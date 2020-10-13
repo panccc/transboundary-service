@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.transample.demo.mapper.TaoProductMapper">
+    
+    <resultMap type="TaoProduct" id="TaoProductResult">
+        <result property="imgUrl"    column="img_url"    />
+        <result property="productId"    column="product_id"    />
+        <result property="productName"    column="product_name"    />
+        <result property="productCategory"    column="product_category"    />
+        <result property="productDescription"    column="product_description"    />
+        <result property="productPrice"    column="product_price"    />
+        <result property="productSpecification"    column="product_specification"    />
+        <result property="executedOrder"    column="executed_order"    />
+        <result property="delete"    column="delete"    />
+        <result property="sellerId"    column="seller_id"    />
+    </resultMap>
+	
+	<sql id="selectTaoProductVo">
+        select img_url, product_id, product_name, product_category, product_description, product_price, product_specification, executed_order, delete, seller_id from tao_product
+    </sql>
+	
+    <select id="selectTaoProductList" parameterType="TaoProduct" resultMap="TaoProductResult">
+        <include refid="selectTaoProductVo"/>
+        <where>  
+            <if test="imgUrl != null  and imgUrl != '' "> and img_url LIKE CONCAT('%',#{imgUrl},'%')</if>
+             <if test="productId != null "> and product_id LIKE CONCAT('%',#{productId},'%')</if>
+             <if test="productName != null  and productName != '' "> and product_name LIKE CONCAT('%',#{productName},'%')</if>
+             <if test="productCategory != null  and productCategory != '' "> and product_category LIKE CONCAT('%',#{productCategory},'%')</if>
+             <if test="productDescription != null  and productDescription != '' "> and product_description LIKE CONCAT('%',#{productDescription},'%')</if>
+             <if test="productPrice != null "> and product_price LIKE CONCAT('%',#{productPrice},'%')</if>
+             <if test="productSpecification != null  and productSpecification != '' "> and product_specification LIKE CONCAT('%',#{productSpecification},'%')</if>
+             <if test="executedOrder != null "> and executed_order LIKE CONCAT('%',#{executedOrder},'%')</if>
+             <if test="delete != null "> and delete LIKE CONCAT('%',#{delete},'%')</if>
+             <if test="sellerId != null "> and seller_id LIKE CONCAT('%',#{sellerId},'%')</if>
+         </where>
+    </select>
+    
+    <select id="selectTaoProductById" parameterType="String" resultMap="TaoProductResult">
+        <include refid="selectTaoProductVo"/>
+        where img_url = #{imgUrl}
+    </select>
+        
+    <insert id="insertTaoProduct" parameterType="TaoProduct">
+        insert into tao_product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="imgUrl != null  and imgUrl != ''  ">img_url,</if>
+			<if test="productId != null  ">product_id,</if>
+			<if test="productName != null  and productName != ''  ">product_name,</if>
+			<if test="productCategory != null  and productCategory != ''  ">product_category,</if>
+			<if test="productDescription != null  and productDescription != ''  ">product_description,</if>
+			<if test="productPrice != null  ">product_price,</if>
+			<if test="productSpecification != null  and productSpecification != ''  ">product_specification,</if>
+			<if test="executedOrder != null  ">executed_order,</if>
+			<if test="delete != null  ">delete,</if>
+			<if test="sellerId != null  ">seller_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="imgUrl != null  and imgUrl != ''  ">#{imgUrl},</if>
+			<if test="productId != null  ">#{productId},</if>
+			<if test="productName != null  and productName != ''  ">#{productName},</if>
+			<if test="productCategory != null  and productCategory != ''  ">#{productCategory},</if>
+			<if test="productDescription != null  and productDescription != ''  ">#{productDescription},</if>
+			<if test="productPrice != null  ">#{productPrice},</if>
+			<if test="productSpecification != null  and productSpecification != ''  ">#{productSpecification},</if>
+			<if test="executedOrder != null  ">#{executedOrder},</if>
+			<if test="delete != null  ">#{delete},</if>
+			<if test="sellerId != null  ">#{sellerId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateTaoProduct" parameterType="TaoProduct">
+        update tao_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productId != null  ">product_id = #{productId},</if>
+            <if test="productName != null  and productName != ''  ">product_name = #{productName},</if>
+            <if test="productCategory != null  and productCategory != ''  ">product_category = #{productCategory},</if>
+            <if test="productDescription != null  and productDescription != ''  ">product_description = #{productDescription},</if>
+            <if test="productPrice != null  ">product_price = #{productPrice},</if>
+            <if test="productSpecification != null  and productSpecification != ''  ">product_specification = #{productSpecification},</if>
+            <if test="executedOrder != null  ">executed_order = #{executedOrder},</if>
+            <if test="delete != null  ">delete = #{delete},</if>
+            <if test="sellerId != null  ">seller_id = #{sellerId},</if>
+        </trim>
+        where img_url = #{imgUrl}
+    </update>
+
+	<delete id="deleteTaoProductById" parameterType="String">
+        delete from tao_product where img_url = #{imgUrl}
+    </delete>
+	
+    <delete id="deleteTaoProductByIds" parameterType="String">
+        delete from tao_product where img_url in 
+        <foreach item="imgUrl" collection="array" open="(" separator="," close=")">
+            #{imgUrl}
+        </foreach>
+    </delete>
+    
+</mapper>

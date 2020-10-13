@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.transample.demo.mapper.TaoShoppingCartMapper">
+    
+    <resultMap type="TaoShoppingCart" id="TaoShoppingCartResult">
+        <result property="cartId"    column="cart_id"    />
+        <result property="villagerId"    column="villager_id"    />
+    </resultMap>
+	
+	<sql id="selectTaoShoppingCartVo">
+        select cart_id, villager_id from tao_shopping_cart
+    </sql>
+	
+    <select id="selectTaoShoppingCartList" parameterType="TaoShoppingCart" resultMap="TaoShoppingCartResult">
+        <include refid="selectTaoShoppingCartVo"/>
+        <where>  
+            <if test="cartId != null "> and cart_id LIKE CONCAT('%',#{cartId},'%')</if>
+             <if test="villagerId != null "> and villager_id LIKE CONCAT('%',#{villagerId},'%')</if>
+         </where>
+    </select>
+    
+    <select id="selectTaoShoppingCartById" parameterType="Integer" resultMap="TaoShoppingCartResult">
+        <include refid="selectTaoShoppingCartVo"/>
+        where cart_id = #{cartId}
+    </select>
+        
+    <insert id="insertTaoShoppingCart" parameterType="TaoShoppingCart">
+        insert into tao_shopping_cart
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="cartId != null  ">cart_id,</if>
+			<if test="villagerId != null  ">villager_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="cartId != null  ">#{cartId},</if>
+			<if test="villagerId != null  ">#{villagerId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateTaoShoppingCart" parameterType="TaoShoppingCart">
+        update tao_shopping_cart
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="villagerId != null  ">villager_id = #{villagerId},</if>
+        </trim>
+        where cart_id = #{cartId}
+    </update>
+
+	<delete id="deleteTaoShoppingCartById" parameterType="Integer">
+        delete from tao_shopping_cart where cart_id = #{cartId}
+    </delete>
+	
+    <delete id="deleteTaoShoppingCartByIds" parameterType="String">
+        delete from tao_shopping_cart where cart_id in 
+        <foreach item="cartId" collection="array" open="(" separator="," close=")">
+            #{cartId}
+        </foreach>
+    </delete>
+    
+</mapper>

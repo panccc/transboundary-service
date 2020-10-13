@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.transample.demo.mapper.TaoSellerMapper">
+    
+    <resultMap type="TaoSeller" id="TaoSellerResult">
+        <result property="sellerId"    column="seller_id"    />
+        <result property="description"    column="description"    />
+        <result property="sellerCategory"    column="seller_category"    />
+        <result property="sellerName"    column="seller_name"    />
+        <result property="sellerLocation"    column="seller_location"    />
+        <result property="sellerPhone"    column="seller_phone"    />
+        <result property="password"    column="password"    />
+    </resultMap>
+	
+	<sql id="selectTaoSellerVo">
+        select seller_id, description, seller_category, seller_name, seller_location, seller_phone, password from tao_seller
+    </sql>
+	
+    <select id="selectTaoSellerList" parameterType="TaoSeller" resultMap="TaoSellerResult">
+        <include refid="selectTaoSellerVo"/>
+        <where>  
+            <if test="sellerId != null "> and seller_id LIKE CONCAT('%',#{sellerId},'%')</if>
+             <if test="description != null  and description != '' "> and description LIKE CONCAT('%',#{description},'%')</if>
+             <if test="sellerCategory != null  and sellerCategory != '' "> and seller_category LIKE CONCAT('%',#{sellerCategory},'%')</if>
+             <if test="sellerName != null  and sellerName != '' "> and seller_name LIKE CONCAT('%',#{sellerName},'%')</if>
+             <if test="sellerLocation != null  and sellerLocation != '' "> and seller_location LIKE CONCAT('%',#{sellerLocation},'%')</if>
+             <if test="sellerPhone != null  and sellerPhone != '' "> and seller_phone LIKE CONCAT('%',#{sellerPhone},'%')</if>
+             <if test="password != null  and password != '' "> and password LIKE CONCAT('%',#{password},'%')</if>
+         </where>
+    </select>
+    
+    <select id="selectTaoSellerById" parameterType="Integer" resultMap="TaoSellerResult">
+        <include refid="selectTaoSellerVo"/>
+        where seller_id = #{sellerId}
+    </select>
+        
+    <insert id="insertTaoSeller" parameterType="TaoSeller">
+        insert into tao_seller
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sellerId != null  ">seller_id,</if>
+			<if test="description != null  and description != ''  ">description,</if>
+			<if test="sellerCategory != null  and sellerCategory != ''  ">seller_category,</if>
+			<if test="sellerName != null  and sellerName != ''  ">seller_name,</if>
+			<if test="sellerLocation != null  and sellerLocation != ''  ">seller_location,</if>
+			<if test="sellerPhone != null  and sellerPhone != ''  ">seller_phone,</if>
+			<if test="password != null  and password != ''  ">password,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sellerId != null  ">#{sellerId},</if>
+			<if test="description != null  and description != ''  ">#{description},</if>
+			<if test="sellerCategory != null  and sellerCategory != ''  ">#{sellerCategory},</if>
+			<if test="sellerName != null  and sellerName != ''  ">#{sellerName},</if>
+			<if test="sellerLocation != null  and sellerLocation != ''  ">#{sellerLocation},</if>
+			<if test="sellerPhone != null  and sellerPhone != ''  ">#{sellerPhone},</if>
+			<if test="password != null  and password != ''  ">#{password},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateTaoSeller" parameterType="TaoSeller">
+        update tao_seller
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="description != null  and description != ''  ">description = #{description},</if>
+            <if test="sellerCategory != null  and sellerCategory != ''  ">seller_category = #{sellerCategory},</if>
+            <if test="sellerName != null  and sellerName != ''  ">seller_name = #{sellerName},</if>
+            <if test="sellerLocation != null  and sellerLocation != ''  ">seller_location = #{sellerLocation},</if>
+            <if test="sellerPhone != null  and sellerPhone != ''  ">seller_phone = #{sellerPhone},</if>
+            <if test="password != null  and password != ''  ">password = #{password},</if>
+        </trim>
+        where seller_id = #{sellerId}
+    </update>
+
+	<delete id="deleteTaoSellerById" parameterType="Integer">
+        delete from tao_seller where seller_id = #{sellerId}
+    </delete>
+	
+    <delete id="deleteTaoSellerByIds" parameterType="String">
+        delete from tao_seller where seller_id in 
+        <foreach item="sellerId" collection="array" open="(" separator="," close=")">
+            #{sellerId}
+        </foreach>
+    </delete>
+    
+</mapper>

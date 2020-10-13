@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.transample.demo.mapper.TaoMurakamiMapper">
+    
+    <resultMap type="TaoMurakami" id="TaoMurakamiResult">
+        <result property="murakamiId"    column="murakami_id"    />
+        <result property="stationId"    column="station_id"    />
+        <result property="stationName"    column="station_name"    />
+        <result property="murakamiName"    column="murakami_name"    />
+        <result property="murakamiTel"    column="murakami_tel"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="password"    column="password"    />
+    </resultMap>
+	
+	<sql id="selectTaoMurakamiVo">
+        select murakami_id, station_id, station_name, murakami_name, murakami_tel, create_time, password from tao_murakami
+    </sql>
+	
+    <select id="selectTaoMurakamiList" parameterType="TaoMurakami" resultMap="TaoMurakamiResult">
+        <include refid="selectTaoMurakamiVo"/>
+        <where>  
+            <if test="murakamiId != null "> and murakami_id LIKE CONCAT('%',#{murakamiId},'%')</if>
+             <if test="stationId != null "> and station_id LIKE CONCAT('%',#{stationId},'%')</if>
+             <if test="stationName != null  and stationName != '' "> and station_name LIKE CONCAT('%',#{stationName},'%')</if>
+             <if test="murakamiName != null  and murakamiName != '' "> and murakami_name LIKE CONCAT('%',#{murakamiName},'%')</if>
+             <if test="murakamiTel != null  and murakamiTel != '' "> and murakami_tel LIKE CONCAT('%',#{murakamiTel},'%')</if>
+             <if test="createTime != null "> and create_time LIKE CONCAT('%',#{createTime},'%')</if>
+             <if test="password != null  and password != '' "> and password LIKE CONCAT('%',#{password},'%')</if>
+         </where>
+    </select>
+    
+    <select id="selectTaoMurakamiById" parameterType="Integer" resultMap="TaoMurakamiResult">
+        <include refid="selectTaoMurakamiVo"/>
+        where murakami_id = #{murakamiId}
+    </select>
+        
+    <insert id="insertTaoMurakami" parameterType="TaoMurakami">
+        insert into tao_murakami
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="murakamiId != null  ">murakami_id,</if>
+			<if test="stationId != null  ">station_id,</if>
+			<if test="stationName != null  and stationName != ''  ">station_name,</if>
+			<if test="murakamiName != null  and murakamiName != ''  ">murakami_name,</if>
+			<if test="murakamiTel != null  and murakamiTel != ''  ">murakami_tel,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="password != null  and password != ''  ">password,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="murakamiId != null  ">#{murakamiId},</if>
+			<if test="stationId != null  ">#{stationId},</if>
+			<if test="stationName != null  and stationName != ''  ">#{stationName},</if>
+			<if test="murakamiName != null  and murakamiName != ''  ">#{murakamiName},</if>
+			<if test="murakamiTel != null  and murakamiTel != ''  ">#{murakamiTel},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="password != null  and password != ''  ">#{password},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateTaoMurakami" parameterType="TaoMurakami">
+        update tao_murakami
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stationId != null  ">station_id = #{stationId},</if>
+            <if test="stationName != null  and stationName != ''  ">station_name = #{stationName},</if>
+            <if test="murakamiName != null  and murakamiName != ''  ">murakami_name = #{murakamiName},</if>
+            <if test="murakamiTel != null  and murakamiTel != ''  ">murakami_tel = #{murakamiTel},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="password != null  and password != ''  ">password = #{password},</if>
+        </trim>
+        where murakami_id = #{murakamiId}
+    </update>
+
+	<delete id="deleteTaoMurakamiById" parameterType="Integer">
+        delete from tao_murakami where murakami_id = #{murakamiId}
+    </delete>
+	
+    <delete id="deleteTaoMurakamiByIds" parameterType="String">
+        delete from tao_murakami where murakami_id in 
+        <foreach item="murakamiId" collection="array" open="(" separator="," close=")">
+            #{murakamiId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.transample.demo.mapper.TaoStationMapper">
+    
+    <resultMap type="TaoStation" id="TaoStationResult">
+        <result property="stationId"    column="station_id"    />
+        <result property="stationName"    column="station_name"    />
+        <result property="stationAddr"    column="station_addr"    />
+        <result property="provence"    column="provence"    />
+        <result property="city"    column="city"    />
+        <result property="county"    column="county"    />
+        <result property="village"    column="village"    />
+        <result property="companyId"    column="company_id"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+	
+	<sql id="selectTaoStationVo">
+        select station_id, station_name, station_addr, provence, city, county, village, company_id, company_name, create_time, update_time from tao_station
+    </sql>
+	
+    <select id="selectTaoStationList" parameterType="TaoStation" resultMap="TaoStationResult">
+        <include refid="selectTaoStationVo"/>
+        <where>  
+            <if test="stationId != null "> and station_id LIKE CONCAT('%',#{stationId},'%')</if>
+             <if test="stationName != null  and stationName != '' "> and station_name LIKE CONCAT('%',#{stationName},'%')</if>
+             <if test="stationAddr != null  and stationAddr != '' "> and station_addr LIKE CONCAT('%',#{stationAddr},'%')</if>
+             <if test="provence != null  and provence != '' "> and provence LIKE CONCAT('%',#{provence},'%')</if>
+             <if test="city != null  and city != '' "> and city LIKE CONCAT('%',#{city},'%')</if>
+             <if test="county != null  and county != '' "> and county LIKE CONCAT('%',#{county},'%')</if>
+             <if test="village != null  and village != '' "> and village LIKE CONCAT('%',#{village},'%')</if>
+             <if test="companyId != null "> and company_id LIKE CONCAT('%',#{companyId},'%')</if>
+             <if test="companyName != null  and companyName != '' "> and company_name LIKE CONCAT('%',#{companyName},'%')</if>
+             <if test="createTime != null "> and create_time LIKE CONCAT('%',#{createTime},'%')</if>
+             <if test="updateTime != null "> and update_time LIKE CONCAT('%',#{updateTime},'%')</if>
+         </where>
+    </select>
+    
+    <select id="selectTaoStationById" parameterType="Integer" resultMap="TaoStationResult">
+        <include refid="selectTaoStationVo"/>
+        where station_id = #{stationId}
+    </select>
+        
+    <insert id="insertTaoStation" parameterType="TaoStation">
+        insert into tao_station
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="stationId != null  ">station_id,</if>
+			<if test="stationName != null  and stationName != ''  ">station_name,</if>
+			<if test="stationAddr != null  and stationAddr != ''  ">station_addr,</if>
+			<if test="provence != null  and provence != ''  ">provence,</if>
+			<if test="city != null  and city != ''  ">city,</if>
+			<if test="county != null  and county != ''  ">county,</if>
+			<if test="village != null  and village != ''  ">village,</if>
+			<if test="companyId != null  ">company_id,</if>
+			<if test="companyName != null  and companyName != ''  ">company_name,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="stationId != null  ">#{stationId},</if>
+			<if test="stationName != null  and stationName != ''  ">#{stationName},</if>
+			<if test="stationAddr != null  and stationAddr != ''  ">#{stationAddr},</if>
+			<if test="provence != null  and provence != ''  ">#{provence},</if>
+			<if test="city != null  and city != ''  ">#{city},</if>
+			<if test="county != null  and county != ''  ">#{county},</if>
+			<if test="village != null  and village != ''  ">#{village},</if>
+			<if test="companyId != null  ">#{companyId},</if>
+			<if test="companyName != null  and companyName != ''  ">#{companyName},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateTaoStation" parameterType="TaoStation">
+        update tao_station
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stationName != null  and stationName != ''  ">station_name = #{stationName},</if>
+            <if test="stationAddr != null  and stationAddr != ''  ">station_addr = #{stationAddr},</if>
+            <if test="provence != null  and provence != ''  ">provence = #{provence},</if>
+            <if test="city != null  and city != ''  ">city = #{city},</if>
+            <if test="county != null  and county != ''  ">county = #{county},</if>
+            <if test="village != null  and village != ''  ">village = #{village},</if>
+            <if test="companyId != null  ">company_id = #{companyId},</if>
+            <if test="companyName != null  and companyName != ''  ">company_name = #{companyName},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where station_id = #{stationId}
+    </update>
+
+	<delete id="deleteTaoStationById" parameterType="Integer">
+        delete from tao_station where station_id = #{stationId}
+    </delete>
+	
+    <delete id="deleteTaoStationByIds" parameterType="String">
+        delete from tao_station where station_id in 
+        <foreach item="stationId" collection="array" open="(" separator="," close=")">
+            #{stationId}
+        </foreach>
+    </delete>
+    
+</mapper>

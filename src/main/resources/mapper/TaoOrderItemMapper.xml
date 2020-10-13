@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.transample.demo.mapper.TaoOrderItemMapper">
+    
+    <resultMap type="TaoOrderItem" id="TaoOrderItemResult">
+        <result property="orderItemId"    column="order_item_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="specification"    column="specification"    />
+        <result property="amount"    column="amount"    />
+        <result property="price"    column="price"    />
+        <result property="orderId"    column="order_id"    />
+    </resultMap>
+	
+	<sql id="selectTaoOrderItemVo">
+        select order_item_id, goods_id, specification, amount, price, order_id from tao_order_item
+    </sql>
+	
+    <select id="selectTaoOrderItemList" parameterType="TaoOrderItem" resultMap="TaoOrderItemResult">
+        <include refid="selectTaoOrderItemVo"/>
+        <where>  
+            <if test="orderItemId != null "> and order_item_id LIKE CONCAT('%',#{orderItemId},'%')</if>
+             <if test="goodsId != null "> and goods_id LIKE CONCAT('%',#{goodsId},'%')</if>
+             <if test="specification != null  and specification != '' "> and specification LIKE CONCAT('%',#{specification},'%')</if>
+             <if test="amount != null "> and amount LIKE CONCAT('%',#{amount},'%')</if>
+             <if test="price != null "> and price LIKE CONCAT('%',#{price},'%')</if>
+             <if test="orderId != null "> and order_id LIKE CONCAT('%',#{orderId},'%')</if>
+         </where>
+    </select>
+    
+    <select id="selectTaoOrderItemById" parameterType="Integer" resultMap="TaoOrderItemResult">
+        <include refid="selectTaoOrderItemVo"/>
+        where order_item_id = #{orderItemId}
+    </select>
+        
+    <insert id="insertTaoOrderItem" parameterType="TaoOrderItem">
+        insert into tao_order_item
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="orderItemId != null  ">order_item_id,</if>
+			<if test="goodsId != null  ">goods_id,</if>
+			<if test="specification != null  and specification != ''  ">specification,</if>
+			<if test="amount != null  ">amount,</if>
+			<if test="price != null  ">price,</if>
+			<if test="orderId != null  ">order_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="orderItemId != null  ">#{orderItemId},</if>
+			<if test="goodsId != null  ">#{goodsId},</if>
+			<if test="specification != null  and specification != ''  ">#{specification},</if>
+			<if test="amount != null  ">#{amount},</if>
+			<if test="price != null  ">#{price},</if>
+			<if test="orderId != null  ">#{orderId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateTaoOrderItem" parameterType="TaoOrderItem">
+        update tao_order_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsId != null  ">goods_id = #{goodsId},</if>
+            <if test="specification != null  and specification != ''  ">specification = #{specification},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="price != null  ">price = #{price},</if>
+            <if test="orderId != null  ">order_id = #{orderId},</if>
+        </trim>
+        where order_item_id = #{orderItemId}
+    </update>
+
+	<delete id="deleteTaoOrderItemById" parameterType="Integer">
+        delete from tao_order_item where order_item_id = #{orderItemId}
+    </delete>
+	
+    <delete id="deleteTaoOrderItemByIds" parameterType="String">
+        delete from tao_order_item where order_item_id in 
+        <foreach item="orderItemId" collection="array" open="(" separator="," close=")">
+            #{orderItemId}
+        </foreach>
+    </delete>
+    
+</mapper>

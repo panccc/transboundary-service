@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.transample.demo.mapper.TaoVillagerMapper">
+    
+    <resultMap type="TaoVillager" id="TaoVillagerResult">
+        <result property="villagerId"    column="villager_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="address"    column="address"    />
+        <result property="provence"    column="provence"    />
+        <result property="city"    column="city"    />
+        <result property="county"    column="county"    />
+        <result property="village"    column="village"    />
+        <result property="stationId"    column="station_id"    />
+        <result property="stationName"    column="station_name"    />
+        <result property="password"    column="password"    />
+    </resultMap>
+	
+	<sql id="selectTaoVillagerVo">
+        select villager_id, user_name, mobile, address, provence, city, county, village, station_id, station_name, password from tao_villager
+    </sql>
+	
+    <select id="selectTaoVillagerList" parameterType="TaoVillager" resultMap="TaoVillagerResult">
+        <include refid="selectTaoVillagerVo"/>
+        <where>  
+            <if test="villagerId != null "> and villager_id LIKE CONCAT('%',#{villagerId},'%')</if>
+             <if test="userName != null  and userName != '' "> and user_name LIKE CONCAT('%',#{userName},'%')</if>
+             <if test="mobile != null  and mobile != '' "> and mobile LIKE CONCAT('%',#{mobile},'%')</if>
+             <if test="address != null  and address != '' "> and address LIKE CONCAT('%',#{address},'%')</if>
+             <if test="provence != null  and provence != '' "> and provence LIKE CONCAT('%',#{provence},'%')</if>
+             <if test="city != null  and city != '' "> and city LIKE CONCAT('%',#{city},'%')</if>
+             <if test="county != null  and county != '' "> and county LIKE CONCAT('%',#{county},'%')</if>
+             <if test="village != null  and village != '' "> and village LIKE CONCAT('%',#{village},'%')</if>
+             <if test="stationId != null "> and station_id LIKE CONCAT('%',#{stationId},'%')</if>
+             <if test="stationName != null  and stationName != '' "> and station_name LIKE CONCAT('%',#{stationName},'%')</if>
+             <if test="password != null  and password != '' "> and password LIKE CONCAT('%',#{password},'%')</if>
+         </where>
+    </select>
+    
+    <select id="selectTaoVillagerById" parameterType="Integer" resultMap="TaoVillagerResult">
+        <include refid="selectTaoVillagerVo"/>
+        where villager_id = #{villagerId}
+    </select>
+        
+    <insert id="insertTaoVillager" parameterType="TaoVillager">
+        insert into tao_villager
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="villagerId != null  ">villager_id,</if>
+			<if test="userName != null  and userName != ''  ">user_name,</if>
+			<if test="mobile != null  and mobile != ''  ">mobile,</if>
+			<if test="address != null  and address != ''  ">address,</if>
+			<if test="provence != null  and provence != ''  ">provence,</if>
+			<if test="city != null  and city != ''  ">city,</if>
+			<if test="county != null  and county != ''  ">county,</if>
+			<if test="village != null  and village != ''  ">village,</if>
+			<if test="stationId != null  ">station_id,</if>
+			<if test="stationName != null  and stationName != ''  ">station_name,</if>
+			<if test="password != null  and password != ''  ">password,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="villagerId != null  ">#{villagerId},</if>
+			<if test="userName != null  and userName != ''  ">#{userName},</if>
+			<if test="mobile != null  and mobile != ''  ">#{mobile},</if>
+			<if test="address != null  and address != ''  ">#{address},</if>
+			<if test="provence != null  and provence != ''  ">#{provence},</if>
+			<if test="city != null  and city != ''  ">#{city},</if>
+			<if test="county != null  and county != ''  ">#{county},</if>
+			<if test="village != null  and village != ''  ">#{village},</if>
+			<if test="stationId != null  ">#{stationId},</if>
+			<if test="stationName != null  and stationName != ''  ">#{stationName},</if>
+			<if test="password != null  and password != ''  ">#{password},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateTaoVillager" parameterType="TaoVillager">
+        update tao_villager
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null  and userName != ''  ">user_name = #{userName},</if>
+            <if test="mobile != null  and mobile != ''  ">mobile = #{mobile},</if>
+            <if test="address != null  and address != ''  ">address = #{address},</if>
+            <if test="provence != null  and provence != ''  ">provence = #{provence},</if>
+            <if test="city != null  and city != ''  ">city = #{city},</if>
+            <if test="county != null  and county != ''  ">county = #{county},</if>
+            <if test="village != null  and village != ''  ">village = #{village},</if>
+            <if test="stationId != null  ">station_id = #{stationId},</if>
+            <if test="stationName != null  and stationName != ''  ">station_name = #{stationName},</if>
+            <if test="password != null  and password != ''  ">password = #{password},</if>
+        </trim>
+        where villager_id = #{villagerId}
+    </update>
+
+	<delete id="deleteTaoVillagerById" parameterType="Integer">
+        delete from tao_villager where villager_id = #{villagerId}
+    </delete>
+	
+    <delete id="deleteTaoVillagerByIds" parameterType="String">
+        delete from tao_villager where villager_id in 
+        <foreach item="villagerId" collection="array" open="(" separator="," close=")">
+            #{villagerId}
+        </foreach>
+    </delete>
+    
+</mapper>

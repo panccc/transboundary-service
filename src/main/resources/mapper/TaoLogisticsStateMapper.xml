@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.transample.demo.mapper.TaoLogisticsStateMapper">
+    
+    <resultMap type="TaoLogisticsState" id="TaoLogisticsStateResult">
+        <result property="id"    column="id"    />
+        <result property="ticketId"    column="ticket_id"    />
+        <result property="curState"    column="cur_state"    />
+        <result property="deliveryPath"    column="delivery_path"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+	
+	<sql id="selectTaoLogisticsStateVo">
+        select id, ticket_id, cur_state, delivery_path, create_time, update_time from tao_logistics_state
+    </sql>
+	
+    <select id="selectTaoLogisticsStateList" parameterType="TaoLogisticsState" resultMap="TaoLogisticsStateResult">
+        <include refid="selectTaoLogisticsStateVo"/>
+        <where>  
+            <if test="id != null "> and id LIKE CONCAT('%',#{id},'%')</if>
+             <if test="ticketId != null  and ticketId != '' "> and ticket_id LIKE CONCAT('%',#{ticketId},'%')</if>
+             <if test="curState != null  and curState != '' "> and cur_state LIKE CONCAT('%',#{curState},'%')</if>
+             <if test="deliveryPath != null  and deliveryPath != '' "> and delivery_path LIKE CONCAT('%',#{deliveryPath},'%')</if>
+             <if test="createTime != null "> and create_time LIKE CONCAT('%',#{createTime},'%')</if>
+             <if test="updateTime != null "> and update_time LIKE CONCAT('%',#{updateTime},'%')</if>
+         </where>
+    </select>
+    
+    <select id="selectTaoLogisticsStateById" parameterType="Integer" resultMap="TaoLogisticsStateResult">
+        <include refid="selectTaoLogisticsStateVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTaoLogisticsState" parameterType="TaoLogisticsState">
+        insert into tao_logistics_state
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="ticketId != null  and ticketId != ''  ">ticket_id,</if>
+			<if test="curState != null  and curState != ''  ">cur_state,</if>
+			<if test="deliveryPath != null  and deliveryPath != ''  ">delivery_path,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="ticketId != null  and ticketId != ''  ">#{ticketId},</if>
+			<if test="curState != null  and curState != ''  ">#{curState},</if>
+			<if test="deliveryPath != null  and deliveryPath != ''  ">#{deliveryPath},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateTaoLogisticsState" parameterType="TaoLogisticsState">
+        update tao_logistics_state
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ticketId != null  and ticketId != ''  ">ticket_id = #{ticketId},</if>
+            <if test="curState != null  and curState != ''  ">cur_state = #{curState},</if>
+            <if test="deliveryPath != null  and deliveryPath != ''  ">delivery_path = #{deliveryPath},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteTaoLogisticsStateById" parameterType="Integer">
+        delete from tao_logistics_state where id = #{id}
+    </delete>
+	
+    <delete id="deleteTaoLogisticsStateByIds" parameterType="String">
+        delete from tao_logistics_state where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
