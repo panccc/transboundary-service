@@ -69,10 +69,10 @@ public class TaoProductController
 	/**
 	 * 修改商品
 	 */
-	@GetMapping("/edit/{imgUrl}")
-	public String edit(@PathVariable("imgUrl") String imgUrl, ModelMap mmap)
+	@GetMapping("/edit/{productId}")
+	public String edit(@PathVariable("productId") Integer productId, ModelMap mmap)
 	{
-		TaoProduct taoProduct = taoProductService.selectTaoProductById(imgUrl);
+		TaoProduct taoProduct = taoProductService.selectTaoProductById(productId);
 		mmap.put("taoProduct", taoProduct);
 	    return prefix + "/edit";
 	}

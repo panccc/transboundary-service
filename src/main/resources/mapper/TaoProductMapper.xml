@@ -37,9 +37,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </where>
     </select>
     
-    <select id="selectTaoProductById" parameterType="String" resultMap="TaoProductResult">
+    <select id="selectTaoProductById" parameterType="Integer" resultMap="TaoProductResult">
         <include refid="selectTaoProductVo"/>
-        where img_url = #{imgUrl}
+        where product_id = #{productId}
     </select>
         
     <insert id="insertTaoProduct" parameterType="TaoProduct">
@@ -83,17 +83,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="delete != null  ">delete = #{delete},</if>
             <if test="sellerId != null  ">seller_id = #{sellerId},</if>
         </trim>
-        where img_url = #{imgUrl}
+        where product_id = #{productId}
     </update>
 
-	<delete id="deleteTaoProductById" parameterType="String">
-        delete from tao_product where img_url = #{imgUrl}
+	<delete id="deleteTaoProductById" parameterType="Integer">
+        delete from tao_product where product_id = #{productId}
     </delete>
 	
     <delete id="deleteTaoProductByIds" parameterType="String">
         delete from tao_product where img_url in 
-        <foreach item="imgUrl" collection="array" open="(" separator="," close=")">
-            #{imgUrl}
+        <foreach item="productId" collection="array" open="(" separator="," close=")">
+            #{productId}
         </foreach>
     </delete>
     

@@ -22,13 +22,13 @@ public class TaoProductServiceImpl implements ITaoProductService
 	/**
      * 查询商品信息
      * 
-     * @param imgUrl 商品ID
+     * @param productId 商品ID
      * @return 商品信息
      */
     @Override
-	public TaoProduct selectTaoProductById(String imgUrl)
+	public TaoProduct selectTaoProductById(Integer productId)
 	{
-	    return taoProductMapper.selectTaoProductById(imgUrl);
+	    return taoProductMapper.selectTaoProductById(productId);
 	}
 	
 	/**
