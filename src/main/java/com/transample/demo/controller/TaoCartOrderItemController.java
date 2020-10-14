@@ -66,9 +66,9 @@ public class TaoCartOrderItemController
 	@ApiOperation("新增保存购物车单类商品")
 	@PostMapping("/add")
 	@ResponseBody
-	public ResponseEntity addSave(@RequestBody TaoCartOrderItem taoCartOrderItem)
+	public ResponseEntity addSave(@RequestBody TaoCartOrderItem taoCartOrderItem,@ApiParam(value = "村民id",required = true) @RequestParam Integer villagerId)
 	{		
-		return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItemService.insertTaoCartOrderItem(taoCartOrderItem)));
+		return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItemService.insertTaoCartOrderItem(taoCartOrderItem,villagerId)));
 	}
 
 	/**

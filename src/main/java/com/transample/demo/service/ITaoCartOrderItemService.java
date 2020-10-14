@@ -33,7 +33,7 @@ public interface ITaoCartOrderItemService
      * @param taoCartOrderItem 购物车单类商品信息
      * @return 结果
      */
-	public int insertTaoCartOrderItem(TaoCartOrderItem taoCartOrderItem);
+	public int insertTaoCartOrderItem(TaoCartOrderItem taoCartOrderItem,Integer villagerId);
 	
 	/**
      * 修改购物车单类商品

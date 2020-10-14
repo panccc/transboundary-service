@@ -1,6 +1,11 @@
 package com.transample.demo.service.impl;
 
 import java.util.List;
+
+import com.transample.demo.domain.TaoProduct;
+import com.transample.demo.domain.TaoShoppingCart;
+import com.transample.demo.mapper.TaoProductMapper;
+import com.transample.demo.mapper.TaoShoppingCartMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoCartOrderItemMapper;
@@ -20,6 +25,12 @@ public class TaoCartOrderItemServiceImpl implements ITaoCartOrderItemService
 {
 	@Resource
 	private TaoCartOrderItemMapper taoCartOrderItemMapper;
+
+	@Resource
+	private TaoProductMapper taoProductMapper;
+
+	@Resource
+	private TaoShoppingCartMapper taoShoppingCartMapper;
 
 	/**
      * 查询购物车单类商品信息
@@ -52,9 +63,21 @@ public class TaoCartOrderItemServiceImpl implements ITaoCartOrderItemService
      * @return 结果
      */
 	@Override
-	public int insertTaoCartOrderItem(TaoCartOrderItem taoCartOrderItem)
+	public int insertTaoCartOrderItem(TaoCartOrderItem taoCartOrderItem,Integer villagerId)
 	{
-	    return taoCartOrderItemMapper.insertTaoCartOrderItem(taoCartOrderItem);
+		TaoShoppingCart taoShoppingCart = new TaoShoppingCart();
+		taoShoppingCart.setVillagerId(villagerId);
+		List<TaoShoppingCart> list = taoShoppingCartMapper.selectTaoShoppingCartList(taoShoppingCart);
+		if(list.size()==0)return 0;
+		taoShoppingCart = list.get(0);
+
+		int productId = taoCartOrderItem.getGoodsId();
+		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
+		if(product==null)return 0;
+
+		taoCartOrderItem.setPrice(product.getProductPrice()*taoCartOrderItem.getAmount());
+		taoCartOrderItem.setCartId(taoShoppingCart.getCartId());
+		return taoCartOrderItemMapper.insertTaoCartOrderItem(taoCartOrderItem);
 	}
 	
 	/**
@@ -66,7 +89,11 @@ public class TaoCartOrderItemServiceImpl implements ITaoCartOrderItemService
 	@Override
 	public int updateTaoCartOrderItem(TaoCartOrderItem taoCartOrderItem)
 	{
-	    return taoCartOrderItemMapper.updateTaoCartOrderItem(taoCartOrderItem);
+		int productId = taoCartOrderItem.getGoodsId();
+		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
+		if(product==null)return 0;
+		taoCartOrderItem.setPrice(product.getProductPrice()*taoCartOrderItem.getAmount());
+		return taoCartOrderItemMapper.updateTaoCartOrderItem(taoCartOrderItem);
 	}
 
 	/**
