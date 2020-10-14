@@ -7,6 +7,8 @@ import com.transample.demo.mapper.TaoCartOrderItemMapper;
 import com.transample.demo.domain.TaoCartOrderItem;
 import com.transample.demo.service.ITaoCartOrderItemService;
 
+import javax.annotation.Resource;
+
 /**
  * 购物车单类商品 服务层实现
  * 
@@ -16,7 +18,7 @@ import com.transample.demo.service.ITaoCartOrderItemService;
 @Service
 public class TaoCartOrderItemServiceImpl implements ITaoCartOrderItemService 
 {
-	@Autowired
+	@Resource
 	private TaoCartOrderItemMapper taoCartOrderItemMapper;
 
 	/**

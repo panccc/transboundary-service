@@ -1,13 +1,14 @@
 package com.transample.demo.domain;
 
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 物流表 tao_logistics
  * 
  * @author youcaihua
- * @date 2020-10-13
+ * @date 2020-10-14
  */
 public class TaoLogistics
 {
@@ -17,7 +18,13 @@ public class TaoLogistics
 	/** 对应订单号 */
 	private String orderId;
 	/** 物流价格 */
-	private Double price;
+	private BigDecimal price;
+	/** 物流公司id */
+	private Integer companyId;
+	/** 物流公司名称 */
+	private String companyName;
+	/** 物流公司类型（常规/村县） */
+	private String companyType;
 	/** 收货地址 */
 	private String receiverAddr;
 	/** 	收货人姓名 */
@@ -47,14 +54,41 @@ public class TaoLogistics
 	{
 		return orderId;
 	}
-	public void setPrice(Double price)
+	public void setPrice(BigDecimal price) 
 	{
 		this.price = price;
 	}
 
-	public Double getPrice()
+	public BigDecimal getPrice() 
 	{
 		return price;
+	}
+	public void setCompanyId(Integer companyId) 
+	{
+		this.companyId = companyId;
+	}
+
+	public Integer getCompanyId() 
+	{
+		return companyId;
+	}
+	public void setCompanyName(String companyName) 
+	{
+		this.companyName = companyName;
+	}
+
+	public String getCompanyName() 
+	{
+		return companyName;
+	}
+	public void setCompanyType(String companyType) 
+	{
+		this.companyType = companyType;
+	}
+
+	public String getCompanyType() 
+	{
+		return companyType;
 	}
 	public void setReceiverAddr(String receiverAddr) 
 	{
@@ -88,7 +122,7 @@ public class TaoLogistics
 		this.createTime = createTime;
 	}
 
-	public Date getCreateTime()
+	public Date getCreateTime() 
 	{
 		return createTime;
 	}

@@ -1,15 +1,13 @@
 package com.transample.demo.controller;
 
 import java.util.List;
+
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.transample.demo.domain.TaoOrderItem;
 import com.transample.demo.service.ITaoOrderItemService;
 import com.transample.demo.common.ResponseResult;
@@ -29,18 +27,19 @@ public class TaoOrderItemController
 	@Autowired
 	private ITaoOrderItemService taoOrderItemService;
 	
-	@GetMapping()
-	public String taoOrderItem()
-	{
-	    return prefix + "/taoOrderItem";
-	}
+//	@GetMapping()
+//	public String taoOrderItem()
+//	{
+//	    return prefix + "/taoOrderItem";
+//	}
 	
 	/**
 	 * 查询订单单类商品列表
 	 */
+	@ApiOperation("查询订单单类商品列表")
 	@PostMapping("/list")
 	@ResponseBody
-	public List<TaoOrderItem> list(TaoOrderItem taoOrderItem)
+	public List<TaoOrderItem> list(@RequestBody TaoOrderItem taoOrderItem)
 	{
         List<TaoOrderItem> list = taoOrderItemService.selectTaoOrderItemList(taoOrderItem);
 		return list;

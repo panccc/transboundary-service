@@ -7,16 +7,18 @@ import com.transample.demo.mapper.TaoLogisticsMapper;
 import com.transample.demo.domain.TaoLogistics;
 import com.transample.demo.service.ITaoLogisticsService;
 
+import javax.annotation.Resource;
+
 /**
  * 物流 服务层实现
  * 
  * @author youcaihua
- * @date 2020-10-13
+ * @date 2020-10-14
  */
 @Service
 public class TaoLogisticsServiceImpl implements ITaoLogisticsService 
 {
-	@Autowired
+	@Resource
 	private TaoLogisticsMapper taoLogisticsMapper;
 
 	/**
