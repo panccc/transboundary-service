@@ -63,20 +63,16 @@ public class TaoCartOrderItemServiceImpl implements ITaoCartOrderItemService
      * @return 结果
      */
 	@Override
-	public int insertTaoCartOrderItem(TaoCartOrderItem taoCartOrderItem,Integer villagerId)
+	public int insertTaoCartOrderItem(TaoCartOrderItem taoCartOrderItem)
 	{
-		TaoShoppingCart taoShoppingCart = new TaoShoppingCart();
-		taoShoppingCart.setVillagerId(villagerId);
-		List<TaoShoppingCart> list = taoShoppingCartMapper.selectTaoShoppingCartList(taoShoppingCart);
-		if(list.size()==0)return 0;
-		taoShoppingCart = list.get(0);
+
 
 		int productId = taoCartOrderItem.getGoodsId();
 		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
 		if(product==null)return 0;
 
 		taoCartOrderItem.setPrice(product.getProductPrice()*taoCartOrderItem.getAmount());
-		taoCartOrderItem.setCartId(taoShoppingCart.getCartId());
+
 		return taoCartOrderItemMapper.insertTaoCartOrderItem(taoCartOrderItem);
 	}
 	
