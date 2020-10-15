@@ -17,7 +17,7 @@ public interface ITaoMurakamiService
      * @param murakamiId 村小二ID
      * @return 村小二信息
      */
-	public TaoMurakami selectTaoMurakamiById(Integer murakamiId);
+	public TaoMurakami getTaoMurakamiById(Integer murakamiId);
 	
 	/**
      * 查询村小二列表
@@ -25,7 +25,7 @@ public interface ITaoMurakamiService
      * @param taoMurakami 村小二信息
      * @return 村小二集合
      */
-	public List<TaoMurakami> selectTaoMurakamiList(TaoMurakami taoMurakami);
+	public List<TaoMurakami> getTaoMurakamiList(TaoMurakami taoMurakami);
 	
 	/**
      * 新增村小二
