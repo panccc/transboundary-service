@@ -1,5 +1,6 @@
 package com.transample.demo.service.impl;
 
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,64 +20,53 @@ public class TaoProductServiceImpl implements ITaoProductService
 	@Autowired
 	private TaoProductMapper taoProductMapper;
 
-	/**
-     * 查询商品信息
-     * 
-     * @param productId 商品ID
-     * @return 商品信息
-     */
     @Override
-	public TaoProduct selectTaoProductById(Integer productId)
+	public TaoProduct getProductById(Integer productId)
 	{
 	    return taoProductMapper.selectTaoProductById(productId);
 	}
 	
-	/**
-     * 查询商品列表
-     * 
-     * @param taoProduct 商品信息
-     * @return 商品集合
-     */
 	@Override
-	public List<TaoProduct> selectTaoProductList(TaoProduct taoProduct)
-	{
+	public List<TaoProduct> getTaoProductList(TaoProduct taoProduct) {
 	    return taoProductMapper.selectTaoProductList(taoProduct);
 	}
-	
-    /**
-     * 新增商品
-     * 
-     * @param taoProduct 商品信息
-     * @return 结果
-     */
+
 	@Override
-	public int insertTaoProduct(TaoProduct taoProduct)
-	{
-	    return taoProductMapper.insertTaoProduct(taoProduct);
-	}
-	
-	/**
-     * 修改商品
-     * 
-     * @param taoProduct 商品信息
-     * @return 结果
-     */
-	@Override
-	public int updateTaoProduct(TaoProduct taoProduct)
-	{
-	    return taoProductMapper.updateTaoProduct(taoProduct);
+	public TaoProduct getInfoBeforeAdd(Integer sellerId) {
+		TaoProduct product = new TaoProduct();
+		product.setDelete(0);
+		product.setSellerId(sellerId);
+		product.setExecutedOrder(0);
+		return product;
 	}
 
-	/**
-     * 删除商品对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
+	@Override
+	public int addTaoProduct(TaoProduct product) {
+		return taoProductMapper.insertTaoProduct(product);
+	}
+
+	@Override
+	public TaoProduct getInfoBeforeEdit(Integer productId) {
+    	return taoProductMapper.selectTaoProductById(productId);
+	}
+
+	@Override
+	public int editTaoProduct(TaoProduct product) {
+    	return taoProductMapper.updateTaoProduct(product);
+	}
+
 	@Override
 	public int deleteTaoProductByIds(String ids)
 	{
-		return taoProductMapper.deleteTaoProductByIds(ids.split(","));
+		return taoProductMapper.deleteTaoProductByIds(ids);
+	}
+
+	@Override
+	public List<TaoProduct> getSortedProducts() {
+    	TaoProduct product = new TaoProduct();
+    	List<TaoProduct> products = getTaoProductList(product);
+		products.sort(Comparator.comparing(TaoProduct::getProductPrice).thenComparing(TaoProduct::getExecutedOrder));
+		return products;
 	}
 	
 }

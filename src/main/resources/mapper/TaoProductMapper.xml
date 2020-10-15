@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectTaoProductVo">
-        select img_url, product_id, product_name, product_category, product_description, product_price, product_specification, executed_order, delete, seller_id from tao_product
+        select `img_url`, `product_id`, `product_name`, `product_category`, `product_description`, `product_price`, `product_specification`, `executed_order`, `delete`, `seller_id` from `tao_product`
     </sql>
 	
     <select id="selectTaoProductList" parameterType="TaoProduct" resultMap="TaoProductResult">
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="productPrice != null "> and product_price LIKE CONCAT('%',#{productPrice},'%')</if>
              <if test="productSpecification != null  and productSpecification != '' "> and product_specification LIKE CONCAT('%',#{productSpecification},'%')</if>
              <if test="executedOrder != null "> and executed_order LIKE CONCAT('%',#{executedOrder},'%')</if>
-             <if test="delete != null "> and delete LIKE CONCAT('%',#{delete},'%')</if>
+             <if test="delete != null "> and `delete` LIKE CONCAT('%',#{delete},'%')</if>
              <if test="sellerId != null "> and seller_id LIKE CONCAT('%',#{sellerId},'%')</if>
          </where>
     </select>
@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="productPrice != null  ">product_price,</if>
 			<if test="productSpecification != null  and productSpecification != ''  ">product_specification,</if>
 			<if test="executedOrder != null  ">executed_order,</if>
-			<if test="delete != null  ">delete,</if>
+			<if test="delete != null  ">`delete`,</if>
 			<if test="sellerId != null  ">seller_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -80,7 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productPrice != null  ">product_price = #{productPrice},</if>
             <if test="productSpecification != null  and productSpecification != ''  ">product_specification = #{productSpecification},</if>
             <if test="executedOrder != null  ">executed_order = #{executedOrder},</if>
-            <if test="delete != null  ">delete = #{delete},</if>
+            <if test="delete != null  ">`delete` = #{delete},</if>
             <if test="sellerId != null  ">seller_id = #{sellerId},</if>
         </trim>
         where product_id = #{productId}
@@ -91,10 +91,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 	
     <delete id="deleteTaoProductByIds" parameterType="String">
-        delete from tao_product where img_url in 
+        delete from tao_product where product_id in
         <foreach item="productId" collection="array" open="(" separator="," close=")">
             #{productId}
         </foreach>
     </delete>
-    
+
 </mapper>

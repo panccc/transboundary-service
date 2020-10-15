@@ -1,15 +1,14 @@
 package com.transample.demo.controller;
 
 import java.util.List;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.transample.demo.domain.TaoProduct;
 import com.transample.demo.service.ITaoProductService;
 import com.transample.demo.common.ResponseResult;
@@ -20,82 +19,69 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@Controller
+@RestController
 @RequestMapping("/taoProduct")
+@Api(tags = "商品相关API")
 public class TaoProductController
 {
-    private String prefix = "taoProduct";
-	
+
 	@Autowired
 	private ITaoProductService taoProductService;
-	
-	@GetMapping()
-	public String taoProduct()
+
+	@GetMapping("/getProduct/{productId}")
+	@ApiOperation("通过id获取商品")
+	public ResponseEntity<ResponseResult> getProduct(@PathVariable Integer productId)
 	{
-	    return prefix + "/taoProduct";
+		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getProductById(productId)));
 	}
-	
-	/**
-	 * 查询商品列表
-	 */
-	@PostMapping("/list")
-	@ResponseBody
-	public List<TaoProduct> list(TaoProduct taoProduct)
+
+	@PostMapping("/getProductList")
+	@ApiOperation("获取相似商品列表")
+	public ResponseEntity<ResponseResult> getProductList(@RequestBody TaoProduct product)
 	{
-        List<TaoProduct> list = taoProductService.selectTaoProductList(taoProduct);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getTaoProductList(product)));
 	}
-	
-	
-	/**
-	 * 新增商品
-	 */
-	@GetMapping("/add")
-	public String add()
+
+	@GetMapping("/getInfoBeforeAdd/{sellerId}")
+    @ApiOperation("获取系统自动生成的新建商品信息")
+	public ResponseEntity<ResponseResult> getInfoBeforeAdd(@PathVariable Integer sellerId)
 	{
-	    return prefix + "/add";
+		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getInfoBeforeAdd(sellerId)));
 	}
-	
-	/**
-	 * 新增保存商品
-	 */
+
 	@PostMapping("/add")
-	@ResponseBody
-	public ResponseEntity addSave(TaoProduct taoProduct)
+	@ApiOperation("新增商品")
+	public ResponseEntity<ResponseResult> add(@RequestBody TaoProduct taoProduct)
 	{		
-		return ResponseEntity.ok(ResponseResult.ok(taoProductService.insertTaoProduct(taoProduct)));
+		return ResponseEntity.ok(ResponseResult.ok(taoProductService.addTaoProduct(taoProduct)));
 	}
 
-	/**
-	 * 修改商品
-	 */
-	@GetMapping("/edit/{productId}")
-	public String edit(@PathVariable("productId") Integer productId, ModelMap mmap)
+	@GetMapping("/getInfoBeforeEdit/{productId}")
+    @ApiOperation("通过id获取商品信息")
+	public TaoProduct getInfoBeforeEdit(@PathVariable("productId") Integer productId)
 	{
-		TaoProduct taoProduct = taoProductService.selectTaoProductById(productId);
-		mmap.put("taoProduct", taoProduct);
-	    return prefix + "/edit";
+		return taoProductService.getInfoBeforeEdit(productId);
 	}
 	
-	/**
-	 * 修改保存商品
-	 */
 	@PostMapping("/edit")
-	@ResponseBody
-	public ResponseEntity editSave(TaoProduct taoProduct)
+	@ApiOperation("修改商品信息")
+	public ResponseEntity<ResponseResult> edit(@RequestBody TaoProduct taoProduct)
 	{		
-		return ResponseEntity.ok(ResponseResult.ok(taoProductService.updateTaoProduct(taoProduct)));
+		return ResponseEntity.ok(ResponseResult.ok(taoProductService.editTaoProduct(taoProduct)));
 	}
 	
-	/**
-	 * 删除商品
-	 */
-
-	@PostMapping( "/remove")
-	@ResponseBody
-	public ResponseEntity remove(String ids)
+	@PostMapping("/remove")
+	@ApiOperation("删除指定多个id商品")
+	public ResponseEntity<ResponseResult> remove(@ApiParam("id字符串") @RequestParam String ids)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoProductService.deleteTaoProductByIds(ids)));
 	}
-	
+
+	@GetMapping("/sort")
+    @ApiOperation("返回按价格、成交数排序的所有商品")
+	public ResponseEntity<ResponseResult> getSortedProducts()
+	{
+		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getSortedProducts()));
+	}
+
 }

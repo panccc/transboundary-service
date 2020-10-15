@@ -11,44 +11,66 @@ import java.util.List;
  */
 public interface ITaoProductService 
 {
+
 	/**
-     * 查询商品信息
-     * 
-     * @param productId 商品ID
-     * @return 商品信息
-     */
-	public TaoProduct selectTaoProductById(Integer productId);
-	
+	 * 通过id获取product
+	 *
+	 * @param productId integer
+	 * @return product
+	 */
+	public TaoProduct getProductById(Integer productId);
+
 	/**
-     * 查询商品列表
-     * 
-     * @param taoProduct 商品信息
-     * @return 商品集合
-     */
-	public List<TaoProduct> selectTaoProductList(TaoProduct taoProduct);
-	
+	 * 获取相似product列表
+	 *
+	 * @param product 包含指定相似属性的product
+	 * @return product list
+	 */
+	public List<TaoProduct> getTaoProductList(TaoProduct product);
+
 	/**
-     * 新增商品
+     * 获取自动生成的product信息
      * 
-     * @param taoProduct 商品信息
-     * @return 结果
+     * @return taoProduct
      */
-	public int insertTaoProduct(TaoProduct taoProduct);
-	
+	public TaoProduct getInfoBeforeAdd(Integer sellerId);
+
 	/**
-     * 修改商品
-     * 
-     * @param taoProduct 商品信息
-     * @return 结果
-     */
-	public int updateTaoProduct(TaoProduct taoProduct);
-		
+	 * 插入product信息
+	 *
+	 * @param product taoProduct
+	 * @return 1 if success else 0
+	 */
+	public int addTaoProduct(TaoProduct product);
+
 	/**
-     * 删除商品信息
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
+	 * 获取已有商品信息
+	 *
+	 * @param productId unique id
+	 * @return TaoProduct
+ 	 */
+	public TaoProduct getInfoBeforeEdit(Integer productId);
+
+	/**
+	 * 修改product信息
+	 *
+	 * @param product TaoProduct
+	 * @return 1 if success else 0
+	 */
+	public int editTaoProduct(TaoProduct product);
+
+	/**
+	 * 删除商品对象
+	 *
+	 * @param ids 需要删除的数据ID
+	 * @return 结果
+	 */
 	public int deleteTaoProductByIds(String ids);
-	
+
+	/**
+	 * 返回根据商品价格，成交订单数量排序的商品
+	 *
+	 * @return product list
+	 */
+	public List<TaoProduct> getSortedProducts();
 }

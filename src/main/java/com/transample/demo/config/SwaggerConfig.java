@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 
     @Bean
-    public Docket docker(){
+    public Docket docket(){
         // 构造函数传入初始化规范，这是swagger2规范
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("transample")
