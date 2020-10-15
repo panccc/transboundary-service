@@ -1,15 +1,15 @@
 package com.transample.demo.controller;
 
 import java.util.List;
+
+import com.transample.demo.dto.RemoveIdsDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.transample.demo.domain.TaoSeller;
 import com.transample.demo.service.ITaoSellerService;
 import com.transample.demo.common.ResponseResult;
@@ -20,82 +20,62 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@Controller
+@RestController
 @RequestMapping("/taoSeller")
+@Api(tags = "商家相关API")
 public class TaoSellerController
 {
-    private String prefix = "taoSeller";
-	
+
 	@Autowired
 	private ITaoSellerService taoSellerService;
 	
-	@GetMapping()
-	public String taoSeller()
-	{
-	    return prefix + "/taoSeller";
-	}
-	
-	/**
-	 * 查询商家列表
-	 */
 	@PostMapping("/list")
-	@ResponseBody
-	public List<TaoSeller> list(TaoSeller taoSeller)
+	@ApiOperation("查询商家列表")
+	public ResponseEntity<ResponseResult> list(@RequestBody TaoSeller taoSeller)
 	{
-        List<TaoSeller> list = taoSellerService.selectTaoSellerList(taoSeller);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.getTaoSellerList(taoSeller)));
+	}
+
+	@GetMapping("/getInfoBeforeAdd")
+    @ApiOperation("获取新增商家信息")
+	public ResponseEntity<ResponseResult> getInfoBeforeAdd()
+	{
+		return ResponseEntity.ok(ResponseResult.ok(new TaoSeller()));
 	}
 	
-	
-	/**
-	 * 新增商家
-	 */
-	@GetMapping("/add")
-	public String add()
-	{
-	    return prefix + "/add";
-	}
-	
-	/**
-	 * 新增保存商家
-	 */
 	@PostMapping("/add")
-	@ResponseBody
-	public ResponseEntity addSave(TaoSeller taoSeller)
+	@ApiOperation("新增商家")
+	public ResponseEntity<ResponseResult> add(@RequestBody TaoSeller taoSeller)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.insertTaoSeller(taoSeller)));
 	}
 
-	/**
-	 * 修改商家
-	 */
-	@GetMapping("/edit/{sellerId}")
-	public String edit(@PathVariable("sellerId") Integer sellerId, ModelMap mmap)
+	@GetMapping("/getInfoBeforeEdit/{sellerId}")
+    @ApiOperation("获取修改商家信息")
+	public ResponseEntity<ResponseResult> getInfoBeforeEdit(@PathVariable("sellerId") Integer sellerId)
 	{
-		TaoSeller taoSeller = taoSellerService.selectTaoSellerById(sellerId);
-		mmap.put("taoSeller", taoSeller);
-	    return prefix + "/edit";
+		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.getTaoSellerById(sellerId)));
 	}
 	
-	/**
-	 * 修改保存商家
-	 */
 	@PostMapping("/edit")
-	@ResponseBody
-	public ResponseEntity editSave(TaoSeller taoSeller)
+	@ApiOperation("修改商家信息")
+	public ResponseEntity<ResponseResult> edit(@RequestBody TaoSeller taoSeller)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.updateTaoSeller(taoSeller)));
 	}
 	
-	/**
-	 * 删除商家
-	 */
-
 	@PostMapping( "/remove")
-	@ResponseBody
-	public ResponseEntity remove(String ids)
+	@ApiOperation("删除商家")
+	public ResponseEntity<ResponseResult> remove(@RequestBody RemoveIdsDTO ids)
 	{		
-		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.deleteTaoSellerByIds(ids)));
+		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.deleteTaoSellerByIds(ids.getIds())));
 	}
-	
+
+	@PostMapping( "/search/{id}")
+	@ApiOperation("查找商家")
+	public ResponseEntity<ResponseResult> search(@PathVariable Integer id)
+	{
+		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.getTaoSellerById(id)));
+	}
+
 }

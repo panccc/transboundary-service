@@ -17,7 +17,7 @@ public interface ITaoSellerService
      * @param sellerId 商家ID
      * @return 商家信息
      */
-	public TaoSeller selectTaoSellerById(Integer sellerId);
+	public TaoSeller getTaoSellerById(Integer sellerId);
 	
 	/**
      * 查询商家列表
@@ -25,7 +25,7 @@ public interface ITaoSellerService
      * @param taoSeller 商家信息
      * @return 商家集合
      */
-	public List<TaoSeller> selectTaoSellerList(TaoSeller taoSeller);
+	public List<TaoSeller> getTaoSellerList(TaoSeller taoSeller);
 	
 	/**
      * 新增商家
