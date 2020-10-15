@@ -19,64 +19,25 @@ public class TaoStationServiceImpl implements ITaoStationService
 	@Autowired
 	private TaoStationMapper taoStationMapper;
 
-	/**
-     * 查询村站信息
-     * 
-     * @param stationId 村站ID
-     * @return 村站信息
-     */
     @Override
-	public TaoStation selectTaoStationById(Integer stationId)
-	{
+	public TaoStation getTaoStationById(Integer stationId) {
 	    return taoStationMapper.selectTaoStationById(stationId);
 	}
-	
-	/**
-     * 查询村站列表
-     * 
-     * @param taoStation 村站信息
-     * @return 村站集合
-     */
 	@Override
-	public List<TaoStation> selectTaoStationList(TaoStation taoStation)
-	{
+	public List<TaoStation> getTaoStationList(TaoStation taoStation) {
 	    return taoStationMapper.selectTaoStationList(taoStation);
 	}
 	
-    /**
-     * 新增村站
-     * 
-     * @param taoStation 村站信息
-     * @return 结果
-     */
 	@Override
-	public int insertTaoStation(TaoStation taoStation)
-	{
+	public int insertTaoStation(TaoStation taoStation) {
 	    return taoStationMapper.insertTaoStation(taoStation);
 	}
-	
-	/**
-     * 修改村站
-     * 
-     * @param taoStation 村站信息
-     * @return 结果
-     */
 	@Override
-	public int updateTaoStation(TaoStation taoStation)
-	{
+	public int updateTaoStation(TaoStation taoStation) {
 	    return taoStationMapper.updateTaoStation(taoStation);
 	}
-
-	/**
-     * 删除村站对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
 	@Override
-	public int deleteTaoStationByIds(String ids)
-	{
+	public int deleteTaoStationByIds(String ids) {
 		return taoStationMapper.deleteTaoStationByIds(ids.split(","));
 	}
-	
 }

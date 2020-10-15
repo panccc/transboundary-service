@@ -58,14 +58,14 @@ public class TaoMurakamiController
 	
 	@PostMapping("/edit")
 	@ApiOperation("修改村小二信息")
-	public ResponseEntity<ResponseResult> edit(TaoMurakami taoMurakami)
+	public ResponseEntity<ResponseResult> edit(@RequestBody TaoMurakami taoMurakami)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoMurakamiService.updateTaoMurakami(taoMurakami)));
 	}
 	
 	@PostMapping( "/remove")
 	@ApiOperation("删除村小二")
-	public ResponseEntity<ResponseResult> remove(RemoveIdsDTO ids)
+	public ResponseEntity<ResponseResult> remove(@RequestBody RemoveIdsDTO ids)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoMurakamiService.deleteTaoMurakamiByIds(ids.getIds())));
 	}

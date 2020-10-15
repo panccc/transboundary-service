@@ -17,7 +17,7 @@ public interface ITaoStationService
      * @param stationId 村站ID
      * @return 村站信息
      */
-	public TaoStation selectTaoStationById(Integer stationId);
+	public TaoStation getTaoStationById(Integer stationId);
 	
 	/**
      * 查询村站列表
@@ -25,7 +25,7 @@ public interface ITaoStationService
      * @param taoStation 村站信息
      * @return 村站集合
      */
-	public List<TaoStation> selectTaoStationList(TaoStation taoStation);
+	public List<TaoStation> getTaoStationList(TaoStation taoStation);
 	
 	/**
      * 新增村站

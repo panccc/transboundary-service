@@ -1,15 +1,15 @@
 package com.transample.demo.controller;
 
 import java.util.List;
+
+import com.transample.demo.dto.RemoveIdsDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.transample.demo.domain.TaoStation;
 import com.transample.demo.service.ITaoStationService;
 import com.transample.demo.common.ResponseResult;
@@ -20,82 +20,51 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@Controller
+@RestController
 @RequestMapping("/taoStation")
+@Api(tags = "村站相关API")
 public class TaoStationController
 {
-    private String prefix = "taoStation";
-	
+
 	@Autowired
 	private ITaoStationService taoStationService;
 	
-	@GetMapping()
-	public String taoStation()
-	{
-	    return prefix + "/taoStation";
-	}
-	
-	/**
-	 * 查询村站列表
-	 */
 	@PostMapping("/list")
-	@ResponseBody
-	public List<TaoStation> list(TaoStation taoStation)
-	{
-        List<TaoStation> list = taoStationService.selectTaoStationList(taoStation);
-		return list;
+	@ApiOperation("查询村站列表")
+	public ResponseEntity<ResponseResult> list(@RequestBody TaoStation taoStation) {
+		return ResponseEntity.ok(ResponseResult.ok(taoStationService.getTaoStationList(taoStation)));
 	}
 	
-	
-	/**
-	 * 新增村站
-	 */
-	@GetMapping("/add")
-	public String add()
-	{
-	    return prefix + "/add";
+	@GetMapping("/getInfoBeforeAdd")
+	@ApiOperation("查询插入村站信息")
+	public ResponseEntity<ResponseResult> getInfoBeforeAdd() {
+		return ResponseEntity.ok(ResponseResult.ok(new TaoStation()));
 	}
 	
-	/**
-	 * 新增保存村站
-	 */
 	@PostMapping("/add")
-	@ResponseBody
-	public ResponseEntity addSave(TaoStation taoStation)
-	{		
+	@ApiOperation("新增村站")
+	public ResponseEntity<ResponseResult> add(@RequestBody TaoStation taoStation) {
 		return ResponseEntity.ok(ResponseResult.ok(taoStationService.insertTaoStation(taoStation)));
 	}
 
-	/**
-	 * 修改村站
-	 */
-	@GetMapping("/edit/{stationId}")
-	public String edit(@PathVariable("stationId") Integer stationId, ModelMap mmap)
-	{
-		TaoStation taoStation = taoStationService.selectTaoStationById(stationId);
-		mmap.put("taoStation", taoStation);
-	    return prefix + "/edit";
+	@GetMapping("/getInfoBeforeEdit/{stationId}")
+    @ApiOperation("获取修改村站信息")
+	public ResponseEntity<ResponseResult> getInfoBeforeEdit(@PathVariable("stationId") Integer stationId) {
+		return ResponseEntity.ok(ResponseResult.ok(taoStationService.getTaoStationById(stationId)));
 	}
 	
-	/**
-	 * 修改保存村站
-	 */
 	@PostMapping("/edit")
-	@ResponseBody
-	public ResponseEntity editSave(TaoStation taoStation)
+	@ApiOperation("修改村站信息")
+	public ResponseEntity<ResponseResult> edit(@RequestBody TaoStation taoStation)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoStationService.updateTaoStation(taoStation)));
 	}
 	
-	/**
-	 * 删除村站
-	 */
-
 	@PostMapping( "/remove")
-	@ResponseBody
-	public ResponseEntity remove(String ids)
+	@ApiOperation("删除村站信息")
+	public ResponseEntity<ResponseResult> remove(@RequestBody RemoveIdsDTO ids)
 	{		
-		return ResponseEntity.ok(ResponseResult.ok(taoStationService.deleteTaoStationByIds(ids)));
+		return ResponseEntity.ok(ResponseResult.ok(taoStationService.deleteTaoStationByIds(ids.getIds())));
 	}
 	
 }
