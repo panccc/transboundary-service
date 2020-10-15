@@ -36,7 +36,7 @@ public class TaoProductController
 		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getProductById(productId)));
 	}
 
-	@PostMapping("/getProductList")
+	@PostMapping("/list")
 	@ApiOperation("获取相似商品列表")
 	public ResponseEntity<ResponseResult> getProductList(@RequestBody TaoProduct product)
 	{

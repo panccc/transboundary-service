@@ -17,7 +17,7 @@ public interface ITaoVillagerService
      * @param villagerId 村民ID
      * @return 村民信息
      */
-	public TaoVillager selectTaoVillagerById(Integer villagerId);
+	public TaoVillager getTaoVillagerById(Integer villagerId);
 	
 	/**
      * 查询村民列表
@@ -25,7 +25,7 @@ public interface ITaoVillagerService
      * @param taoVillager 村民信息
      * @return 村民集合
      */
-	public List<TaoVillager> selectTaoVillagerList(TaoVillager taoVillager);
+	public List<TaoVillager> getTaoVillagerList(TaoVillager taoVillager);
 	
 	/**
      * 新增村民

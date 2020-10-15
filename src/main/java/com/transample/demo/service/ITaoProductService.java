@@ -62,7 +62,7 @@ public interface ITaoProductService
 	public int editTaoProduct(TaoProduct product);
 
 	/**
-	 * 删除商品对象
+	 * 删除商品对象，将delete状态改为0
 	 *
 	 * @param ids 需要删除的数据ID
 	 * @return 结果

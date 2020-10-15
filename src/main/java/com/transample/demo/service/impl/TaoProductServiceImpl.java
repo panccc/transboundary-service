@@ -36,7 +36,7 @@ public class TaoProductServiceImpl implements ITaoProductService
 	@Override
 	public TaoProduct getInfoBeforeAdd(Integer sellerId) {
 		TaoProduct product = new TaoProduct();
-		product.setDelete(0);
+		product.setDelete(1);
 		product.setSellerId(sellerId);
 		product.setExecutedOrder(0);
 		return product;
@@ -60,7 +60,14 @@ public class TaoProductServiceImpl implements ITaoProductService
 	@Override
 	public int deleteTaoProductByIds(RemoveIdsDTO ids)
 	{
-		return taoProductMapper.deleteTaoProductByIds(ids.getIds().split(","));
+		int flag = 1;
+		for (String id : ids.getIds().split(",")) {
+			TaoProduct product = getProductById(Integer.parseInt(id));
+			product.setDelete(0);
+			flag = editTaoProduct(product);
+			if (flag == 0) return flag;
+		}
+		return flag;
 	}
 
 	@Override
