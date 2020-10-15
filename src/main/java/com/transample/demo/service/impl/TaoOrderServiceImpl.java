@@ -7,6 +7,8 @@ import com.transample.demo.mapper.TaoOrderMapper;
 import com.transample.demo.domain.TaoOrder;
 import com.transample.demo.service.ITaoOrderService;
 
+import javax.annotation.Resource;
+
 /**
  * 订单 服务层实现
  * 
@@ -16,7 +18,7 @@ import com.transample.demo.service.ITaoOrderService;
 @Service
 public class TaoOrderServiceImpl implements ITaoOrderService 
 {
-	@Autowired
+	@Resource
 	private TaoOrderMapper taoOrderMapper;
 
 	/**
@@ -47,12 +49,13 @@ public class TaoOrderServiceImpl implements ITaoOrderService
      * 新增订单
      * 
      * @param taoOrder 订单信息
-     * @return 结果
+     * @return 结果返回订单号即主键
      */
 	@Override
 	public int insertTaoOrder(TaoOrder taoOrder)
 	{
-	    return taoOrderMapper.insertTaoOrder(taoOrder);
+		taoOrderMapper.insertTaoOrder(taoOrder);
+		return taoOrder.getOrderId();
 	}
 	
 	/**

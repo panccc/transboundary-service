@@ -1,7 +1,6 @@
 package com.transample.demo.mapper;
 
 import com.transample.demo.domain.TaoOrder;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 

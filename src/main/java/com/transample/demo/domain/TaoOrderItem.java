@@ -25,7 +25,7 @@ public class TaoOrderItem
 	@ApiModelProperty(value = "商品数量",required = true)
 	private Integer amount;
 	/** 价格 */
-	@ApiModelProperty(value = "商品价格",required = true)
+	@ApiModelProperty(value = "商品价格,可以不传")
 	private Double price;
 	/** 订单Id */
 	private Integer orderId;
