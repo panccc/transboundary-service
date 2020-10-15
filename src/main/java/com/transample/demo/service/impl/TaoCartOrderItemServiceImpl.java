@@ -1,11 +1,18 @@
 package com.transample.demo.service.impl;
 
 import java.util.List;
+
+import com.transample.demo.domain.TaoProduct;
+import com.transample.demo.domain.TaoShoppingCart;
+import com.transample.demo.mapper.TaoProductMapper;
+import com.transample.demo.mapper.TaoShoppingCartMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoCartOrderItemMapper;
 import com.transample.demo.domain.TaoCartOrderItem;
 import com.transample.demo.service.ITaoCartOrderItemService;
+
+import javax.annotation.Resource;
 
 /**
  * 购物车单类商品 服务层实现
@@ -16,8 +23,14 @@ import com.transample.demo.service.ITaoCartOrderItemService;
 @Service
 public class TaoCartOrderItemServiceImpl implements ITaoCartOrderItemService 
 {
-	@Autowired
+	@Resource
 	private TaoCartOrderItemMapper taoCartOrderItemMapper;
+
+	@Resource
+	private TaoProductMapper taoProductMapper;
+
+	@Resource
+	private TaoShoppingCartMapper taoShoppingCartMapper;
 
 	/**
      * 查询购物车单类商品信息
@@ -52,7 +65,15 @@ public class TaoCartOrderItemServiceImpl implements ITaoCartOrderItemService
 	@Override
 	public int insertTaoCartOrderItem(TaoCartOrderItem taoCartOrderItem)
 	{
-	    return taoCartOrderItemMapper.insertTaoCartOrderItem(taoCartOrderItem);
+
+
+		int productId = taoCartOrderItem.getGoodsId();
+		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
+		if(product==null)return 0;
+
+		taoCartOrderItem.setPrice(product.getProductPrice()*taoCartOrderItem.getAmount());
+
+		return taoCartOrderItemMapper.insertTaoCartOrderItem(taoCartOrderItem);
 	}
 	
 	/**
@@ -64,7 +85,11 @@ public class TaoCartOrderItemServiceImpl implements ITaoCartOrderItemService
 	@Override
 	public int updateTaoCartOrderItem(TaoCartOrderItem taoCartOrderItem)
 	{
-	    return taoCartOrderItemMapper.updateTaoCartOrderItem(taoCartOrderItem);
+		int productId = taoCartOrderItem.getGoodsId();
+		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
+		if(product==null)return 0;
+		taoCartOrderItem.setPrice(product.getProductPrice()*taoCartOrderItem.getAmount());
+		return taoCartOrderItemMapper.updateTaoCartOrderItem(taoCartOrderItem);
 	}
 
 	/**

@@ -1,11 +1,16 @@
 package com.transample.demo.service.impl;
 
 import java.util.List;
+
+import com.transample.demo.domain.TaoProduct;
+import com.transample.demo.mapper.TaoProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoOrderItemMapper;
 import com.transample.demo.domain.TaoOrderItem;
 import com.transample.demo.service.ITaoOrderItemService;
+
+import javax.annotation.Resource;
 
 /**
  * 订单单类商品 服务层实现
@@ -16,8 +21,11 @@ import com.transample.demo.service.ITaoOrderItemService;
 @Service
 public class TaoOrderItemServiceImpl implements ITaoOrderItemService 
 {
-	@Autowired
+	@Resource
 	private TaoOrderItemMapper taoOrderItemMapper;
+
+	@Resource
+	private TaoProductMapper taoProductMapper;
 
 	/**
      * 查询订单单类商品信息
@@ -52,7 +60,15 @@ public class TaoOrderItemServiceImpl implements ITaoOrderItemService
 	@Override
 	public int insertTaoOrderItem(TaoOrderItem taoOrderItem)
 	{
-	    return taoOrderItemMapper.insertTaoOrderItem(taoOrderItem);
+	    int productId = taoOrderItem.getGoodsId();
+		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
+		if(product==null)return 0;
+		/**
+		 * 设置价格
+		 */
+		taoOrderItem.setPrice(product.getProductPrice()*taoOrderItem.getAmount());
+
+		return taoOrderItemMapper.insertTaoOrderItem(taoOrderItem);
 	}
 	
 	/**
@@ -64,7 +80,14 @@ public class TaoOrderItemServiceImpl implements ITaoOrderItemService
 	@Override
 	public int updateTaoOrderItem(TaoOrderItem taoOrderItem)
 	{
-	    return taoOrderItemMapper.updateTaoOrderItem(taoOrderItem);
+		int productId = taoOrderItem.getGoodsId();
+		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
+		if(product==null)return 0;
+		/**
+		 * 设置价格
+		 */
+		taoOrderItem.setPrice(product.getProductPrice()*taoOrderItem.getAmount());
+		return taoOrderItemMapper.updateTaoOrderItem(taoOrderItem);
 	}
 
 	/**

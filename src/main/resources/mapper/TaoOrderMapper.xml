@@ -59,6 +59,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
         
     <insert id="insertTaoOrder" parameterType="TaoOrder">
+        <selectKey keyProperty="orderId" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
         insert into tao_order
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="orderId != null  ">order_id,</if>

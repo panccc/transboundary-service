@@ -1,18 +1,15 @@
 package com.transample.demo.mapper;
 
 import com.transample.demo.domain.TaoLogistics;
-import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
+import java.util.List;	
 
 /**
  * 物流 数据层
  * 
  * @author youcaihua
- * @date 2020-10-13
+ * @date 2020-10-14
  */
-
-public interface TaoLogisticsMapper 
+public interface TaoLogisticsMapper
 {
 	/**
      * 查询物流信息

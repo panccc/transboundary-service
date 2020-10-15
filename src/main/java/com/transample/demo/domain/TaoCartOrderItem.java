@@ -1,6 +1,8 @@
 package com.transample.demo.domain;
 
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 购物车单类商品表 tao_cart_order_item
  * 
@@ -9,18 +11,23 @@ package com.transample.demo.domain;
  */
 public class TaoCartOrderItem
 {
-	
 	/** 订单单个商品号 */
+	@ApiModelProperty("新增时不填")
 	private Integer orderItemId;
 	/** 产品Id */
+	@ApiModelProperty(value = "商品id",required = true)
 	private Integer goodsId;
 	/** 规格 */
+	@ApiModelProperty(value = "规格",required = true)
 	private String specification;
 	/** 数量 */
+	@ApiModelProperty(value = "数量",required = true)
 	private Integer amount;
 	/** 价格 */
+	@ApiModelProperty(value = "价格")
 	private Double price;
 	/** 购物车Id */
+	@ApiModelProperty(value = "购物车id，与村民id对应，也可传村民id，待确认",required = true)
 	private Integer cartId;
 
 	public void setOrderItemId(Integer orderItemId) 

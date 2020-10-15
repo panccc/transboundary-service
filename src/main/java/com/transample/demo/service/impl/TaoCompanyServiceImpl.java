@@ -1,11 +1,14 @@
 package com.transample.demo.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoCompanyMapper;
 import com.transample.demo.domain.TaoCompany;
 import com.transample.demo.service.ITaoCompanyService;
+
+import javax.annotation.Resource;
 
 /**
  * 物流公司 服务层实现
@@ -16,7 +19,7 @@ import com.transample.demo.service.ITaoCompanyService;
 @Service
 public class TaoCompanyServiceImpl implements ITaoCompanyService 
 {
-	@Autowired
+	@Resource
 	private TaoCompanyMapper taoCompanyMapper;
 
 	/**
@@ -52,7 +55,14 @@ public class TaoCompanyServiceImpl implements ITaoCompanyService
 	@Override
 	public int insertTaoCompany(TaoCompany taoCompany)
 	{
-	    return taoCompanyMapper.insertTaoCompany(taoCompany);
+		/**
+		 * 填入创建时间和更新时间
+		 */
+
+		Date date = new Date();
+		taoCompany.setCreateTime(date);
+		taoCompany.setUpdateTime(date);
+		return taoCompanyMapper.insertTaoCompany(taoCompany);
 	}
 	
 	/**
@@ -64,7 +74,13 @@ public class TaoCompanyServiceImpl implements ITaoCompanyService
 	@Override
 	public int updateTaoCompany(TaoCompany taoCompany)
 	{
-	    return taoCompanyMapper.updateTaoCompany(taoCompany);
+		/**
+		 * 填入更新时间
+		 */
+		Date date = new Date();
+		taoCompany.setUpdateTime(date);
+
+		return taoCompanyMapper.updateTaoCompany(taoCompany);
 	}
 
 	/**

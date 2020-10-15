@@ -18,7 +18,7 @@ import com.transample.demo.common.ResponseResult;
  * 物流 信息操作处理
  * 
  * @author youcaihua
- * @date 2020-10-13
+ * @date 2020-10-14
  */
 @Controller
 @RequestMapping("/taoLogistics")
@@ -45,7 +45,6 @@ public class TaoLogisticsController
         List<TaoLogistics> list = taoLogisticsService.selectTaoLogisticsList(taoLogistics);
 		return list;
 	}
-	
 	
 	/**
 	 * 新增物流
@@ -90,7 +89,6 @@ public class TaoLogisticsController
 	/**
 	 * 删除物流
 	 */
-
 	@PostMapping( "/remove")
 	@ResponseBody
 	public ResponseEntity remove(String ids)
