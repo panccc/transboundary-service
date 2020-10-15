@@ -2,6 +2,7 @@ package com.transample.demo.controller;
 
 import java.util.List;
 
+import com.transample.demo.dto.RemoveIdsDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -72,7 +73,7 @@ public class TaoProductController
 	
 	@PostMapping("/remove")
 	@ApiOperation("删除指定多个id商品")
-	public ResponseEntity<ResponseResult> remove(@ApiParam("id字符串") @RequestParam String ids)
+	public ResponseEntity<ResponseResult> remove(@ApiParam("id字符串") @RequestBody RemoveIdsDTO ids)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoProductService.deleteTaoProductByIds(ids)));
 	}

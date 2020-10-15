@@ -1,6 +1,8 @@
 package com.transample.demo.service;
 
 import com.transample.demo.domain.TaoProduct;
+import com.transample.demo.dto.RemoveIdsDTO;
+
 import java.util.List;
 
 /**
@@ -65,7 +67,7 @@ public interface ITaoProductService
 	 * @param ids 需要删除的数据ID
 	 * @return 结果
 	 */
-	public int deleteTaoProductByIds(String ids);
+	public int deleteTaoProductByIds(RemoveIdsDTO ids);
 
 	/**
 	 * 返回根据商品价格，成交订单数量排序的商品

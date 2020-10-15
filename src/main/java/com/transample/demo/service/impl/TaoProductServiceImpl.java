@@ -2,6 +2,8 @@ package com.transample.demo.service.impl;
 
 import java.util.Comparator;
 import java.util.List;
+
+import com.transample.demo.dto.RemoveIdsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoProductMapper;
@@ -56,9 +58,9 @@ public class TaoProductServiceImpl implements ITaoProductService
 	}
 
 	@Override
-	public int deleteTaoProductByIds(String ids)
+	public int deleteTaoProductByIds(RemoveIdsDTO ids)
 	{
-		return taoProductMapper.deleteTaoProductByIds(ids);
+		return taoProductMapper.deleteTaoProductByIds(ids.getIds().split(","));
 	}
 
 	@Override
