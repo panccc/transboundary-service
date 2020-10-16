@@ -20,8 +20,8 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@Api("物流公司相关接口")
-@Controller
+@RestController
+@Api(tags = "物流公司API")
 @RequestMapping("/taoCompany")
 public class TaoCompanyController
 {
