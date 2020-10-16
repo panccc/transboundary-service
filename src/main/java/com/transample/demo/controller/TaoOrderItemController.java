@@ -3,12 +3,11 @@ package com.transample.demo.controller;
 import java.util.List;
 
 import com.transample.demo.common.ResultCode;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import com.transample.demo.domain.TaoOrderItem;
 import com.transample.demo.service.ITaoOrderItemService;
@@ -21,6 +20,7 @@ import com.transample.demo.common.ResponseResult;
  * @date 2020-10-13
  */
 //@Controller
+@Api(tags = "订单的商品信息相关API")
 @RequestMapping("/taoOrderItem")
 public class TaoOrderItemController
 {

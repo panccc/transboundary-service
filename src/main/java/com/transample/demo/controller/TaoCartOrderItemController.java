@@ -22,7 +22,7 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@Api("购物车单类商品相关接口")
+@Api(tags = "购物车单类商品相关API")
 @Controller
 @RequestMapping("/taoCartOrderItem")
 public class TaoCartOrderItemController

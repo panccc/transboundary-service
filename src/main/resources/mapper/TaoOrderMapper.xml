@@ -16,6 +16,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="stationName"    column="station_name"    />
         <result property="totalNumber"    column="total_number"    />
         <result property="totalPrice"    column="total_price"    />
+        <result property="logisticsOnePrice"    column="logistics_one_price"    />
+        <result property="logisticsTwoPrice"    column="logistics_two_price"    />
         <result property="status"    column="status"    />
         <result property="remark"    column="remark"    />
         <result property="createTime"    column="create_time"    />
@@ -26,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectTaoOrderVo">
-        select order_id, villager_id, user_name, seller_id, seller_name, mobile, address, station_id, station_name, total_number, total_price, status, remark, create_time, send_time, arrive_time, shou_time, finish_time from tao_order
+        select order_id, villager_id, user_name, seller_id, seller_name, mobile, address, station_id, station_name, total_number, total_price, logistics_one_price, logistics_two_price, status, remark, create_time, send_time, arrive_time, shou_time, finish_time from tao_order
     </sql>
 	
     <select id="selectTaoOrderList" parameterType="TaoOrder" resultMap="TaoOrderResult">
@@ -43,6 +45,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="stationName != null  and stationName != '' "> and station_name LIKE CONCAT('%',#{stationName},'%')</if>
              <if test="totalNumber != null "> and total_number LIKE CONCAT('%',#{totalNumber},'%')</if>
              <if test="totalPrice != null "> and total_price LIKE CONCAT('%',#{totalPrice},'%')</if>
+             <if test="logisticsOnePrice != null "> and logistics_one_price LIKE CONCAT('%',#{logisticsOnePrice},'%')</if>
+             <if test="logisticsTwoPrice != null "> and logistics_two_price LIKE CONCAT('%',#{logisticsTwoPrice},'%')</if>
              <if test="status != null "> and status LIKE CONCAT('%',#{status},'%')</if>
              <if test="remark != null  and remark != '' "> and remark LIKE CONCAT('%',#{remark},'%')</if>
              <if test="createTime != null "> and create_time LIKE CONCAT('%',#{createTime},'%')</if>
@@ -64,7 +68,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </selectKey>
         insert into tao_order
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="orderId != null  ">order_id,</if>
 			<if test="villagerId != null  ">villager_id,</if>
 			<if test="userName != null  and userName != ''  ">user_name,</if>
 			<if test="sellerId != null  ">seller_id,</if>
@@ -75,6 +78,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="stationName != null  and stationName != ''  ">station_name,</if>
 			<if test="totalNumber != null  ">total_number,</if>
 			<if test="totalPrice != null  ">total_price,</if>
+			<if test="logisticsOnePrice != null  ">logistics_one_price,</if>
+			<if test="logisticsTwoPrice != null  ">logistics_two_price,</if>
 			<if test="status != null  ">status,</if>
 			<if test="remark != null  and remark != ''  ">remark,</if>
 			<if test="createTime != null  ">create_time,</if>
@@ -84,7 +89,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="finishTime != null  ">finish_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="orderId != null  ">#{orderId},</if>
 			<if test="villagerId != null  ">#{villagerId},</if>
 			<if test="userName != null  and userName != ''  ">#{userName},</if>
 			<if test="sellerId != null  ">#{sellerId},</if>
@@ -95,6 +99,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="stationName != null  and stationName != ''  ">#{stationName},</if>
 			<if test="totalNumber != null  ">#{totalNumber},</if>
 			<if test="totalPrice != null  ">#{totalPrice},</if>
+			<if test="logisticsOnePrice != null  ">#{logisticsOnePrice},</if>
+			<if test="logisticsTwoPrice != null  ">#{logisticsTwoPrice},</if>
 			<if test="status != null  ">#{status},</if>
 			<if test="remark != null  and remark != ''  ">#{remark},</if>
 			<if test="createTime != null  ">#{createTime},</if>
@@ -118,6 +124,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stationName != null  and stationName != ''  ">station_name = #{stationName},</if>
             <if test="totalNumber != null  ">total_number = #{totalNumber},</if>
             <if test="totalPrice != null  ">total_price = #{totalPrice},</if>
+            <if test="logisticsOnePrice != null  ">logistics_one_price = #{logisticsOnePrice},</if>
+            <if test="logisticsTwoPrice != null  ">logistics_two_price = #{logisticsTwoPrice},</if>
             <if test="status != null  ">status = #{status},</if>
             <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
             <if test="createTime != null  ">create_time = #{createTime},</if>

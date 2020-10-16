@@ -1,6 +1,9 @@
 package com.transample.demo.service;
 
+import com.transample.demo.domain.TaoCartOrderItem;
 import com.transample.demo.domain.TaoOrder;
+import com.transample.demo.domain.TaoOrderItem;
+
 import java.util.List;
 
 /**
@@ -50,5 +53,13 @@ public interface ITaoOrderService
      * @return 结果
      */
 	public int deleteTaoOrderByIds(String ids);
+
+	/**
+	 * 计算一些订单的基本信息
+	 * @param order
+	 * @param itemList
+	 * @return
+	 */
+	public TaoOrder calOrderInfo(TaoOrder order, List<TaoOrderItem> itemList);
 	
 }
