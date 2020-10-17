@@ -44,7 +44,7 @@ public class TaoMurakamiController
 	
 	@PostMapping("/add")
 	@ApiOperation("新增村小二")
-	public ResponseEntity<ResponseResult> addSave(@RequestBody TaoMurakami taoMurakami)
+	public ResponseEntity<ResponseResult> add(@RequestBody TaoMurakami taoMurakami)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoMurakamiService.insertTaoMurakami(taoMurakami)));
 	}
