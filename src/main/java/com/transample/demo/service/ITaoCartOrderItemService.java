@@ -1,6 +1,8 @@
 package com.transample.demo.service;
 
 import com.transample.demo.domain.TaoCartOrderItem;
+
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -50,5 +52,12 @@ public interface ITaoCartOrderItemService
      * @return 结果
      */
 	public int deleteTaoCartOrderItemByIds(String ids);
+
+	/**
+	 * 根据购物车id，获取购物车商品list，并按照商家分类
+	 * @param cartId
+	 * @return
+	 */
+	public HashMap<Integer,List<TaoCartOrderItem>> getCartItemListGroupBySeller(Integer cartId);
 	
 }

@@ -53,7 +53,7 @@ public class TaoOrderController
 	/**
 	 * 查询订单列表
 	 */
-	private static final String queryStatusAPIValue = "待确认underConfirm,已确认confirm,待发货underSend,运输中send" +
+	private static final String queryStatusAPIValue = "待确认underConfirm待发货underSend,运输中send" +
 			",待成交receive,已成交takeOver";
 	@ApiOperation("商家按条件获取订单列表")
 	@GetMapping("/list/seller/{status}/{sellerId}")
@@ -65,9 +65,6 @@ public class TaoOrderController
 		{
 			case "underConfirm":
 				order.setStatus(OrderConstant.PAY);
-				break;
-			case "confirm":
-				order.setStatus(OrderConstant.AUDIT);
 				break;
 			case "underSend":
 				order.setStatus(OrderConstant.AUDIT);
