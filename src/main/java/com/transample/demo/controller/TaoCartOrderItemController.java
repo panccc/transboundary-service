@@ -1,5 +1,6 @@
 package com.transample.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.transample.demo.common.ResultCode;
@@ -23,7 +24,7 @@ import com.transample.demo.common.ResponseResult;
  * @date 2020-10-13
  */
 @Api(tags = "购物车单类商品相关API")
-@Controller
+@RestController
 @RequestMapping("/taoCartOrderItem")
 public class TaoCartOrderItemController
 {
@@ -41,13 +42,13 @@ public class TaoCartOrderItemController
 	/**
 	 * 查询购物车单类商品列表
 	 */
-	@ApiOperation("查询购物车单类商品列表 支持模糊查询")
-	@PostMapping("/list")
-	@ResponseBody
-	public List<TaoCartOrderItem> getCartList(@RequestBody TaoCartOrderItem taoCartOrderItem)
+	@ApiOperation("查询购物车单类商品列表")
+	@GetMapping("/list/{cartId}")
+	public HashMap<Integer,List<TaoCartOrderItem>> getCartList(@PathVariable Integer cartId)
 	{
-        List<TaoCartOrderItem> list = taoCartOrderItemService.selectTaoCartOrderItemList(taoCartOrderItem);
-		return list;
+
+
+        return taoCartOrderItemService.getCartItemListGroupBySeller(cartId);
 	}
 	
 	
@@ -65,7 +66,6 @@ public class TaoCartOrderItemController
 	 */
 	@ApiOperation("新增保存购物车单类商品")
 	@PostMapping("/add/{cartId}")
-	@ResponseBody
 	public ResponseEntity addItem(@ApiParam(value = "购物车id",required = true)@PathVariable("cartId") Integer cartId,@RequestBody TaoCartOrderItem taoCartOrderItem)
 	{		
 		taoCartOrderItem.setCartId(cartId);
