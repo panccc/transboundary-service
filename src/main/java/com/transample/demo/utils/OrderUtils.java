@@ -15,17 +15,68 @@ public class OrderUtils {
      * @param sellerAddress
      * @param villageAddress
      * @param amount
-     * @param hasSecondaryLogistics
-     * @param hasSecondaryLogistics
+     * @param isSecondaryLogistics
      * @return
      */
-    public static double generateFare(String sellerAddress, String villageAddress,int amount,boolean hasSecondaryLogistics,String companyType)
+    public static double generateFare(String sellerAddress, String villageAddress,int amount,boolean isSecondaryLogistics)
     {
+        double ans = 0.0;
         /**
          * 获得商家的省市
          */
         int sIndex = sellerAddress.indexOf("省");
-        return 0;
+        int cIndex = sellerAddress.indexOf("市");
+        String sProvince = sellerAddress.substring(0,sIndex);
+        String sCity = sellerAddress.substring(sIndex+1,cIndex);
+        /**
+         * 获得买家的省市
+         */
+        int vSIndex = villageAddress.indexOf("省");
+        int vCIndex = villageAddress.indexOf("市");
+        String vProvince = villageAddress.substring(0,vSIndex);
+        String vCity = villageAddress.substring(sIndex+1,vCIndex);
+
+
+
+        if(!isSecondaryLogistics)
+        {
+            /**
+             * 一级物流
+             */
+            if(!sProvince.equals(vProvince))
+            {
+                /**
+                 * 省外
+                 */
+                ans = generateRandom(12,20);
+            }else
+            {
+                if(sCity.equals(vCity))
+                {
+                    /**
+                     * 同城
+                     */
+                    ans = generateRandom(4,8);
+                }else
+                {
+                    /**
+                     * 省内
+                     */
+                    ans = generateRandom(8,12);
+                }
+            }
+
+            if(amount>3)
+            {
+                ans += (amount-3)*generateRandom(1,3);
+            }
+
+        }else
+        {
+            ans = generateRandom(3,5);
+        }
+
+        return ans;
     }
 
     /**
