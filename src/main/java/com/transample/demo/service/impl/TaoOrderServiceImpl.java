@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.transample.demo.constants.OrderConstant;
 import com.transample.demo.domain.TaoCartOrderItem;
 import com.transample.demo.domain.TaoOrderItem;
 import com.transample.demo.domain.TaoSeller;
@@ -166,5 +167,48 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 		order.setCreateTime(date);
 
 		return order;
+	}
+
+	/**
+	 * 根据条件获取订单数量
+	 *
+	 * @param order
+	 * @return
+	 */
+	@Override
+	public int getOrderNum(TaoOrder order) {
+		if(order.getSellerId()!=null)
+		{
+		/**
+		 * 商家的订单统计信息
+		 */
+			if(order.getStatus()==null)
+			{
+				List<TaoOrder> total = taoOrderMapper.selectTaoOrderList(order);
+
+				order.setStatus(OrderConstant.CANCEL);
+				List<TaoOrder> cancel = taoOrderMapper.selectTaoOrderList(order);
+				return total.size()-cancel.size();
+			}
+			/**
+			 * 默认总订单数量
+			 */
+			return taoOrderMapper.selectTaoOrderList(order).size();
+		}else if(order.getStationId()!=null)
+		{
+			/**
+			 * 村小二的订单统计信息
+			 */
+			if(order.getStatus()==null)
+			{
+				List<TaoOrder> total = taoOrderMapper.selectTaoOrderList(order);
+
+				order.setStatus(OrderConstant.CANCEL);
+				List<TaoOrder> cancel = taoOrderMapper.selectTaoOrderList(order);
+				return total.size()-cancel.size();
+			}
+			return taoOrderMapper.selectTaoOrderList(order).size();
+		}
+		return 0;
 	}
 }

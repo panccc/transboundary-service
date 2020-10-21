@@ -61,5 +61,13 @@ public interface ITaoOrderService
 	 * @return
 	 */
 	public TaoOrder calOrderInfo(TaoOrder order, List<TaoOrderItem> itemList);
+
+
+	/**
+	 * 根据条件获取订单数量
+	 * @param order
+	 * @return
+	 */
+	public int getOrderNum(TaoOrder order);
 	
 }

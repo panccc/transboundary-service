@@ -178,4 +178,64 @@ public class TaoAddressServiceImpl implements ITaoAddressService
 
 		return 0;
 	}
+
+	/**
+	 * 获得所有的省list
+	 *
+	 * @return
+	 */
+	@Override
+	public List<TaoAddress> getAllProvince() {
+		return taoAddressMapper.getAllProvinces();
+	}
+
+	/**
+	 * 根据省的名字查询所有城市的列表
+	 *
+	 * @param province
+	 * @return
+	 */
+	@Override
+	public List<TaoAddress> getCityListByProvince(String province) {
+		return taoAddressMapper.getAllCitiesByProvince(province);
+	}
+
+	/**
+	 * 根据省市名字查询所有区的列表
+	 *
+	 * @param province
+	 * @param city
+	 * @return
+	 */
+	@Override
+	public List<TaoAddress> getCountyListByProvinceAndCity(String province, String city) {
+		return taoAddressMapper.getAllCountiesByProvinceAndCity(province, city);
+	}
+
+	/**
+	 * 根据省市区名字查询所有镇的列表
+	 *
+	 * @param province
+	 * @param city
+	 * @param county
+	 * @return
+	 */
+	@Override
+	public List<TaoAddress> getTownListByProvinceAndCityAndCounty(String province, String city, String county) {
+		return taoAddressMapper.getAllTownsByProvinceAndCityAndCounty(province, city, county);
+	}
+
+	/**
+	 * 根据省市区镇名字查询所有村的列表
+	 *
+	 * @param province
+	 * @param city
+	 * @param county
+	 * @param town
+	 * @return
+	 */
+	@Override
+	public List<TaoAddress> getVillageListByProvinceAndCityAndCountyAndTown(String province, String city, String county, String town) {
+		return taoAddressMapper.getAllVillagesByProvinceAndCityAndCountyAndTown(province, city, county, town);
+	}
 }
