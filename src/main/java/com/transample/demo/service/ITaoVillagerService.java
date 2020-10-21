@@ -50,5 +50,12 @@ public interface ITaoVillagerService
      * @return 结果
      */
 	public int deleteTaoVillagerByIds(String ids);
-	
+
+	/**
+	 * 村民登陆
+	 * @param taoVillager 存有用户名密码的model
+	 * @return 是否成功登陆
+	 */
+	public boolean login(TaoVillager taoVillager);
+
 }
