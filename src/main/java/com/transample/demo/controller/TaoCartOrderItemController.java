@@ -23,9 +23,10 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@Api(tags = "购物车单类商品相关API")
+@CrossOrigin
 @RestController
 @RequestMapping("/taoCartOrderItem")
+@Api(tags = "购物车单类商品相关API")
 public class TaoCartOrderItemController
 {
     private String prefix = "taoCartOrderItem";
@@ -69,6 +70,7 @@ public class TaoCartOrderItemController
 	public ResponseEntity addItem(@ApiParam(value = "购物车id",required = true)@PathVariable("cartId") Integer cartId,@RequestBody TaoCartOrderItem taoCartOrderItem)
 	{		
 		taoCartOrderItem.setCartId(cartId);
+
 		return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItemService.insertTaoCartOrderItem(taoCartOrderItem)));
 	}
 
@@ -77,7 +79,6 @@ public class TaoCartOrderItemController
 	 */
 	@ApiOperation("修改购物车单类商品,返回该商品的基本信息")
 	@GetMapping("/getInfoBeforeEdit/{orderItemId}")
-	@ResponseBody
 	public ResponseEntity getInfoBeforeEdit(@PathVariable("orderItemId") @ApiParam(value = "订单单个商品号",required = true) Integer orderItemId)
 	{
 		TaoCartOrderItem taoCartOrderItem = taoCartOrderItemService.selectTaoCartOrderItemById(orderItemId);
@@ -93,7 +94,6 @@ public class TaoCartOrderItemController
 	 */
 	@ApiOperation("修改购物车单类商品")
 	@PostMapping("/edit")
-	@ResponseBody
 	public ResponseEntity editCart(@RequestBody TaoCartOrderItem taoCartOrderItem)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItemService.updateTaoCartOrderItem(taoCartOrderItem)));
@@ -104,7 +104,6 @@ public class TaoCartOrderItemController
 	 */
 	@ApiOperation("删除购物车单类商品")
 	@PostMapping( "/remove")
-	@ResponseBody
 	public ResponseEntity removeItems(@RequestBody @ApiParam("被删除商品的id字符串，用逗号分隔")RemoveIdsDTO removeIdsDTO)
 	{
 		if(removeIdsDTO.getIds()==null||removeIdsDTO.getIds().equals(""))return ResponseEntity.ok(ResponseResult.fail(ResultCode.FILED_VALUE_INVALID));

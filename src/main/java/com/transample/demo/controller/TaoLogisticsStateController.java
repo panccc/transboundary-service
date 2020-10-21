@@ -30,6 +30,7 @@ import javax.annotation.Resource;
  * @date 2020-10-13
  */
 @Api(tags = "物流状态相关API")
+@CrossOrigin
 @RestController
 @RequestMapping("/taoLogisticsState")
 public class TaoLogisticsStateController

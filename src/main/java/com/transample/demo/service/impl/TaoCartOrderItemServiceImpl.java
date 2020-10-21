@@ -69,13 +69,13 @@ public class TaoCartOrderItemServiceImpl implements ITaoCartOrderItemService
 	public int insertTaoCartOrderItem(TaoCartOrderItem taoCartOrderItem)
 	{
 
-
+		if(taoCartOrderItem.getOrderItemId()!=null)taoCartOrderItem.setOrderItemId(null);
 		int productId = taoCartOrderItem.getGoodsId();
 		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
 		if(product==null)return 0;
 
 		taoCartOrderItem.setPrice(product.getProductPrice()*taoCartOrderItem.getAmount());
-
+		System.out.println(taoCartOrderItem.getOrderItemId());
 		return taoCartOrderItemMapper.insertTaoCartOrderItem(taoCartOrderItem);
 	}
 	

@@ -1,6 +1,7 @@
 package com.transample.demo.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ import javax.annotation.Resource;
  * @author youcaihua
  * @date 2020-10-13
  */
+@CrossOrigin
 @RestController
 @Api(tags = "订单相关API")
 @RequestMapping("/taoOrder")
@@ -149,6 +151,7 @@ public class TaoOrderController
 	public ResponseEntity addOrder(@RequestBody OrderDTO orderDTO)
 	{
 		HashMap<Integer,List<TaoOrderItem>> hashMap = orderDTO.getOrderItemHashMap();
+		List<Integer> orderIds= new ArrayList<>();
 		for(Integer sellerId : hashMap.keySet())
 		{
 			TaoOrder order = orderDTO.getOrder();
@@ -161,11 +164,12 @@ public class TaoOrderController
 			List<TaoOrderItem> list = hashMap.get(sellerId);
 
 			order= taoOrderService.calOrderInfo(order,list);
-
+			System.out.println(order.getOrderId());
+			orderIds.add(order.getOrderId());
 			taoOrderService.updateTaoOrder(order);
 		}
 
-		return ResponseEntity.ok(ResponseResult.ok("下单成功"));
+		return ResponseEntity.ok(ResponseResult.ok(orderIds));
 	}
 
 
@@ -173,11 +177,21 @@ public class TaoOrderController
 
 	@ApiOperation("获取订单详情返显给前端的信息")
 	@GetMapping("/getOrderInfo/{orderId}")
-	public TaoOrder getOrderInfo(@PathVariable @ApiParam(value = "订单id",required = true) Integer orderId)
+	public ResponseEntity getOrderInfo(@PathVariable @ApiParam(value = "订单id",required = true) Integer orderId)
 	{
-	    TaoOrder order = taoOrderService.selectTaoOrderById(orderId);
 
-		return order;
+		OrderDTO orderDTO = new OrderDTO();
+		TaoOrder order = taoOrderService.selectTaoOrderById(orderId);
+		TaoOrderItem taoOrderItem = new TaoOrderItem();
+		taoOrderItem.setOrderId(orderId);
+	    List<TaoOrderItem> list = taoOrderItemService.selectTaoOrderItemList(taoOrderItem);
+
+	    orderDTO.setOrder(order);
+	    HashMap<Integer,List<TaoOrderItem>> hashMap = new HashMap<>();
+	    hashMap.put(order.getSellerId(),list);
+	    orderDTO.setOrderItemHashMap(hashMap);
+
+		return ResponseEntity.ok(ResponseResult.ok(orderDTO));
 	}
 	
 

@@ -50,5 +50,9 @@ public interface ITaoAddressService
      * @return 结果
      */
 	public int deleteTaoAddressByIds(String ids);
+
+	public void insertTaoAddressListFromJson(String fileName);
+
+	public int insertAddressBySpider(String province,String url);
 	
 }

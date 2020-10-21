@@ -5,11 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.transample.demo.domain.TaoShoppingCart;
 import com.transample.demo.service.ITaoShoppingCartService;
 import com.transample.demo.common.ResponseResult;
@@ -20,6 +16,7 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
+@CrossOrigin
 @Controller
 @RequestMapping("/taoShoppingCart")
 public class TaoShoppingCartController
