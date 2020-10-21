@@ -273,18 +273,37 @@ public class TaoOrderController
 			return ResponseEntity.ok(ResponseResult.fail(ResultCode.DATA_UPDATE_ERROR));
 		}
 		return ResponseEntity.ok(ResponseResult.ok("操作成功"));
-
 	}
-	
-//	/**
-//	 * 删除订单
-//	 */
-//
-//	@PostMapping( "/remove")
-//	@ResponseBody
-//	public ResponseEntity remove(String ids)
-//	{
-//		return ResponseEntity.ok(ResponseResult.ok(taoOrderService.deleteTaoOrderByIds(ids)));
-//	}
-	
+
+	@ApiOperation("村小二和商家根据订单状态获取订单数量")
+	@GetMapping("/getOrderNum/{role}/{op}/{id}")
+	public HashMap<String,Integer> getOrderNum(@ApiParam("卖家seller;村站station") @PathVariable String role, @ApiParam("总订单total;未发货underSend;未确认underConfirm") @PathVariable String op,@ApiParam("村小二或商家id") @PathVariable Integer id)
+	{
+		HashMap<String, Integer> ans = new HashMap<>();
+		int num = 0;
+		TaoOrder order = new TaoOrder();
+		if(role.equals("seller"))
+		{
+			order.setSellerId(id);
+		}else if(role.equals("station"))
+		{
+			order.setStationId(id);
+		}else
+		{
+			ans.put("num",0);
+			return ans;
+		}
+
+		if(op.equals("underSend"))
+		{
+			order.setStatus(OrderConstant.AUDIT);
+		}else if(op.equals("underConfirm"))
+		{
+			order.setStatus(OrderConstant.PAY);
+		}
+		num = taoOrderService.getOrderNum(order);
+		ans.put("num",num);
+		return ans;
+	}
+
 }
