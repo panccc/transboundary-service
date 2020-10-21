@@ -50,5 +50,13 @@ public interface ITaoSellerService
      * @return 结果
      */
 	public int deleteTaoSellerByIds(String ids);
-	
+
+	/**
+	 * 商家登陆
+	 *
+	 * @param taoSeller 商家信息
+	 * @return 是否登陆成功
+	 */
+	public boolean login(TaoSeller taoSeller);
+
 }

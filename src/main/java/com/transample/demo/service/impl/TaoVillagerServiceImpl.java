@@ -48,5 +48,13 @@ public class TaoVillagerServiceImpl implements ITaoVillagerService
 	{
 		return taoVillagerMapper.deleteTaoVillagerByIds(ids.split(","));
 	}
-	
+
+	@Override
+	public boolean login(TaoVillager taoVillager) {
+        TaoVillager villager = new TaoVillager();
+        villager.setUserName(taoVillager.getUserName());
+    	List<TaoVillager> villagers = taoVillagerMapper.selectTaoVillagerList(villager);
+		return villagers.size() == 1 && villagers.get(0).getPassword().equals(taoVillager.getPassword());
+	}
+
 }

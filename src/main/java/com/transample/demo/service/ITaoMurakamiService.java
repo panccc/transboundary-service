@@ -50,5 +50,13 @@ public interface ITaoMurakamiService
      * @return 结果
      */
 	public int deleteTaoMurakamiByIds(String ids);
-	
+
+	/**
+	 * 村小二登陆
+	 *
+	 * @param taoMurakami 村小二用户名与密码
+	 * @return 是否登陆成功
+	 */
+	public boolean login(TaoMurakami taoMurakami);
+
 }

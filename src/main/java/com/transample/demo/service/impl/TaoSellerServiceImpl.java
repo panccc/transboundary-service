@@ -1,6 +1,8 @@
 package com.transample.demo.service.impl;
 
 import java.util.List;
+
+import com.transample.demo.domain.TaoMurakami;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoSellerMapper;
@@ -48,5 +50,13 @@ public class TaoSellerServiceImpl implements ITaoSellerService
 	{
 		return taoSellerMapper.deleteTaoSellerByIds(ids.split(","));
 	}
-	
+
+	@Override
+	public boolean login(TaoSeller taoSeller) {
+		TaoSeller seller = new TaoSeller();
+		seller.setSellerName(taoSeller.getSellerName());
+		List<TaoSeller> sellers = taoSellerMapper.selectTaoSellerList(seller);
+		return sellers.size() == 1 && sellers.get(0).getPassword().equals(taoSeller.getPassword());
+	}
+
 }
