@@ -1,12 +1,15 @@
 package com.transample.demo.domain;
 
 
+import lombok.AllArgsConstructor;
+
 /**
  * 全国省市村统计表 tao_address
  * 
  * @author youcaihua
  * @date 2020-10-13
  */
+
 public class TaoAddress
 {
 	
@@ -18,10 +21,23 @@ public class TaoAddress
 	private String city;
 	/** 所属县/区 */
 	private String county;
+	/** 所属镇/街道*/
+	private String town;
 	/** 所属村/乡 */
 	private String village;
 
-	public void setId(Integer id) 
+	public TaoAddress() {
+	}
+
+	public TaoAddress(String provence, String city, String county, String town, String village) {
+		this.provence = provence;
+		this.city = city;
+		this.county = county;
+		this.town = town;
+		this.village = village;
+	}
+
+	public void setId(Integer id)
 	{
 		this.id = id;
 	}
@@ -67,4 +83,23 @@ public class TaoAddress
 		return village;
 	}
 
+	public String getTown() {
+		return town;
+	}
+
+	public void setTown(String town) {
+		this.town = town;
+	}
+
+	@Override
+	public String toString() {
+		return "TaoAddress{" +
+				"id=" + id +
+				", provence='" + provence + '\'' +
+				", city='" + city + '\'' +
+				", county='" + county + '\'' +
+				", town='" + town + '\'' +
+				", village='" + village + '\'' +
+				'}';
+	}
 }

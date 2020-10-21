@@ -9,6 +9,7 @@ import com.transample.demo.domain.TaoOrderItem;
 import com.transample.demo.domain.TaoSeller;
 import com.transample.demo.mapper.TaoOrderItemMapper;
 import com.transample.demo.mapper.TaoSellerMapper;
+import com.transample.demo.service.ITaoOrderItemService;
 import com.transample.demo.utils.OrderUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 	private TaoOrderMapper taoOrderMapper;
 
 	@Resource
-	private TaoOrderItemMapper taoOrderItemMapper;
+	private ITaoOrderItemService taoOrderItemService;
 
 	@Resource
 	private TaoSellerMapper taoSellerMapper;
@@ -134,7 +135,8 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 			/**
 			 * 插入orderItem表
 			 */
-			taoOrderItemMapper.insertTaoOrderItem(taoOrderItem);
+			if(taoOrderItem.getOrderItemId()!=null)taoOrderItem.setOrderItemId(null);
+			taoOrderItemService.insertTaoOrderItem(taoOrderItem);
 		}
 
 		order.setTotalNumber(totalAmount);

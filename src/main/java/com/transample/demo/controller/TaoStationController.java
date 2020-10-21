@@ -20,6 +20,7 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/taoStation")
 @Api(tags = "村站相关API")
