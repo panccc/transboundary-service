@@ -56,6 +56,6 @@ public interface ITaoVillagerService
 	 * @param taoVillager 存有用户名密码的model
 	 * @return 是否成功登陆
 	 */
-	public boolean login(TaoVillager taoVillager);
+	public TaoVillager login(TaoVillager taoVillager);
 
 }
