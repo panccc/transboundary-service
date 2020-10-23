@@ -52,11 +52,15 @@ public class TaoMurakamiServiceImpl implements ITaoMurakamiService
 	}
 
 	@Override
-	public boolean login(TaoMurakami taoMurakami) {
+	public TaoMurakami login(TaoMurakami taoMurakami) {
 		TaoMurakami murakami = new TaoMurakami();
 		murakami.setMurakamiName(taoMurakami.getMurakamiName());
 		List<TaoMurakami> murakamis = taoMurakamiMapper.selectTaoMurakamiList(murakami);
-		return murakamis.size() == 1 && murakamis.get(0).getPassword().equals(taoMurakami.getPassword());
+		if (murakamis.size() == 1 && murakamis.get(0).getPassword().equals(taoMurakami.getPassword())) {
+			return murakamis.get(0);
+		} else {
+			return null;
+		}
 	}
 
 }

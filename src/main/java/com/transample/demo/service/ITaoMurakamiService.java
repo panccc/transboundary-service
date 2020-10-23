@@ -57,6 +57,6 @@ public interface ITaoMurakamiService
 	 * @param taoMurakami 村小二用户名与密码
 	 * @return 是否登陆成功
 	 */
-	public boolean login(TaoMurakami taoMurakami);
+	public TaoMurakami login(TaoMurakami taoMurakami);
 
 }
