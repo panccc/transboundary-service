@@ -60,5 +60,8 @@ public interface TaoOrderMapper
      * @return 结果
      */
 	public int deleteTaoOrderByIds(String[] orderIds);
-	
+
+
+	public List<TaoOrder> getTaoOrderList(TaoOrder taoOrder);
+
 }

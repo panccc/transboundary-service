@@ -69,5 +69,12 @@ public interface ITaoOrderService
 	 * @return
 	 */
 	public int getOrderNum(TaoOrder order);
-	
+
+	/**
+	 *
+	 * @param order
+	 * @return
+	 */
+	public double getTotalPrice(TaoOrder order);
+
 }

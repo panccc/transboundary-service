@@ -149,15 +149,22 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 		 */
 		TaoSeller seller = taoSellerMapper.selectTaoSellerById(order.getSellerId());
 		String sellerAddress = seller.getSellerLocation();
-		double logisticsOnePrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),false);
-		order.setLogisticsOnePrice(BigDecimal.valueOf(logisticsOnePrice));
+		if(order.getLogisticsOnePrice()==null)
+		{
+			double logisticsOnePrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),false);
+			order.setLogisticsOnePrice(BigDecimal.valueOf(logisticsOnePrice));
+		}
 		if(order.getStationId()!=null)
 		{
 			/**
 			设置二级物流价格
 			 */
-			double logisticsTwoPrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),true);
-			order.setLogisticsTwoPrice(BigDecimal.valueOf(logisticsTwoPrice));
+			if(order.getLogisticsTwoPrice()==null)
+			{
+				double logisticsTwoPrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),true);
+
+				order.setLogisticsTwoPrice(BigDecimal.valueOf(logisticsTwoPrice));
+			}
 		}
 
 		/**
@@ -184,15 +191,16 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 		 */
 			if(order.getStatus()==null)
 			{
+				/**
+				 * 默认总订单数量(不包括取消订单)
+				 */
 				List<TaoOrder> total = taoOrderMapper.selectTaoOrderList(order);
 
 				order.setStatus(OrderConstant.CANCEL);
 				List<TaoOrder> cancel = taoOrderMapper.selectTaoOrderList(order);
 				return total.size()-cancel.size();
 			}
-			/**
-			 * 默认总订单数量
-			 */
+
 			return taoOrderMapper.selectTaoOrderList(order).size();
 		}else if(order.getStationId()!=null)
 		{
@@ -210,5 +218,37 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 			return taoOrderMapper.selectTaoOrderList(order).size();
 		}
 		return 0;
+	}
+
+	/**
+	 * 获取订单的总价 （分为村小二和商家）
+	 *
+	 * @param order
+	 * @return
+	 */
+	@Override
+	public double getTotalPrice(TaoOrder order) {
+		double ans = 0.0;
+		if(order.getSellerId()!=null)
+		{
+			List<TaoOrder> list = taoOrderMapper.getTaoOrderList(order);
+			for(TaoOrder taoOrder:list)
+			{
+				if(taoOrder.getTotalPrice()!=null)
+					ans += taoOrder.getTotalPrice().doubleValue();
+			}
+			return ans;
+		}else if(order.getStationId()!=null)
+		{
+			List<TaoOrder> list = taoOrderMapper.getTaoOrderList(order);
+			for(TaoOrder taoOrder:list)
+			{
+				if(taoOrder.getLogisticsTwoPrice()!=null)
+					ans += taoOrder.getLogisticsTwoPrice().doubleValue();
+			}
+			return ans;
+		}
+
+		return ans;
 	}
 }

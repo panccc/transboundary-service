@@ -147,5 +147,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{orderId}
         </foreach>
     </delete>
-    
+
+
+    <select id="getTaoOrderList" parameterType="TaoOrder" resultMap="TaoOrderResult">
+        <include refid="selectTaoOrderVo"/>
+        <where>
+            status != 10 and status != 60
+            <if test="orderId != null "> and order_id LIKE CONCAT('%',#{orderId},'%')</if>
+            <if test="sellerId != null "> and seller_id LIKE CONCAT('%',#{sellerId},'%')</if>
+            <if test="stationId != null "> and station_id LIKE CONCAT('%',#{stationId},'%')</if>
+
+        </where>
+    </select>
+
 </mapper>

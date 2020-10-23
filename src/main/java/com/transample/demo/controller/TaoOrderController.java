@@ -10,8 +10,11 @@ import com.transample.demo.common.ResultCode;
 import com.transample.demo.constants.OrderConstant;
 import com.transample.demo.domain.TaoCartOrderItem;
 import com.transample.demo.domain.TaoOrderItem;
+import com.transample.demo.domain.TaoSeller;
 import com.transample.demo.dto.OrderDTO;
 import com.transample.demo.service.ITaoOrderItemService;
+import com.transample.demo.service.ITaoSellerService;
+import com.transample.demo.utils.OrderUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -46,11 +49,8 @@ public class TaoOrderController
 	@Resource
 	private ITaoOrderItemService taoOrderItemService;
 	
-//	@GetMapping()
-//	public String taoOrder()
-//	{
-//	    return prefix + "/taoOrder";
-//	}
+	@Resource
+	private ITaoSellerService taoSellerService;
 	
 	/**
 	 * 查询订单列表
@@ -86,16 +86,22 @@ public class TaoOrderController
 		return list;
 	}
 
-	private static final String queryStatusUserAPIValue = "已购买pay,待发货underSend,运输中send" +
+	private static final String queryStatusUserAPIValue = "未付款unpaid,已购买pay,待发货underSend,运输中send" +
 			",已购买takeOver";
 	@ApiOperation("用户按条件获取订单列表")
 	@GetMapping("/list/user/{status}/{userId}")
-	public List<TaoOrder> getListOfUser(@PathVariable @ApiParam(value = queryStatusUserAPIValue,required = true) String status,@PathVariable @ApiParam("用户id") Integer userId)
+	public ResponseResult getListOfUser(@PathVariable @ApiParam(value = queryStatusUserAPIValue,required = true) String status,@PathVariable @ApiParam("用户id") Integer userId)
 	{
+		ModelMap modelMap = new ModelMap();
+		List<OrderDTO> ans = new ArrayList<>();
+
 		TaoOrder order = new TaoOrder();
 		order.setVillagerId(userId);
 		switch (status)
 		{
+			case "unpaid":
+				order.setStatus(OrderConstant.UNPAID);
+				break;
 			case "pay":
 				order.setStatus(OrderConstant.PAY);
 				break;
@@ -110,8 +116,21 @@ public class TaoOrderController
 				break;
 		}
 		List<TaoOrder> list = taoOrderService.selectTaoOrderList(order);
-
-		return list;
+		for(TaoOrder order1:list)
+		{
+			OrderDTO orderDTO = new OrderDTO();
+			orderDTO.setOrder(order1);
+			TaoOrderItem orderItem = new TaoOrderItem();
+			orderItem.setOrderId(order1.getOrderId());
+			List<TaoOrderItem>  items= taoOrderItemService.selectTaoOrderItemList(orderItem);
+			HashMap<Integer,List<TaoOrderItem>> hashMap = new HashMap<>();
+			hashMap.put(order1.getSellerId(),items);
+			orderDTO.setOrderItemHashMap(hashMap);
+			ans.add(orderDTO);
+		}
+		modelMap.put("totalNum",ans.size());
+		modelMap.put("orderList",ans);
+		return ResponseResult.ok(modelMap);
 	}
 
 	private static final String queryStatusStationAPIValue = "村站等待收取underSend,已代收receive";
@@ -288,7 +307,8 @@ public class TaoOrderController
 		}else if(role.equals("station"))
 		{
 			order.setStationId(id);
-		}else
+		}
+		else
 		{
 			ans.put("num",0);
 			return ans;
@@ -305,5 +325,50 @@ public class TaoOrderController
 		ans.put("num",num);
 		return ans;
 	}
+
+	@ApiOperation("商家获取订单总成交额；村小二获取总二级物流价格")
+	@GetMapping("/getTotalPrice/{role}/{id}")
+	public HashMap<String, Double> getTotalPrice(@ApiParam("商家:seller;村站:station ")@PathVariable String role, @ApiParam("id") @PathVariable Integer id)
+	{
+		HashMap<String,Double> ans = new HashMap<>();
+		TaoOrder order = new TaoOrder();
+		if(role.equals("seller"))
+		{
+			order.setSellerId(id);
+			double price = taoOrderService.getTotalPrice(order);
+			ans.put("price",price);
+		}else if(role.equals("station"))
+		{
+			order.setStationId(id);
+			double price = taoOrderService.getTotalPrice(order);
+			ans.put("price",price);
+		}
+		return ans;
+	}
+
+
+	@ApiOperation("根据地址获得物流价格")
+	@GetMapping("/getLogisticsFare")
+	public ResponseEntity getLogisticsFare(@ApiParam("商家id") Integer sellerId, @ApiParam("收件人所在省") String province, @ApiParam("收件人所在市") String city, @ApiParam("商品数量") Integer amount,@ApiParam("一级物流：1；二级物流2") Integer isOne)
+	{
+		TaoSeller seller = taoSellerService.getTaoSellerById(sellerId);
+		if(seller==null)
+			return ResponseEntity.ok(ResponseResult.fail(ResultCode.OBJECT_NOT_EXIST));
+		if(province==null||city==null||amount==null||isOne==null)
+			return ResponseEntity.ok(ResponseResult.fail(ResultCode.FILED_VALUE_INVALID));
+		String villagerAddress = province + city;
+		double fare = 0.0;
+		if(isOne==1)
+			fare = OrderUtils.generateFare(seller.getSellerLocation(),villagerAddress,amount,false);
+		else if(isOne==2)
+			fare = OrderUtils.generateFare(seller.getSellerLocation(),villagerAddress,amount,true);
+
+		ModelMap modelMap = new ModelMap();
+		modelMap.put("logistics",fare);
+		return ResponseEntity.ok(ResponseResult.ok(modelMap));
+
+
+	}
+
 
 }
