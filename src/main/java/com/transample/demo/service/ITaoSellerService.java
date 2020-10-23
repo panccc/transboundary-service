@@ -57,6 +57,6 @@ public interface ITaoSellerService
 	 * @param taoSeller 商家信息
 	 * @return 是否登陆成功
 	 */
-	public boolean login(TaoSeller taoSeller);
+	public TaoSeller login(TaoSeller taoSeller);
 
 }

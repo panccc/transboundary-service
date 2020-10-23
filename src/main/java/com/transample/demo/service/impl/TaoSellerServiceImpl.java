@@ -52,11 +52,15 @@ public class TaoSellerServiceImpl implements ITaoSellerService
 	}
 
 	@Override
-	public boolean login(TaoSeller taoSeller) {
+	public TaoSeller login(TaoSeller taoSeller) {
 		TaoSeller seller = new TaoSeller();
 		seller.setSellerName(taoSeller.getSellerName());
 		List<TaoSeller> sellers = taoSellerMapper.selectTaoSellerList(seller);
-		return sellers.size() == 1 && sellers.get(0).getPassword().equals(taoSeller.getPassword());
+		if (sellers.size() == 1 && sellers.get(0).getPassword().equals(taoSeller.getPassword())) {
+			return sellers.get(0);
+		} else {
+			return null;
+		}
 	}
 
 }

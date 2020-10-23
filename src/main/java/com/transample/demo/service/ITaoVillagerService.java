@@ -1,6 +1,8 @@
 package com.transample.demo.service;
 
 import com.transample.demo.domain.TaoVillager;
+import org.springframework.ui.ModelMap;
+
 import java.util.List;
 
 /**
@@ -54,8 +56,8 @@ public interface ITaoVillagerService
 	/**
 	 * 村民登陆
 	 * @param taoVillager 存有用户名密码的model
-	 * @return 是否成功登陆
+	 * @return villager以及cart信息
 	 */
-	public boolean login(TaoVillager taoVillager);
+	public ModelMap login(TaoVillager taoVillager);
 
 }
