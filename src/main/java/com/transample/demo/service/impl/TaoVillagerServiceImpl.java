@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoVillagerMapper;
 import com.transample.demo.domain.TaoVillager;
 import com.transample.demo.service.ITaoVillagerService;
+import org.springframework.ui.ModelMap;
 
 /**
  * 村民 服务层实现
@@ -68,12 +69,17 @@ public class TaoVillagerServiceImpl implements ITaoVillagerService
 	}
 
 	@Override
-	public TaoVillager login(TaoVillager taoVillager) {
-        TaoVillager villager = new TaoVillager();
+	public ModelMap login(TaoVillager taoVillager) {
+		ModelMap map = new ModelMap();
+		TaoVillager villager = new TaoVillager();
         villager.setUserName(taoVillager.getUserName());
     	List<TaoVillager> villagers = taoVillagerMapper.selectTaoVillagerList(villager);
 		if (villagers.size() == 1 && villagers.get(0).getPassword().equals(taoVillager.getPassword())) {
-			return villagers.get(0);
+			map.put("villager", villagers.get(0));
+			TaoShoppingCart cart = new TaoShoppingCart();
+			cart.setVillagerId(villagers.get(0).getVillagerId());
+			map.put("cart", taoShoppingCartMapper.selectTaoShoppingCartList(cart));
+			return map
 		} else {
 			return null;
 		}
