@@ -1,6 +1,22 @@
 package com.transample.demo.constants;
 
 public class OrderConstant {
+
+    public enum Municipality
+    {
+        北京市,
+        上海市,
+        天津市,
+        重庆市
+    }
+    public enum AutonomousRegion
+    {
+        内蒙古自治区,
+        宁夏回族自治区,
+        西藏自治区,
+        新疆维吾尔自治区,
+        广西壮族自治区
+    }
     /**
      * 关于订单的一些常数
      */

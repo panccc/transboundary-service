@@ -125,5 +125,9 @@ public class TaoLogisticsServiceImpl implements ITaoLogisticsService
 	{
 		return taoLogisticsMapper.deleteTaoLogisticsByIds(ids.split(","));
 	}
-	
+
+	@Override
+	public TaoLogistics selectLogisticsByOrderId(Integer orderId) {
+		return taoLogisticsMapper.selectLogisticsByOrderId(orderId);
+	}
 }

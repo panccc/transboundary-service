@@ -1,7 +1,9 @@
 package com.transample.demo.mapper;
 
 import com.transample.demo.domain.TaoLogistics;
-import java.util.List;	
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * 物流 数据层
@@ -58,5 +60,8 @@ public interface TaoLogisticsMapper
      * @return 结果
      */
 	public int deleteTaoLogisticsByIds(String[] ticketIds);
+
+	@Select("select * from tao_logistics where order_id = #{orderId}")
+	public TaoLogistics selectLogisticsByOrderId(Integer orderId);
 	
 }

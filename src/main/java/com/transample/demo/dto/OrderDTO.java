@@ -21,4 +21,5 @@ public class OrderDTO {
     @ApiModelProperty("按照sellerId返回商品的list")
     HashMap<Integer,List<TaoOrderItem>> orderItemHashMap;
 
+
 }

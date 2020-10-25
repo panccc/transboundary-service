@@ -144,28 +144,28 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 		BigDecimal totalPriceBigDecimal = BigDecimal.valueOf(totalPrice);
 		order.setTotalPrice(totalPriceBigDecimal);
 
-		/**
-		 * 设置订单物流价格
-		 */
-		TaoSeller seller = taoSellerMapper.selectTaoSellerById(order.getSellerId());
-		String sellerAddress = seller.getSellerLocation();
-		if(order.getLogisticsOnePrice()==null)
-		{
-			double logisticsOnePrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),false);
-			order.setLogisticsOnePrice(BigDecimal.valueOf(logisticsOnePrice));
-		}
-		if(order.getStationId()!=null)
-		{
-			/**
-			设置二级物流价格
-			 */
-			if(order.getLogisticsTwoPrice()==null)
-			{
-				double logisticsTwoPrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),true);
-
-				order.setLogisticsTwoPrice(BigDecimal.valueOf(logisticsTwoPrice));
-			}
-		}
+//		/**
+//		 * 设置订单物流价格
+//		 */
+//		TaoSeller seller = taoSellerMapper.selectTaoSellerById(order.getSellerId());
+//		String sellerAddress = seller.getSellerLocation();
+//		if(order.getLogisticsOnePrice()==null)
+//		{
+//			double logisticsOnePrice = OrderUtils.generateFare(sellerAddress, order.get, order.getTotalNumber(),false);
+//			order.setLogisticsOnePrice(BigDecimal.valueOf(logisticsOnePrice));
+//		}
+//		if(order.getStationId()!=null)
+//		{
+//			/**
+//			设置二级物流价格
+//			 */
+//			if(order.getLogisticsTwoPrice()==null)
+//			{
+//				double logisticsTwoPrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),true);
+//
+//				order.setLogisticsTwoPrice(BigDecimal.valueOf(logisticsTwoPrice));
+//			}
+//		}
 
 		/**
 		 * 创建时间

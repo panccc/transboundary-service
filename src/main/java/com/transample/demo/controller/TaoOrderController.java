@@ -18,6 +18,7 @@ import com.transample.demo.utils.OrderUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,7 @@ import javax.annotation.Resource;
  * @date 2020-10-13
  */
 @CrossOrigin
+@Slf4j
 @RestController
 @Api(tags = "订单相关API")
 @RequestMapping("/taoOrder")
@@ -171,6 +173,8 @@ public class TaoOrderController
 	{
 		HashMap<Integer,List<TaoOrderItem>> hashMap = orderDTO.getOrderItemHashMap();
 		List<Integer> orderIds= new ArrayList<>();
+		ModelMap modelMap = new ModelMap();
+
 		for(Integer sellerId : hashMap.keySet())
 		{
 			TaoOrder order = orderDTO.getOrder();
@@ -183,12 +187,15 @@ public class TaoOrderController
 			List<TaoOrderItem> list = hashMap.get(sellerId);
 
 			order= taoOrderService.calOrderInfo(order,list);
-			System.out.println(order.getOrderId());
+//			System.out.println(order.getOrderId());
+
+			log.info("成功添加了订单："+order.getOrderId());
 			orderIds.add(order.getOrderId());
 			taoOrderService.updateTaoOrder(order);
 		}
+		modelMap.put("orderIds",orderIds);
 
-		return ResponseEntity.ok(ResponseResult.ok(orderIds));
+		return ResponseEntity.ok(ResponseResult.ok(modelMap));
 	}
 
 
@@ -349,24 +356,25 @@ public class TaoOrderController
 
 	@ApiOperation("根据地址获得物流价格")
 	@GetMapping("/getLogisticsFare")
-	public ResponseEntity getLogisticsFare(@ApiParam("商家id") Integer sellerId, @ApiParam("收件人所在省") String province, @ApiParam("收件人所在市") String city, @ApiParam("商品数量") Integer amount,@ApiParam("一级物流：1；二级物流2") Integer isOne)
+	public ResponseEntity getLogisticsFare(@ApiParam("商家id")@RequestParam("sellerId") Integer sellerId, @ApiParam("收件人所在省") @RequestParam("province") String province, @ApiParam("收件人所在市") @RequestParam("city") String city, @ApiParam("商品数量") @RequestParam("amount") Integer amount,@ApiParam("一级物流：1；二级物流2")@RequestParam("isOne") Integer isOne)
 	{
+
 		TaoSeller seller = taoSellerService.getTaoSellerById(sellerId);
 		if(seller==null)
 			return ResponseEntity.ok(ResponseResult.fail(ResultCode.OBJECT_NOT_EXIST));
 		if(province==null||city==null||amount==null||isOne==null)
 			return ResponseEntity.ok(ResponseResult.fail(ResultCode.FILED_VALUE_INVALID));
-		String villagerAddress = province + city;
+//		String villagerAddress = province + city;
 		double fare = 0.0;
 		if(isOne==1)
-			fare = OrderUtils.generateFare(seller.getSellerLocation(),villagerAddress,amount,false);
+			fare = OrderUtils.generateFare(seller.getSellerLocation(),province,city,amount,false);
 		else if(isOne==2)
-			fare = OrderUtils.generateFare(seller.getSellerLocation(),villagerAddress,amount,true);
+			fare = OrderUtils.generateFare(seller.getSellerLocation(),province,city,amount,true);
 
 		ModelMap modelMap = new ModelMap();
 		modelMap.put("logistics",fare);
+		log.info("生成物流价格："+fare);
 		return ResponseEntity.ok(ResponseResult.ok(modelMap));
-
 
 	}
 

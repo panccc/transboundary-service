@@ -131,7 +131,29 @@ public class TaoLogisticsController
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoLogisticsService.updateTaoLogistics(taoLogistics)));
 	}
-	
+
+
+	/**
+	 * 根据订单id来查询物流信息
+	 */
+	@ApiOperation("根据订单id来查询物流信息")
+	@GetMapping("getLogistics/{orderId}")
+	public ResponseEntity getLogisticsById(@PathVariable Integer orderId)
+	{
+		TaoLogistics taoLogistics = taoLogisticsService.selectLogisticsByOrderId(orderId);
+		if(taoLogistics==null)
+			return ResponseEntity.ok(ResponseResult.fail(ResultCode.OBJECT_NOT_EXIST));
+
+		TaoLogisticsState taoLogisticsState = new TaoLogisticsState();
+		taoLogisticsState.setTicketId(taoLogistics.getTicketId());
+		List<TaoLogisticsState> logisticsStateList = taoLogisticsStateService.selectTaoLogisticsStateList(taoLogisticsState);
+		ModelMap modelMap = new ModelMap();
+		modelMap.put("logisticsInfo",taoLogistics);
+		modelMap.put("logisticsList",logisticsStateList);
+		return ResponseEntity.ok(ResponseResult.ok(modelMap));
+	}
+
+
 //	/**
 //	 * 删除物流
 //	 */

@@ -1,5 +1,7 @@
 package com.transample.demo.utils;
 
+import com.transample.demo.constants.OrderConstant;
+
 public class OrderUtils {
 
 
@@ -13,29 +15,68 @@ public class OrderUtils {
      *
      * 商家发货，需要在这个表里面新增一条数据：
      * @param sellerAddress
-     * @param villageAddress
+     * @param province
+     * @param city
      * @param amount
      * @param isSecondaryLogistics
      * @return
      */
-    public static double generateFare(String sellerAddress, String villageAddress,int amount,boolean isSecondaryLogistics)
+    public static double generateFare(String sellerAddress, String province, String city, int amount,boolean isSecondaryLogistics)
     {
         double ans = 0.0;
         /**
          * 获得商家的省市
          */
-        int sIndex = sellerAddress.indexOf("省");
-        int cIndex = sellerAddress.indexOf("市");
-        String sProvince = sellerAddress.substring(0,sIndex);
-        String sCity = sellerAddress.substring(sIndex+1,cIndex);
-        /**
-         * 获得买家的省市
-         */
-        int vSIndex = villageAddress.indexOf("省");
-        int vCIndex = villageAddress.indexOf("市");
-        String vProvince = villageAddress.substring(0,vSIndex);
-        String vCity = villageAddress.substring(sIndex+1,vCIndex);
+        int sIndex = 0;
+        String sProvince = "";
 
+        if(sellerAddress.contains("省"))
+        {
+            sIndex = sellerAddress.indexOf("省");
+            sProvince = sellerAddress.substring(0,sIndex);
+        }else if(sellerAddress.contains("自治区"))
+        {
+            sIndex = sellerAddress.indexOf("自治区");
+            sProvince = sellerAddress.substring(0,sIndex+3);
+        }else
+        {
+            /**
+             * 直辖市特殊处理
+             */
+            sIndex = sellerAddress.indexOf("市");
+            sProvince = sellerAddress.substring(0,sIndex);
+            if(!isSecondaryLogistics)
+            {
+                if(sProvince.equals(province))
+                {
+                    /**
+                     * 同市
+                     */
+                    ans = generateRandom(4,8);
+                }else
+                {
+                    /**
+                     * 省外
+                     */
+                    ans = generateRandom(12,20);
+                }
+                if(amount>3)
+                {
+                    ans += (amount-3)*generateRandom(1,3);
+                }
+
+            }else
+            {
+                /**
+                 * 二级物流
+                  */
+                ans = generateRandom(3,5);
+            }
+            return ans;
+        }
+
+
+        boolean isSameCity = sellerAddress.contains(city);
 
 
         if(!isSecondaryLogistics)
@@ -43,7 +84,7 @@ public class OrderUtils {
             /**
              * 一级物流
              */
-            if(!sProvince.equals(vProvince))
+            if(!sProvince.equals(province))
             {
                 /**
                  * 省外
@@ -51,7 +92,7 @@ public class OrderUtils {
                 ans = generateRandom(12,20);
             }else
             {
-                if(sCity.equals(vCity))
+                if(isSameCity)
                 {
                     /**
                      * 同城
@@ -90,5 +131,7 @@ public class OrderUtils {
 
         return l+(Math.random()*(r-l));
     }
+
+
 
 }
