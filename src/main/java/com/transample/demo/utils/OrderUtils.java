@@ -2,6 +2,8 @@ package com.transample.demo.utils;
 
 import com.transample.demo.constants.OrderConstant;
 
+import java.text.DecimalFormat;
+
 public class OrderUtils {
 
 
@@ -116,8 +118,9 @@ public class OrderUtils {
         {
             ans = generateRandom(3,5);
         }
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-        return ans;
+        return Double.parseDouble(decimalFormat.format(ans));
     }
 
     /**

@@ -36,7 +36,7 @@ import javax.annotation.Resource;
  * @author youcaihua
  * @date 2020-10-13
  */
-@CrossOrigin
+//@CrossOrigin
 @Slf4j
 @RestController
 @Api(tags = "订单相关API")

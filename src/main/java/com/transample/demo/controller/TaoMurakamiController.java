@@ -20,7 +20,7 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping("/taoMurakami")
 @Api(tags = "村小二相关API")

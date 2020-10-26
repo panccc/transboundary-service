@@ -20,7 +20,7 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping("/taoSeller")
 @Api(tags = "商家相关API")

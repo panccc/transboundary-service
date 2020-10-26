@@ -21,7 +21,7 @@ import com.transample.demo.common.ResponseResult;
  * @date 2020-10-13
  */
 @RestController
-@CrossOrigin
+//@CrossOrigin
 @Api(tags = "物流公司API")
 @RequestMapping("/taoCompany")
 public class TaoCompanyController

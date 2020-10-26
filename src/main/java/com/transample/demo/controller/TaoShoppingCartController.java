@@ -16,7 +16,7 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@CrossOrigin
+//@CrossOrigin
 @Controller
 @RequestMapping("/taoShoppingCart")
 public class TaoShoppingCartController

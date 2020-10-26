@@ -30,7 +30,7 @@ import javax.annotation.Resource;
  */
 @Api(tags = "物流相关API")
 @RestController
-@CrossOrigin
+//@CrossOrigin
 @RequestMapping("/taoLogistics")
 public class TaoLogisticsController
 {
