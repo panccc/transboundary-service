@@ -21,7 +21,7 @@ public class TaoProduct
 	/** 商品描述 */
 	private String productDescription;
 	/** 商品价格 */
-	private Double productPrice;
+	private String productPrice;
 	/** 	商品规格 */
 	private String productSpecification;
 	/** 成交订单数 */
@@ -76,16 +76,16 @@ public class TaoProduct
 	{
 		return productDescription;
 	}
-	public void setProductPrice(Double productPrice)
-	{
+
+	public String getProductPrice() {
+		return productPrice;
+	}
+
+	public void setProductPrice(String productPrice) {
 		this.productPrice = productPrice;
 	}
 
-	public Double getProductPrice()
-	{
-		return productPrice;
-	}
-	public void setProductSpecification(String productSpecification) 
+	public void setProductSpecification(String productSpecification)
 	{
 		this.productSpecification = productSpecification;
 	}

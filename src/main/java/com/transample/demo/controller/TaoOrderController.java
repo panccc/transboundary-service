@@ -61,7 +61,7 @@ public class TaoOrderController
 			",待成交receive,已成交takeOver";
 	@ApiOperation("商家按条件获取订单列表")
 	@GetMapping("/list/seller/{status}/{sellerId}")
-	public List<TaoOrder> getListOfSeller(@PathVariable @ApiParam(value = queryStatusAPIValue,required = true) String status,@PathVariable @ApiParam("商家id") Integer sellerId)
+	public ResponseEntity getListOfSeller(@PathVariable @ApiParam(value = queryStatusAPIValue,required = true) String status,@PathVariable @ApiParam("商家id") Integer sellerId)
 	{
 		TaoOrder order = new TaoOrder();
 		order.setSellerId(sellerId);
@@ -85,14 +85,14 @@ public class TaoOrderController
 		}
       		List<TaoOrder> list = taoOrderService.selectTaoOrderList(order);
 
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 	private static final String queryStatusUserAPIValue = "未付款unpaid,已购买pay,待发货underSend,运输中send" +
 			",已购买takeOver";
 	@ApiOperation("用户按条件获取订单列表")
 	@GetMapping("/list/user/{status}/{userId}")
-	public ResponseResult getListOfUser(@PathVariable @ApiParam(value = queryStatusUserAPIValue,required = true) String status,@PathVariable @ApiParam("用户id") Integer userId)
+	public ResponseEntity getListOfUser(@PathVariable @ApiParam(value = queryStatusUserAPIValue,required = true) String status,@PathVariable @ApiParam("用户id") Integer userId)
 	{
 		ModelMap modelMap = new ModelMap();
 		List<OrderDTO> ans = new ArrayList<>();
@@ -132,7 +132,7 @@ public class TaoOrderController
 		}
 		modelMap.put("totalNum",ans.size());
 		modelMap.put("orderList",ans);
-		return ResponseResult.ok(modelMap);
+		return ResponseEntity.ok(ResponseResult.ok(modelMap));
 	}
 
 	private static final String queryStatusStationAPIValue = "村站等待收取underSend,已代收receive";
@@ -335,7 +335,7 @@ public class TaoOrderController
 
 	@ApiOperation("商家获取订单总成交额；村小二获取总二级物流价格")
 	@GetMapping("/getTotalPrice/{role}/{id}")
-	public HashMap<String, Double> getTotalPrice(@ApiParam("商家:seller;村站:station ")@PathVariable String role, @ApiParam("id") @PathVariable Integer id)
+	public ResponseEntity getTotalPrice(@ApiParam("商家:seller;村站:station ")@PathVariable String role, @ApiParam("id") @PathVariable Integer id)
 	{
 		HashMap<String,Double> ans = new HashMap<>();
 		TaoOrder order = new TaoOrder();
@@ -350,7 +350,7 @@ public class TaoOrderController
 			double price = taoOrderService.getTotalPrice(order);
 			ans.put("price",price);
 		}
-		return ans;
+		return ResponseEntity.ok(ResponseResult.ok(ans));
 	}
 
 

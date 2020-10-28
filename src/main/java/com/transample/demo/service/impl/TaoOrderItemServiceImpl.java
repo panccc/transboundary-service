@@ -60,13 +60,13 @@ public class TaoOrderItemServiceImpl implements ITaoOrderItemService
 	@Override
 	public int insertTaoOrderItem(TaoOrderItem taoOrderItem)
 	{
-	    int productId = taoOrderItem.getGoodsId();
-		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
-		if(product==null)return 0;
+//	    int productId = taoOrderItem.getGoodsId();
+//		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
+//		if(product==null)return 0;
 		/**
 		 * 设置价格
 		 */
-		taoOrderItem.setPrice(product.getProductPrice()*taoOrderItem.getAmount());
+//		taoOrderItem.setPrice(product.getProductPrice()*taoOrderItem.getAmount());
 
 		return taoOrderItemMapper.insertTaoOrderItem(taoOrderItem);
 	}
@@ -80,13 +80,13 @@ public class TaoOrderItemServiceImpl implements ITaoOrderItemService
 	@Override
 	public int updateTaoOrderItem(TaoOrderItem taoOrderItem)
 	{
-		int productId = taoOrderItem.getGoodsId();
-		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
-		if(product==null)return 0;
+//		int productId = taoOrderItem.getGoodsId();
+//		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
+//		if(product==null)return 0;
 		/**
 		 * 设置价格
 		 */
-		taoOrderItem.setPrice(product.getProductPrice()*taoOrderItem.getAmount());
+//		taoOrderItem.setPrice(product.getProductPrice()*taoOrderItem.getAmount());
 		return taoOrderItemMapper.updateTaoOrderItem(taoOrderItem);
 	}
 
