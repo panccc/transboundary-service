@@ -41,7 +41,7 @@ public class TaoCompanyController
 	 * 查询物流公司列表
 	 */
 	@ApiOperation(value = "查询物流公司列表 按照物流公司类型查找")
-	@GetMapping("/list/{companyType}")
+	@GetMapping("")
 	public List<TaoCompany> list(@PathVariable @ApiParam(value = "物流公司类型 1常规， 2县村",required = true) Integer companyType)
 	{
 		TaoCompany taoCompany = new TaoCompany();

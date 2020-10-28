@@ -1,12 +1,14 @@
 package com.transample.demo.common;
 
-import com.transample.demo.common.ResultCode;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.springframework.http.HttpStatus;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>响应结果包装类</p>
@@ -30,6 +32,16 @@ public class ResponseResult  {
     @JsonInclude(value = Include.NON_NULL)
     private  Object data;
 
+    public List<String> getIndexes() {
+        return indexes;
+    }
+
+    public void setIndexes(List<String> indexes) {
+        this.indexes = indexes;
+    }
+
+    @JsonInclude(value = Include.NON_NULL)
+    private List<String> indexes;
     /**
      * 响应时间
      */
@@ -55,8 +67,14 @@ public class ResponseResult  {
     }
 
     public ResponseResult(ResultCode resultCode, String message){
-         this.status = resultCode.getCode();
-         this.message = message;
+        this.status = resultCode.getCode();
+        this.message = message;
+    }
+    public ResponseResult(Integer status , String message, Object data, List<String> indexes){
+        this.status = status;
+        this.message = message;
+        this.data = data;
+        this.indexes = indexes;
     }
 
     /**
@@ -67,6 +85,16 @@ public class ResponseResult  {
         this.status = ResultCode.OK.getCode();
         this.message = ResultCode.OK.getName();
         this.data = data;
+    }
+    /**
+     * 成功返回结果与指标的实例
+     * @param data
+     */
+    private ResponseResult(Object data,List<String> indexes){
+        this.status = ResultCode.OK.getCode();
+        this.message = ResultCode.OK.getName();
+        this.data = data;
+        this.indexes = indexes;
     }
 
     private ResponseResult(ResultCode code){
@@ -94,9 +122,11 @@ public class ResponseResult  {
     public static ResponseResult ok(Object data){
         return new ResponseResult(data);
     }
-
+    public static ResponseResult ok(Object data,List<String> indexes){
+        return new ResponseResult(data,indexes);
+    }
     public static ResponseResult fail(ResultCode code){
-       return new ResponseResult(code);
+        return new ResponseResult(code);
     }
 
     public static ResponseResult fail(String message){
