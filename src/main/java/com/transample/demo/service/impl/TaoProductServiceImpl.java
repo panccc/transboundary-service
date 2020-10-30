@@ -62,7 +62,7 @@ public class TaoProductServiceImpl implements ITaoProductService
 
 	@Override
 	public TaoProduct getInfoBeforeEdit(Integer productId) {
-    	return taoProductMapper.selectTaoProductById(productId);
+    	return getProductById(productId);
 	}
 
 	@Override
