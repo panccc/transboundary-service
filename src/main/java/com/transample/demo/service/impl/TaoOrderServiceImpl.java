@@ -5,18 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.transample.demo.constants.OrderConstant;
-import com.transample.demo.domain.TaoCartOrderItem;
-import com.transample.demo.domain.TaoOrderItem;
-import com.transample.demo.domain.TaoSeller;
+import com.transample.demo.domain.*;
 import com.transample.demo.mapper.TaoOrderItemMapper;
 import com.transample.demo.mapper.TaoSellerMapper;
-import com.transample.demo.service.ITaoOrderItemService;
+import com.transample.demo.service.*;
 import com.transample.demo.utils.OrderUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoOrderMapper;
-import com.transample.demo.domain.TaoOrder;
-import com.transample.demo.service.ITaoOrderService;
 
 import javax.annotation.Resource;
 
@@ -36,7 +32,13 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 	private ITaoOrderItemService taoOrderItemService;
 
 	@Resource
-	private TaoSellerMapper taoSellerMapper;
+	private ITaoSellerService taoSellerService;
+
+	@Resource
+	private ITaoVillagerService taoVillagerService;
+
+	@Resource
+	private ITaoStationService taoStationService;
 
 	/**
      * 查询订单信息
@@ -111,6 +113,21 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 	public TaoOrder calOrderInfo(TaoOrder order, List<TaoOrderItem> itemList) {
 
 
+		int sellerId = order.getSellerId();
+		TaoSeller seller = taoSellerService.getTaoSellerById(sellerId);
+		if(seller!=null)
+			order.setSellerName(seller.getSellerName());
+		int villagerId = order.getVillagerId();
+		TaoVillager villager = taoVillagerService.getTaoVillagerById(villagerId);
+		if(villager!=null)
+			order.setUserName(villager.getUserName());
+		if(order.getStationId()!=null)
+		{
+			int stationId = order.getStationId();
+			TaoStation station = taoStationService.getTaoStationById(stationId);
+			if(station!=null)
+				order.setStationName(station.getStationName());
+		}
 		/**
 		 * 向数据库中插入一条记录，并返回订单id
 		 */

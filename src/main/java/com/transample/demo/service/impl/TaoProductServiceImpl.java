@@ -3,12 +3,15 @@ package com.transample.demo.service.impl;
 import java.util.Comparator;
 import java.util.List;
 
+import com.transample.demo.constants.ImgConstants;
 import com.transample.demo.dto.RemoveIdsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoProductMapper;
 import com.transample.demo.domain.TaoProduct;
 import com.transample.demo.service.ITaoProductService;
+
+import javax.annotation.Resource;
 
 /**
  * 商品 服务层实现
@@ -19,18 +22,28 @@ import com.transample.demo.service.ITaoProductService;
 @Service
 public class TaoProductServiceImpl implements ITaoProductService 
 {
-	@Autowired
+	@Resource
 	private TaoProductMapper taoProductMapper;
 
     @Override
 	public TaoProduct getProductById(Integer productId)
 	{
-	    return taoProductMapper.selectTaoProductById(productId);
+	    TaoProduct taoProduct = taoProductMapper.selectTaoProductById(productId);
+	    taoProduct.setImgUrl(ImgConstants.BASEURL+taoProduct.getImgUrl());
+
+		return taoProduct;
 	}
 	
 	@Override
 	public List<TaoProduct> getTaoProductList(TaoProduct taoProduct) {
-	    return taoProductMapper.selectTaoProductList(taoProduct);
+    	List<TaoProduct> list = taoProductMapper.selectTaoProductList(taoProduct);
+    	for(int i=0;i<list.size();i++)
+		{
+			String imgUrl = list.get(i).getImgUrl();
+			list.get(i).setImgUrl(ImgConstants.BASEURL +imgUrl);
+		}
+
+	    return list;
 	}
 
 	@Override
