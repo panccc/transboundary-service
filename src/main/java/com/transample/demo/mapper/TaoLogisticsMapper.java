@@ -61,7 +61,7 @@ public interface TaoLogisticsMapper
      */
 	public int deleteTaoLogisticsByIds(String[] ticketIds);
 
-	@Select("select * from tao_logistics where order_id = #{orderId}")
-	public TaoLogistics selectLogisticsByOrderId(Integer orderId);
+
+	public List<TaoLogistics> selectLogisticsByOrderId(Integer orderId);
 	
 }

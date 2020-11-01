@@ -41,16 +41,16 @@ public class TaoCompanyController
 	 * 查询物流公司列表
 	 */
 	@ApiOperation(value = "查询物流公司列表 按照物流公司类型查找")
-	@GetMapping("")
+	@GetMapping("/list/{companyType}")
 	public ResponseEntity list(@PathVariable @ApiParam(value = "物流公司类型 1常规， 2县村",required = true) Integer companyType)
 	{
 		TaoCompany taoCompany = new TaoCompany();
 		if(companyType==1)
 		{
-			taoCompany.setCompanyType("常规");
+			taoCompany.setCompanyType("城市物流");
 		}else if(companyType==2)
 		{
-			taoCompany.setCompanyType("县村");
+			taoCompany.setCompanyType("县乡村物流");
 		}
 		return ResponseEntity.ok(ResponseResult.ok(taoCompanyService.selectTaoCompanyList(taoCompany)));
 	}

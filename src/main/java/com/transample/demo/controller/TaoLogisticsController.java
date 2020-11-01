@@ -1,5 +1,6 @@
 package com.transample.demo.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import com.transample.demo.common.ResultCode;
 import com.transample.demo.constants.OrderConstant;
 import com.transample.demo.domain.TaoLogisticsState;
 import com.transample.demo.domain.TaoOrder;
+import com.transample.demo.dto.LogisticsDTO;
 import com.transample.demo.service.ITaoLogisticsStateService;
 import com.transample.demo.service.ITaoOrderService;
 import io.swagger.annotations.Api;
@@ -140,17 +142,23 @@ public class TaoLogisticsController
 	@GetMapping("getLogistics/{orderId}")
 	public ResponseEntity getLogisticsById(@PathVariable Integer orderId)
 	{
-		TaoLogistics taoLogistics = taoLogisticsService.selectLogisticsByOrderId(orderId);
-		if(taoLogistics==null)
+		List<TaoLogistics> taoLogisticsList= taoLogisticsService.selectLogisticsByOrderId(orderId);
+		if(taoLogisticsList==null)
 			return ResponseEntity.ok(ResponseResult.fail(ResultCode.OBJECT_NOT_EXIST));
 
-		TaoLogisticsState taoLogisticsState = new TaoLogisticsState();
-		taoLogisticsState.setTicketId(taoLogistics.getTicketId());
-		List<TaoLogisticsState> logisticsStateList = taoLogisticsStateService.selectTaoLogisticsStateList(taoLogisticsState);
-		ModelMap modelMap = new ModelMap();
-		modelMap.put("logisticsInfo",taoLogistics);
-		modelMap.put("logisticsList",logisticsStateList);
-		return ResponseEntity.ok(ResponseResult.ok(modelMap));
+		List<LogisticsDTO> ans = new ArrayList<>();
+
+		for(int i=0;i<taoLogisticsList.size();i++)
+		{
+			LogisticsDTO logisticsDTO = new LogisticsDTO();
+			logisticsDTO.setLogistics(taoLogisticsList.get(i));
+			TaoLogisticsState taoLogisticsState = new TaoLogisticsState();
+			taoLogisticsState.setTicketId(taoLogisticsList.get(i).getTicketId());
+			List<TaoLogisticsState> logisticsStateList = taoLogisticsStateService.selectTaoLogisticsStateList(taoLogisticsState);
+			logisticsDTO.setLogisticsStateList(logisticsStateList);
+			ans.add(logisticsDTO);
+		}
+		return ResponseEntity.ok(ResponseResult.ok(ans));
 	}
 
 

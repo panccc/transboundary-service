@@ -56,6 +56,6 @@ public interface ITaoLogisticsService
 	 * @param orderId
 	 * @return
 	 */
-	public TaoLogistics selectLogisticsByOrderId(Integer orderId);
+	public List<TaoLogistics> selectLogisticsByOrderId(Integer orderId);
 	
 }
