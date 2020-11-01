@@ -1,11 +1,20 @@
 package com.transample.demo.service.impl;
 
+import java.io.IOException;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.transample.demo.constants.ImgConstants;
+import com.transample.demo.constants.ServiceNetworkConstants;
 import com.transample.demo.dto.RemoveIdsDTO;
+import com.transample.demo.utils.JSONUtils;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoProductMapper;
 import com.transample.demo.domain.TaoProduct;
@@ -25,13 +34,46 @@ public class TaoProductServiceImpl implements ITaoProductService
 	@Resource
 	private TaoProductMapper taoProductMapper;
 
-    @Override
-	public TaoProduct getProductById(Integer productId)
-	{
-	    TaoProduct taoProduct = taoProductMapper.selectTaoProductById(productId);
-	    taoProduct.setImgUrl(ImgConstants.BASEURL+taoProduct.getImgUrl());
+	private final OkHttpClient httpClient = new OkHttpClient();
 
-		return taoProduct;
+    @Override
+	public Response getProductById(Integer productId)
+	{
+//	    TaoProduct taoProduct = taoProductMapper.selectTaoProductById(productId);
+//	    taoProduct.setImgUrl(ImgConstants.BASEURL+taoProduct.getImgUrl());
+		/***
+		 * 修改为调用服务网络
+		 */
+		TaoProduct taoProduct = new TaoProduct();
+
+		MediaType mediaType= MediaType.parse("application/json; charset=utf-8");
+		JSONObject jsonObject = new JSONObject();
+
+		String url = ServiceNetworkConstants.ADDRESS+ServiceNetworkConstants.INVOKEINTERFACE;
+		HashMap<String, Integer> hashMap = new HashMap<>();
+		hashMap.put("productId",productId);
+		String params = JSON.toJSONString(hashMap);
+		System.out.println(params);
+		String interfaceId = "1515652101257-1515648412249-1604237392244";
+
+		try{
+			jsonObject.put("interfaceId",interfaceId);
+			jsonObject.put("params",params);
+		}catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+
+		RequestBody requestBody =RequestBody.create(mediaType, String.valueOf(jsonObject));
+		Response res =null;
+		try {
+			res = httpClient.newCall(new Request.Builder().url(url).post(requestBody).build()).execute();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return res;
 	}
 	
 	@Override
@@ -62,7 +104,8 @@ public class TaoProductServiceImpl implements ITaoProductService
 
 	@Override
 	public TaoProduct getInfoBeforeEdit(Integer productId) {
-    	return getProductById(productId);
+//    	return getProductById(productId);
+		return null;
 	}
 
 	@Override
@@ -74,12 +117,12 @@ public class TaoProductServiceImpl implements ITaoProductService
 	public int deleteTaoProductByIds(RemoveIdsDTO ids)
 	{
 		int flag = 1;
-		for (String id : ids.getIds().split(",")) {
-			TaoProduct product = getProductById(Integer.parseInt(id));
-			product.setDelete(0);
-			flag = editTaoProduct(product);
-			if (flag == 0) return flag;
-		}
+//		for (String id : ids.getIds().split(",")) {
+////			TaoProduct product = getProductById(Integer.parseInt(id));
+//			product.setDelete(0);
+//			flag = editTaoProduct(product);
+//			if (flag == 0) return flag;
+//		}
 		return flag;
 	}
 

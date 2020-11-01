@@ -2,6 +2,7 @@ package com.transample.demo.service;
 
 import com.transample.demo.domain.TaoProduct;
 import com.transample.demo.dto.RemoveIdsDTO;
+import okhttp3.Response;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface ITaoProductService
 	 * @param productId integer
 	 * @return product
 	 */
-	public TaoProduct getProductById(Integer productId);
+	public Response getProductById(Integer productId);
 
 	/**
 	 * 获取相似product列表
