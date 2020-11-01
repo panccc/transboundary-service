@@ -28,8 +28,10 @@ public class TaoProductServiceImpl implements ITaoProductService
     @Override
 	public TaoProduct getProductById(Integer productId)
 	{
-	    TaoProduct taoProduct = taoProductMapper.selectTaoProductById(productId);
-	    taoProduct.setImgUrl(ImgConstants.BASEURL+taoProduct.getImgUrl());
+
+		TaoProduct taoProduct = taoProductMapper.selectTaoProductById(productId);
+	    if(taoProduct!=null)
+			taoProduct.setImgUrl(ImgConstants.BASEURL+taoProduct.getImgUrl());
 
 		return taoProduct;
 	}

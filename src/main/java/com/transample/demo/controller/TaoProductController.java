@@ -30,9 +30,9 @@ public class TaoProductController
 	@Autowired
 	private ITaoProductService taoProductService;
 
-	@GetMapping("/getProduct/{productId}")
+	@GetMapping("/getProduct")
 	@ApiOperation("通过id获取商品")
-	public ResponseEntity<ResponseResult> getProduct(@PathVariable Integer productId)
+	public ResponseEntity<ResponseResult> getProduct(@ApiParam(value = "商品id", required = true) @RequestParam("productId") Integer productId)
 	{
 		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getProductById(productId)));
 	}
