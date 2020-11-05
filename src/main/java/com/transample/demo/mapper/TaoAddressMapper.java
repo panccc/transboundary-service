@@ -2,6 +2,8 @@ package com.transample.demo.mapper;
 
 import com.transample.demo.domain.TaoAddress;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -61,5 +63,18 @@ public interface TaoAddressMapper
      * @return 结果
      */
 	public int deleteTaoAddressByIds(String[] ids);
-	
+
+
+	public List<TaoAddress> getAllProvinces();
+
+	public List<TaoAddress> getAllCitiesByProvince(String province);
+
+
+	public List<TaoAddress> getAllCountiesByProvinceAndCity(@Param("province") String province, @Param("city") String city);
+
+
+	public List<TaoAddress> getAllTownsByProvinceAndCityAndCounty(@Param("province") String province, @Param("city") String city, @Param("county")String county);
+
+	public List<TaoAddress> getAllVillagesByProvinceAndCityAndCountyAndTown(@Param("province") String province, @Param("city") String city, @Param("county")String county, @Param("town")String town);
+
 }

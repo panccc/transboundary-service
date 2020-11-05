@@ -54,5 +54,45 @@ public interface ITaoAddressService
 	public void insertTaoAddressListFromJson(String fileName);
 
 	public int insertAddressBySpider(String province,String url);
-	
+
+	/**
+	 * 获得所有的省list
+	 * @return
+	 */
+	public List<TaoAddress> getAllProvince();
+
+	/**
+	 * 根据省的名字查询所有城市的列表
+	 * @param province
+	 * @return
+	 */
+	public List<TaoAddress> getCityListByProvince(String province);
+
+	/**
+	 * 根据省市名字查询所有区的列表
+	 * @param province
+	 * @return
+	 */
+	public List<TaoAddress> getCountyListByProvinceAndCity(String province,String city);
+
+
+	/**
+	 * 根据省市区名字查询所有镇的列表
+	 * @param province
+	 * @param city
+	 * @param county
+	 * @return
+	 */
+	public List<TaoAddress> getTownListByProvinceAndCityAndCounty(String province,String city,String county);
+
+	/**
+	 * 根据省市区镇名字查询所有村的列表
+	 * @param province
+	 * @param city
+	 * @param county
+	 * @param town
+	 * @return
+	 */
+	public List<TaoAddress> getVillageListByProvinceAndCityAndCountyAndTown(String province,String city,String county, String town);
+
 }

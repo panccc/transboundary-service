@@ -8,6 +8,7 @@ import com.transample.demo.dto.RemoveIdsDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,8 +24,9 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@CrossOrigin
+//@CrossOrigin
 @RestController
+@Slf4j
 @RequestMapping("/taoCartOrderItem")
 @Api(tags = "购物车单类商品相关API")
 public class TaoCartOrderItemController
@@ -77,6 +79,7 @@ public class TaoCartOrderItemController
 	/**
 	 * 修改购物车单类商品
 	 */
+
 	@ApiOperation("修改购物车单类商品,返回该商品的基本信息")
 	@GetMapping("/getInfoBeforeEdit/{orderItemId}")
 	public ResponseEntity getInfoBeforeEdit(@PathVariable("orderItemId") @ApiParam(value = "订单单个商品号",required = true) Integer orderItemId)

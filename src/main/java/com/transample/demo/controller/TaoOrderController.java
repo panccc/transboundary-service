@@ -10,11 +10,15 @@ import com.transample.demo.common.ResultCode;
 import com.transample.demo.constants.OrderConstant;
 import com.transample.demo.domain.TaoCartOrderItem;
 import com.transample.demo.domain.TaoOrderItem;
+import com.transample.demo.domain.TaoSeller;
 import com.transample.demo.dto.OrderDTO;
 import com.transample.demo.service.ITaoOrderItemService;
+import com.transample.demo.service.ITaoSellerService;
+import com.transample.demo.utils.OrderUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,7 +36,8 @@ import javax.annotation.Resource;
  * @author youcaihua
  * @date 2020-10-13
  */
-@CrossOrigin
+//@CrossOrigin
+@Slf4j
 @RestController
 @Api(tags = "订单相关API")
 @RequestMapping("/taoOrder")
@@ -46,11 +51,8 @@ public class TaoOrderController
 	@Resource
 	private ITaoOrderItemService taoOrderItemService;
 	
-//	@GetMapping()
-//	public String taoOrder()
-//	{
-//	    return prefix + "/taoOrder";
-//	}
+	@Resource
+	private ITaoSellerService taoSellerService;
 	
 	/**
 	 * 查询订单列表
@@ -59,7 +61,7 @@ public class TaoOrderController
 			",待成交receive,已成交takeOver";
 	@ApiOperation("商家按条件获取订单列表")
 	@GetMapping("/list/seller/{status}/{sellerId}")
-	public List<TaoOrder> getListOfSeller(@PathVariable @ApiParam(value = queryStatusAPIValue,required = true) String status,@PathVariable @ApiParam("商家id") Integer sellerId)
+	public ResponseEntity getListOfSeller(@PathVariable @ApiParam(value = queryStatusAPIValue,required = true) String status,@PathVariable @ApiParam("商家id") Integer sellerId)
 	{
 		TaoOrder order = new TaoOrder();
 		order.setSellerId(sellerId);
@@ -83,19 +85,25 @@ public class TaoOrderController
 		}
       		List<TaoOrder> list = taoOrderService.selectTaoOrderList(order);
 
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
-	private static final String queryStatusUserAPIValue = "已购买pay,待发货underSend,运输中send" +
+	private static final String queryStatusUserAPIValue = "未付款unpaid,已购买pay,待发货underSend,运输中send" +
 			",已购买takeOver";
 	@ApiOperation("用户按条件获取订单列表")
 	@GetMapping("/list/user/{status}/{userId}")
-	public List<TaoOrder> getListOfUser(@PathVariable @ApiParam(value = queryStatusUserAPIValue,required = true) String status,@PathVariable @ApiParam("用户id") Integer userId)
+	public ResponseEntity getListOfUser(@PathVariable @ApiParam(value = queryStatusUserAPIValue,required = true) String status,@PathVariable @ApiParam("用户id") Integer userId)
 	{
+		ModelMap modelMap = new ModelMap();
+		List<OrderDTO> ans = new ArrayList<>();
+
 		TaoOrder order = new TaoOrder();
 		order.setVillagerId(userId);
 		switch (status)
 		{
+			case "unpaid":
+				order.setStatus(OrderConstant.UNPAID);
+				break;
 			case "pay":
 				order.setStatus(OrderConstant.PAY);
 				break;
@@ -110,8 +118,21 @@ public class TaoOrderController
 				break;
 		}
 		List<TaoOrder> list = taoOrderService.selectTaoOrderList(order);
-
-		return list;
+		for(TaoOrder order1:list)
+		{
+			OrderDTO orderDTO = new OrderDTO();
+			orderDTO.setOrder(order1);
+			TaoOrderItem orderItem = new TaoOrderItem();
+			orderItem.setOrderId(order1.getOrderId());
+			List<TaoOrderItem>  items= taoOrderItemService.selectTaoOrderItemList(orderItem);
+			HashMap<Integer,List<TaoOrderItem>> hashMap = new HashMap<>();
+			hashMap.put(order1.getSellerId(),items);
+			orderDTO.setOrderItemHashMap(hashMap);
+			ans.add(orderDTO);
+		}
+		modelMap.put("totalNum",ans.size());
+		modelMap.put("orderList",ans);
+		return ResponseEntity.ok(ResponseResult.ok(modelMap));
 	}
 
 	private static final String queryStatusStationAPIValue = "村站等待收取underSend,已代收receive";
@@ -152,6 +173,8 @@ public class TaoOrderController
 	{
 		HashMap<Integer,List<TaoOrderItem>> hashMap = orderDTO.getOrderItemHashMap();
 		List<Integer> orderIds= new ArrayList<>();
+		ModelMap modelMap = new ModelMap();
+
 		for(Integer sellerId : hashMap.keySet())
 		{
 			TaoOrder order = orderDTO.getOrder();
@@ -164,12 +187,15 @@ public class TaoOrderController
 			List<TaoOrderItem> list = hashMap.get(sellerId);
 
 			order= taoOrderService.calOrderInfo(order,list);
-			System.out.println(order.getOrderId());
+//			System.out.println(order.getOrderId());
+
+			log.info("成功添加了订单："+order.getOrderId());
 			orderIds.add(order.getOrderId());
 			taoOrderService.updateTaoOrder(order);
 		}
+		modelMap.put("orderIds",orderIds);
 
-		return ResponseEntity.ok(ResponseResult.ok(orderIds));
+		return ResponseEntity.ok(ResponseResult.ok(modelMap));
 	}
 
 
@@ -273,18 +299,84 @@ public class TaoOrderController
 			return ResponseEntity.ok(ResponseResult.fail(ResultCode.DATA_UPDATE_ERROR));
 		}
 		return ResponseEntity.ok(ResponseResult.ok("操作成功"));
+	}
+
+	@ApiOperation("村小二和商家根据订单状态获取订单数量")
+	@GetMapping("/getOrderNum/{role}/{op}/{id}")
+	public HashMap<String,Integer> getOrderNum(@ApiParam("卖家seller;村站station") @PathVariable String role, @ApiParam("总订单total;未发货underSend;未确认underConfirm") @PathVariable String op,@ApiParam("村小二或商家id") @PathVariable Integer id)
+	{
+		HashMap<String, Integer> ans = new HashMap<>();
+		int num = 0;
+		TaoOrder order = new TaoOrder();
+		if(role.equals("seller"))
+		{
+			order.setSellerId(id);
+		}else if(role.equals("station"))
+		{
+			order.setStationId(id);
+		}
+		else
+		{
+			ans.put("num",0);
+			return ans;
+		}
+
+		if(op.equals("underSend"))
+		{
+			order.setStatus(OrderConstant.AUDIT);
+		}else if(op.equals("underConfirm"))
+		{
+			order.setStatus(OrderConstant.PAY);
+		}
+		num = taoOrderService.getOrderNum(order);
+		ans.put("num",num);
+		return ans;
+	}
+
+	@ApiOperation("商家获取订单总成交额；村小二获取总二级物流价格")
+	@GetMapping("/getTotalPrice/{role}/{id}")
+	public ResponseEntity getTotalPrice(@ApiParam("商家:seller;村站:station ")@PathVariable String role, @ApiParam("id") @PathVariable Integer id)
+	{
+		HashMap<String,Double> ans = new HashMap<>();
+		TaoOrder order = new TaoOrder();
+		if(role.equals("seller"))
+		{
+			order.setSellerId(id);
+			double price = taoOrderService.getTotalPrice(order);
+			ans.put("price",price);
+		}else if(role.equals("station"))
+		{
+			order.setStationId(id);
+			double price = taoOrderService.getTotalPrice(order);
+			ans.put("price",price);
+		}
+		return ResponseEntity.ok(ResponseResult.ok(ans));
+	}
+
+
+	@ApiOperation("根据地址获得物流价格")
+	@GetMapping("/getLogisticsFare")
+	public ResponseEntity getLogisticsFare(@ApiParam("商家id")@RequestParam("sellerId") Integer sellerId, @ApiParam("收件人所在省") @RequestParam("province") String province, @ApiParam("收件人所在市") @RequestParam("city") String city, @ApiParam("商品数量") @RequestParam("amount") Integer amount,@ApiParam("一级物流：1；二级物流2")@RequestParam("isOne") Integer isOne)
+	{
+
+		TaoSeller seller = taoSellerService.getTaoSellerById(sellerId);
+		if(seller==null)
+			return ResponseEntity.ok(ResponseResult.fail(ResultCode.OBJECT_NOT_EXIST));
+		if(province==null||city==null||amount==null||isOne==null)
+			return ResponseEntity.ok(ResponseResult.fail(ResultCode.FILED_VALUE_INVALID));
+//		String villagerAddress = province + city;
+		double fare = 0.0;
+		if(isOne==1)
+			fare = OrderUtils.generateFare(seller.getSellerLocation(),province,city,amount,false);
+		else if(isOne==2)
+			fare = OrderUtils.generateFare(seller.getSellerLocation(),province,city,amount,true);
+
+		ModelMap modelMap = new ModelMap();
+		modelMap.put("logistics",fare);
+		log.info("生成物流价格："+fare);
+		return ResponseEntity.ok(ResponseResult.ok(modelMap));
 
 	}
-	
-//	/**
-//	 * 删除订单
-//	 */
-//
-//	@PostMapping( "/remove")
-//	@ResponseBody
-//	public ResponseEntity remove(String ids)
-//	{
-//		return ResponseEntity.ok(ResponseResult.ok(taoOrderService.deleteTaoOrderByIds(ids)));
-//	}
-	
+
+
 }

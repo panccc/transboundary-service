@@ -24,6 +24,8 @@ public class TaoStation
 	private String city;
 	/** 所属县/区 */
 	private String county;
+	/** 所属镇 */
+	private String town;
 	/** 所属村 */
 	private String village;
 	/** 二阶物流公司ID */
@@ -135,4 +137,11 @@ public class TaoStation
 		return updateTime;
 	}
 
+	public String getTown() {
+		return town;
+	}
+
+	public void setTown(String town) {
+		this.town = town;
+	}
 }

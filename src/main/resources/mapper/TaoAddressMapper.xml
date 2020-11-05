@@ -77,4 +77,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
+    <select id="getAllProvinces" resultMap="TaoAddressResult">
+        select distinct provence from tao_address order by provence
+    </select>
+
+    <select id="getAllCitiesByProvince" parameterType="String" resultMap="TaoAddressResult">
+        select DISTINCT provence,city  from tao_address where provence = #{province}
+    </select>
+
+    <select id="getAllCountiesByProvinceAndCity" parameterType="String" resultMap="TaoAddressResult">
+        select DISTINCT provence,city,county  from tao_address where provence = #{province} and city = #{city}
+    </select>
+
+    <select id="getAllTownsByProvinceAndCityAndCounty" parameterType="String" resultMap="TaoAddressResult">
+        select DISTINCT provence,city,county,town  from tao_address where provence = #{province} and city = #{city} and county = #{county}
+    </select>
+
+    <select id="getAllVillagesByProvinceAndCityAndCountyAndTown" parameterType="String" resultMap="TaoAddressResult">
+        select DISTINCT provence,city,county,town, village from tao_address
+        where provence = #{province} and city = #{city} and county = #{county} and town = #{town}
+    </select>
+
 </mapper>

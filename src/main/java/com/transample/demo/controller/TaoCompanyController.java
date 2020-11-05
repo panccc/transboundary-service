@@ -21,7 +21,7 @@ import com.transample.demo.common.ResponseResult;
  * @date 2020-10-13
  */
 @RestController
-@CrossOrigin
+//@CrossOrigin
 @Api(tags = "物流公司API")
 @RequestMapping("/taoCompany")
 public class TaoCompanyController
@@ -41,8 +41,8 @@ public class TaoCompanyController
 	 * 查询物流公司列表
 	 */
 	@ApiOperation(value = "查询物流公司列表 按照物流公司类型查找")
-	@GetMapping("/list/{companyType}")
-	public List<TaoCompany> list(@PathVariable @ApiParam(value = "物流公司类型 1常规， 2县村",required = true) Integer companyType)
+	@GetMapping("")
+	public ResponseEntity list(@PathVariable @ApiParam(value = "物流公司类型 1常规， 2县村",required = true) Integer companyType)
 	{
 		TaoCompany taoCompany = new TaoCompany();
 		if(companyType==1)
@@ -52,7 +52,7 @@ public class TaoCompanyController
 		{
 			taoCompany.setCompanyType("县村");
 		}
-		return taoCompanyService.selectTaoCompanyList(taoCompany);
+		return ResponseEntity.ok(ResponseResult.ok(taoCompanyService.selectTaoCompanyList(taoCompany)));
 	}
 	
 	

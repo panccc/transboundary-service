@@ -4,18 +4,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import com.transample.demo.domain.TaoCartOrderItem;
-import com.transample.demo.domain.TaoOrderItem;
-import com.transample.demo.domain.TaoSeller;
+import com.transample.demo.constants.OrderConstant;
+import com.transample.demo.domain.*;
 import com.transample.demo.mapper.TaoOrderItemMapper;
 import com.transample.demo.mapper.TaoSellerMapper;
-import com.transample.demo.service.ITaoOrderItemService;
+import com.transample.demo.service.*;
 import com.transample.demo.utils.OrderUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoOrderMapper;
-import com.transample.demo.domain.TaoOrder;
-import com.transample.demo.service.ITaoOrderService;
 
 import javax.annotation.Resource;
 
@@ -35,7 +32,13 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 	private ITaoOrderItemService taoOrderItemService;
 
 	@Resource
-	private TaoSellerMapper taoSellerMapper;
+	private ITaoSellerService taoSellerService;
+
+	@Resource
+	private ITaoVillagerService taoVillagerService;
+
+	@Resource
+	private ITaoStationService taoStationService;
 
 	/**
      * 查询订单信息
@@ -110,6 +113,21 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 	public TaoOrder calOrderInfo(TaoOrder order, List<TaoOrderItem> itemList) {
 
 
+		int sellerId = order.getSellerId();
+		TaoSeller seller = taoSellerService.getTaoSellerById(sellerId);
+		if(seller!=null)
+			order.setSellerName(seller.getSellerName());
+		int villagerId = order.getVillagerId();
+		TaoVillager villager = taoVillagerService.getTaoVillagerById(villagerId);
+		if(villager!=null)
+			order.setUserName(villager.getUserName());
+		if(order.getStationId()!=null)
+		{
+			int stationId = order.getStationId();
+			TaoStation station = taoStationService.getTaoStationById(stationId);
+			if(station!=null)
+				order.setStationName(station.getStationName());
+		}
 		/**
 		 * 向数据库中插入一条记录，并返回订单id
 		 */
@@ -143,21 +161,28 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 		BigDecimal totalPriceBigDecimal = BigDecimal.valueOf(totalPrice);
 		order.setTotalPrice(totalPriceBigDecimal);
 
-		/**
-		 * 设置订单物流价格
-		 */
-		TaoSeller seller = taoSellerMapper.selectTaoSellerById(order.getSellerId());
-		String sellerAddress = seller.getSellerLocation();
-		double logisticsOnePrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),false);
-		order.setLogisticsOnePrice(BigDecimal.valueOf(logisticsOnePrice));
-		if(order.getStationId()!=null)
-		{
-			/**
-			设置二级物流价格
-			 */
-			double logisticsTwoPrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),true);
-			order.setLogisticsTwoPrice(BigDecimal.valueOf(logisticsTwoPrice));
-		}
+//		/**
+//		 * 设置订单物流价格
+//		 */
+//		TaoSeller seller = taoSellerMapper.selectTaoSellerById(order.getSellerId());
+//		String sellerAddress = seller.getSellerLocation();
+//		if(order.getLogisticsOnePrice()==null)
+//		{
+//			double logisticsOnePrice = OrderUtils.generateFare(sellerAddress, order.get, order.getTotalNumber(),false);
+//			order.setLogisticsOnePrice(BigDecimal.valueOf(logisticsOnePrice));
+//		}
+//		if(order.getStationId()!=null)
+//		{
+//			/**
+//			设置二级物流价格
+//			 */
+//			if(order.getLogisticsTwoPrice()==null)
+//			{
+//				double logisticsTwoPrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),true);
+//
+//				order.setLogisticsTwoPrice(BigDecimal.valueOf(logisticsTwoPrice));
+//			}
+//		}
 
 		/**
 		 * 创建时间
@@ -166,5 +191,81 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 		order.setCreateTime(date);
 
 		return order;
+	}
+
+	/**
+	 * 根据条件获取订单数量
+	 *
+	 * @param order
+	 * @return
+	 */
+	@Override
+	public int getOrderNum(TaoOrder order) {
+		if(order.getSellerId()!=null)
+		{
+		/**
+		 * 商家的订单统计信息
+		 */
+			if(order.getStatus()==null)
+			{
+				/**
+				 * 默认总订单数量(不包括取消订单)
+				 */
+				List<TaoOrder> total = taoOrderMapper.selectTaoOrderList(order);
+
+				order.setStatus(OrderConstant.CANCEL);
+				List<TaoOrder> cancel = taoOrderMapper.selectTaoOrderList(order);
+				return total.size()-cancel.size();
+			}
+
+			return taoOrderMapper.selectTaoOrderList(order).size();
+		}else if(order.getStationId()!=null)
+		{
+			/**
+			 * 村小二的订单统计信息
+			 */
+			if(order.getStatus()==null)
+			{
+				List<TaoOrder> total = taoOrderMapper.selectTaoOrderList(order);
+
+				order.setStatus(OrderConstant.CANCEL);
+				List<TaoOrder> cancel = taoOrderMapper.selectTaoOrderList(order);
+				return total.size()-cancel.size();
+			}
+			return taoOrderMapper.selectTaoOrderList(order).size();
+		}
+		return 0;
+	}
+
+	/**
+	 * 获取订单的总价 （分为村小二和商家）
+	 *
+	 * @param order
+	 * @return
+	 */
+	@Override
+	public double getTotalPrice(TaoOrder order) {
+		double ans = 0.0;
+		if(order.getSellerId()!=null)
+		{
+			List<TaoOrder> list = taoOrderMapper.getTaoOrderList(order);
+			for(TaoOrder taoOrder:list)
+			{
+				if(taoOrder.getTotalPrice()!=null)
+					ans += taoOrder.getTotalPrice().doubleValue();
+			}
+			return ans;
+		}else if(order.getStationId()!=null)
+		{
+			List<TaoOrder> list = taoOrderMapper.getTaoOrderList(order);
+			for(TaoOrder taoOrder:list)
+			{
+				if(taoOrder.getLogisticsTwoPrice()!=null)
+					ans += taoOrder.getLogisticsTwoPrice().doubleValue();
+			}
+			return ans;
+		}
+
+		return ans;
 	}
 }

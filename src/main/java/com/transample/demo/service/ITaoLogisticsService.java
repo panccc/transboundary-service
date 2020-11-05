@@ -50,5 +50,12 @@ public interface ITaoLogisticsService
      * @return 结果
      */
 	public int deleteTaoLogisticsByIds(String ids);
+
+	/**
+	 * 根据订单id来查询物流信息
+	 * @param orderId
+	 * @return
+	 */
+	public TaoLogistics selectLogisticsByOrderId(Integer orderId);
 	
 }

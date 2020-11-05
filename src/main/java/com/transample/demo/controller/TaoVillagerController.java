@@ -21,7 +21,7 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping("/taoVillager")
 @Api(tags = "村民相关API")
