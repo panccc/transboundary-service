@@ -1,10 +1,7 @@
 package com.transample.demo.controller;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import com.transample.demo.common.ResultCode;
 import com.transample.demo.constants.OrderConstant;
@@ -61,7 +58,7 @@ public class TaoOrderController
 			",待成交receive,已成交takeOver";
 	@ApiOperation("商家按条件获取订单列表")
 	@GetMapping("/list/seller/{status}/{sellerId}")
-	public ResponseEntity getListOfSeller(@PathVariable @ApiParam(value = queryStatusAPIValue,required = true) String status,@PathVariable @ApiParam("商家id") Integer sellerId)
+	public ResponseEntity getListOfSeller(@PathVariable @ApiParam(value = queryStatusAPIValue,required = true) String status, @PathVariable @ApiParam("商家id") Integer sellerId)
 	{
 		TaoOrder order = new TaoOrder();
 		order.setSellerId(sellerId);

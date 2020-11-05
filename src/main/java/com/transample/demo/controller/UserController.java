@@ -37,6 +37,7 @@ public class UserController {
     @ApiOperation("村民登陆")
     public ResponseEntity<ResponseResult> villagerLogin(@RequestBody TaoVillager villager, HttpSession session) {
 
+
         ModelMap modelMap = taoVillagerService.login(villager);
         if(modelMap==null)
         {

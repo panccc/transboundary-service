@@ -44,7 +44,7 @@ public class ImageController {
 
             minioUtil.putObject(bucketName, uploadFile, name);
             ModelMap modelMap = new ModelMap();
-            modelMap.put("imgUrl", bucketName+"/"+name);
+            modelMap.put("imgUrl", name);
             return ResponseEntity.ok(ResponseResult.ok(modelMap));
         }
         return ResponseEntity.ok(ResponseResult.fail("上传图片失败"));

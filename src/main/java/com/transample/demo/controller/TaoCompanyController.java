@@ -1,18 +1,25 @@
 package com.transample.demo.controller;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.transample.demo.common.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.transample.demo.domain.TaoCompany;
 import com.transample.demo.service.ITaoCompanyService;
 import com.transample.demo.common.ResponseResult;
+import org.springframework.web.servlet.HandlerMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 物流公司 信息操作处理
@@ -42,8 +49,9 @@ public class TaoCompanyController
 	 */
 	@ApiOperation(value = "查询物流公司列表 按照物流公司类型查找")
 	@GetMapping("/list/{companyType}")
-	public ResponseEntity list(@PathVariable @ApiParam(value = "物流公司类型 1常规， 2县村",required = true) Integer companyType)
+	public ResponseEntity list(@PathVariable @ApiParam(value = "物流公司类型 1常规， 2县村",required = true) Integer companyType, HttpServletRequest httpRequest)
 	{
+
 		TaoCompany taoCompany = new TaoCompany();
 		if(companyType==1)
 		{
@@ -98,8 +106,9 @@ public class TaoCompanyController
 	 */
 	@ApiOperation(value = "修改保存物流公司，返回状态")
 	@PostMapping("/edit")
-	public ResponseEntity editCompany(@RequestBody TaoCompany taoCompany)
-	{		
+	public ResponseEntity editCompany(@RequestBody TaoCompany taoCompany,HttpServletRequest request)
+	{
+
 		return ResponseEntity.ok(ResponseResult.ok(taoCompanyService.updateTaoCompany(taoCompany)));
 	}
 	

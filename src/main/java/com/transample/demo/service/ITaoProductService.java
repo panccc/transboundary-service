@@ -21,7 +21,7 @@ public interface ITaoProductService
 	 * @param productId integer
 	 * @return product
 	 */
-	public Response getProductById(Integer productId);
+	public TaoProduct  getProductById(Integer productId);
 
 	/**
 	 * 获取相似product列表
