@@ -1,6 +1,16 @@
 package com.transample.demo.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+
+import com.transample.demo.domain.TaoCartOrderItem;
+import com.transample.demo.domain.TaoOrderItem;
+import com.transample.demo.domain.TaoSeller;
+import com.transample.demo.mapper.TaoOrderItemMapper;
+import com.transample.demo.mapper.TaoSellerMapper;
+import com.transample.demo.service.ITaoOrderItemService;
+import com.transample.demo.utils.OrderUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoOrderMapper;
@@ -20,6 +30,12 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 {
 	@Resource
 	private TaoOrderMapper taoOrderMapper;
+
+	@Resource
+	private ITaoOrderItemService taoOrderItemService;
+
+	@Resource
+	private TaoSellerMapper taoSellerMapper;
 
 	/**
      * 查询订单信息
@@ -81,5 +97,74 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 	{
 		return taoOrderMapper.deleteTaoOrderByIds(ids.split(","));
 	}
-	
+
+
+	/**
+	 * 计算一些订单的基本信息
+	 *
+	 * @param order
+	 * @param itemList
+	 * @return
+	 */
+	@Override
+	public TaoOrder calOrderInfo(TaoOrder order, List<TaoOrderItem> itemList) {
+
+
+		/**
+		 * 向数据库中插入一条记录，并返回订单id
+		 */
+		int orderId = insertTaoOrder(order);
+
+		int totalAmount = 0 ;
+		double totalPrice = 0.0;
+
+
+		for(int i=0;i<itemList.size();i++)
+		{
+			TaoOrderItem taoOrderItem = itemList.get(i);
+			/**
+			 * 统计商品总价格和总数量
+			 */
+			totalAmount+=taoOrderItem.getAmount();
+			totalPrice+=taoOrderItem.getAmount()*taoOrderItem.getPrice();
+
+			/**
+			 * 将orderId填入orderItem
+			 */
+			taoOrderItem.setOrderId(orderId);
+			/**
+			 * 插入orderItem表
+			 */
+			if(taoOrderItem.getOrderItemId()!=null)taoOrderItem.setOrderItemId(null);
+			taoOrderItemService.insertTaoOrderItem(taoOrderItem);
+		}
+
+		order.setTotalNumber(totalAmount);
+		BigDecimal totalPriceBigDecimal = BigDecimal.valueOf(totalPrice);
+		order.setTotalPrice(totalPriceBigDecimal);
+
+		/**
+		 * 设置订单物流价格
+		 */
+		TaoSeller seller = taoSellerMapper.selectTaoSellerById(order.getSellerId());
+		String sellerAddress = seller.getSellerLocation();
+		double logisticsOnePrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),false);
+		order.setLogisticsOnePrice(BigDecimal.valueOf(logisticsOnePrice));
+		if(order.getStationId()!=null)
+		{
+			/**
+			设置二级物流价格
+			 */
+			double logisticsTwoPrice = OrderUtils.generateFare(sellerAddress, order.getAddress(), order.getTotalNumber(),true);
+			order.setLogisticsTwoPrice(BigDecimal.valueOf(logisticsTwoPrice));
+		}
+
+		/**
+		 * 创建时间
+		 */
+		Date date = new Date();
+		order.setCreateTime(date);
+
+		return order;
+	}
 }

@@ -79,7 +79,7 @@ public class TaoVillagerServiceImpl implements ITaoVillagerService
 			TaoShoppingCart cart = new TaoShoppingCart();
 			cart.setVillagerId(villagers.get(0).getVillagerId());
 			map.put("cart", taoShoppingCartMapper.selectTaoShoppingCartList(cart));
-			return map
+			return map;
 		} else {
 			return null;
 		}

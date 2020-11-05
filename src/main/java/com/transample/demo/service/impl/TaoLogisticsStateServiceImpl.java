@@ -1,11 +1,14 @@
 package com.transample.demo.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.transample.demo.mapper.TaoLogisticsStateMapper;
 import com.transample.demo.domain.TaoLogisticsState;
 import com.transample.demo.service.ITaoLogisticsStateService;
+
+import javax.annotation.Resource;
 
 /**
  * 物流状态 服务层实现
@@ -16,7 +19,7 @@ import com.transample.demo.service.ITaoLogisticsStateService;
 @Service
 public class TaoLogisticsStateServiceImpl implements ITaoLogisticsStateService 
 {
-	@Autowired
+	@Resource
 	private TaoLogisticsStateMapper taoLogisticsStateMapper;
 
 	/**
@@ -52,7 +55,11 @@ public class TaoLogisticsStateServiceImpl implements ITaoLogisticsStateService
 	@Override
 	public int insertTaoLogisticsState(TaoLogisticsState taoLogisticsState)
 	{
-	    return taoLogisticsStateMapper.insertTaoLogisticsState(taoLogisticsState);
+	    Date date = new Date();
+	    taoLogisticsState.setCreateTime(date);
+
+
+		return taoLogisticsStateMapper.insertTaoLogisticsState(taoLogisticsState);
 	}
 	
 	/**
@@ -64,7 +71,9 @@ public class TaoLogisticsStateServiceImpl implements ITaoLogisticsStateService
 	@Override
 	public int updateTaoLogisticsState(TaoLogisticsState taoLogisticsState)
 	{
-	    return taoLogisticsStateMapper.updateTaoLogisticsState(taoLogisticsState);
+	    Date date = new Date();
+		taoLogisticsState.setUpdateTime(date);
+		return taoLogisticsStateMapper.updateTaoLogisticsState(taoLogisticsState);
 	}
 
 	/**

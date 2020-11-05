@@ -20,8 +20,9 @@ import com.transample.demo.common.ResponseResult;
  * @author youcaihua
  * @date 2020-10-13
  */
-@Api("物流公司相关接口")
-@Controller
+@RestController
+@CrossOrigin
+@Api(tags = "物流公司API")
 @RequestMapping("/taoCompany")
 public class TaoCompanyController
 {
@@ -41,7 +42,6 @@ public class TaoCompanyController
 	 */
 	@ApiOperation(value = "查询物流公司列表 按照物流公司类型查找")
 	@GetMapping("/list/{companyType}")
-	@ResponseBody
 	public List<TaoCompany> list(@PathVariable @ApiParam(value = "物流公司类型 1常规， 2县村",required = true) Integer companyType)
 	{
 		TaoCompany taoCompany = new TaoCompany();
@@ -71,7 +71,6 @@ public class TaoCompanyController
 	 */
 	@ApiOperation(value = "新增保存物流公司")
 	@PostMapping("/add")
-	@ResponseBody
 	public ResponseEntity addCompany(@RequestBody  TaoCompany taoCompany)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoCompanyService.insertTaoCompany(taoCompany)));
@@ -82,8 +81,7 @@ public class TaoCompanyController
 	 */
 	@ApiOperation(value = "修改物流公司，返回物流公司的基本信息")
 	@GetMapping("/getInfoBeforeEdit/{companyId}")
-	@ResponseBody
-	public ResponseEntity getInfoBeforeEdit(@PathVariable("companyId") @ApiParam(name = "物流公司的id") Integer companyId)
+	public ResponseEntity getInfoBeforeEdit(@PathVariable("companyId") Integer companyId)
 	{
 		TaoCompany taoCompany = taoCompanyService.selectTaoCompanyById(companyId);
 		if(taoCompany==null)
@@ -100,7 +98,6 @@ public class TaoCompanyController
 	 */
 	@ApiOperation(value = "修改保存物流公司，返回状态")
 	@PostMapping("/edit")
-	@ResponseBody
 	public ResponseEntity editCompany(@RequestBody TaoCompany taoCompany)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoCompanyService.updateTaoCompany(taoCompany)));
