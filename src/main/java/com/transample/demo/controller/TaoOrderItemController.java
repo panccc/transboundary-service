@@ -35,17 +35,17 @@ public class TaoOrderItemController
 //	    return prefix + "/taoOrderItem";
 //	}
 	
-	/**
-	 * 查询订单单类商品列表
-	 */
-	@ApiOperation("查询订单单类商品列表")
-	@PostMapping("/list")
-	@ResponseBody
-	public List<TaoOrderItem> getItemList(@RequestBody TaoOrderItem taoOrderItem)
-	{
-        List<TaoOrderItem> list = taoOrderItemService.selectTaoOrderItemList(taoOrderItem);
-		return list;
-	}
+//	/**
+//	 * 查询订单单类商品列表
+//	 */
+//	@ApiOperation("查询订单单类商品列表")
+//	@PostMapping("/list")
+//	@ResponseBody
+//	public List<TaoOrderItem> getItemList(@RequestBody TaoOrderItem taoOrderItem)
+//	{
+//        List<TaoOrderItem> list = taoOrderItemService.selectTaoOrderItemList(taoOrderItem);
+//		return list;
+//	}
 	
 	
 //	/**

@@ -3,6 +3,7 @@ package com.transample.demo.controller;
 import com.transample.demo.common.ResponseResult;
 import com.transample.demo.config.MinioConfig;
 import com.transample.demo.constants.ImgConstants;
+import com.transample.demo.service.ITaoInterfaceService;
 import com.transample.demo.utils.DateUtils;
 import com.transample.demo.utils.ImageUtils;
 import com.transample.demo.utils.MinioUtil;
@@ -11,10 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -27,6 +25,8 @@ public class ImageController {
 
     @Resource
     private MinioUtil minioUtil;
+    @Resource
+    private ITaoInterfaceService taoInterfaceService;
 
     @Value("img")
     private String bucketName;
@@ -51,4 +51,9 @@ public class ImageController {
 
 
     }
+//    @GetMapping("/test")
+//    public String test()
+//    {
+//        return taoInterfaceService.getInterfaceId("taoAddress","getProvinceList");
+//    }
 }

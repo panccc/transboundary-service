@@ -52,21 +52,21 @@ public class UserController {
         }
     }
 
-    @GetMapping("/login/villagerBySession")
-    @ApiOperation("村民从session获取登陆信息")
-    public ResponseEntity villagerLoginBySession(HttpSession session)
-    {
-        if(session.getAttribute("villager")==null||session.getAttribute("cart")==null)
-        {
-            return ResponseEntity.ok(ResponseResult.fail(ResultCode.ACCESS_DENIED));
-        }else
-        {
-            ModelMap modelMap = new ModelMap();
-            modelMap.put("villager",session.getAttribute("villager"));
-            modelMap.put("cart",session.getAttribute("cart"));
-            return ResponseEntity.ok(ResponseResult.ok(modelMap));
-        }
-    }
+//    @GetMapping("/login/villagerBySession")
+//    @ApiOperation("村民从session获取登陆信息")
+//    public ResponseEntity villagerLoginBySession(HttpSession session)
+//    {
+//        if(session.getAttribute("villager")==null||session.getAttribute("cart")==null)
+//        {
+//            return ResponseEntity.ok(ResponseResult.fail(ResultCode.ACCESS_DENIED));
+//        }else
+//        {
+//            ModelMap modelMap = new ModelMap();
+//            modelMap.put("villager",session.getAttribute("villager"));
+//            modelMap.put("cart",session.getAttribute("cart"));
+//            return ResponseEntity.ok(ResponseResult.ok(modelMap));
+//        }
+//    }
 
 
     @PostMapping("/login/murakami")

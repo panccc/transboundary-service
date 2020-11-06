@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.transample.demo.common.ResponseResult;
 import com.transample.demo.constants.ServiceNetworkConstants;
+import com.transample.demo.service.ITaoInterfaceService;
+import com.transample.demo.service.impl.TaoInterfaceServiceImpl;
 import com.transample.demo.utils.ParamsUtil;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -16,6 +18,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -32,11 +36,17 @@ import java.lang.reflect.Method;
 @Aspect
 public class Broker {
 
-    @Around("execution(public * com.transample.demo.controller.*.*(..))")
+    @Autowired
+    private ITaoInterfaceService taoInterfaceService;
+
+    @Around("execution(public * com.transample.demo.controller.*.*(..))&&!execution(public * com.transample.demo.controller.ImageController.*(..))")
     public Object around(ProceedingJoinPoint joinPoint) {
         // 获取http请求
         HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
         // 获取参数值以及名称
+        String uri = request.getRequestURI();
+        String controller = uri.split("/")[1];
+        System.out.println(controller);
         Object result = null;
         String methodName = joinPoint.getSignature().getName();
 
@@ -53,7 +63,6 @@ public class Broker {
         Class<?>[] classes = method.getParameterTypes();
 
 
-        ParamsUtil paramsUtil = new ParamsUtil();
         JSONObject jsonObject = new JSONObject();
 
         for (int i = 0; i < annotations.length; i++) {
@@ -62,10 +71,12 @@ public class Broker {
             for (int j = 0; j < paramAnnotation.length; j++) {
                 if (paramAnnotation[j].annotationType().equals(PathVariable.class)) {
                     System.out.println(paramAnnotation[j]);
-                    paramsUtil.add(paramNames[i],paramValues[i]);
+//                    paramsUtil.add(paramNames[i],paramValues[i]);
+                    jsonObject.put(paramNames[i],paramValues[i]);
                     System.out.print("PathVariable ");
                 } else if (paramAnnotation[j].annotationType().equals(RequestParam.class)) {
-                    paramsUtil.add(paramNames[i],paramValues[i]);
+//                    paramsUtil.add(paramNames[i],paramValues[i]);
+                    jsonObject.put(paramNames[i],paramValues[i]);
                     System.out.print("RequestParam ");
                 } else if (paramAnnotation[j].annotationType().equals(RequestBody.class)) {
                     System.out.print("RequestBody ");
@@ -84,17 +95,23 @@ public class Broker {
             OkHttpClient httpClient =new OkHttpClient();
             String url = ServiceNetworkConstants.ADDRESS+ServiceNetworkConstants.INVOKEINTERFACE;
             MediaType mediaType= MediaType.parse("application/json; charset=utf-8");
-            String interfaceId = "1515652101257-1515648412249-1604237392244";
+//            ITaoInterfaceService taoInterfaceService = new TaoInterfaceServiceImpl();
+            String interfaceId = taoInterfaceService.getInterfaceId(controller,methodName);
+            System.out.println(interfaceId);
             JSONObject invokeInterFace = new JSONObject();
             invokeInterFace.put("interfaceId",interfaceId);
             if(request.getMethod().equals("POST"))
             {
+//                if(invokeInterFace==null)invokeInterFace= new JSONObject();
                 invokeInterFace.put("requestBody",jsonObject.toJSONString());
             }else if(request.getMethod().equals("GET"))
             {
-                invokeInterFace.put("params",paramsUtil.toJson());
+//                if(invokeInterFace==null)invokeInterFace= new JSONObject();
+
+                invokeInterFace.put("params",jsonObject.toJSONString());
             }
             System.out.println(invokeInterFace.toJSONString());
+
             okhttp3.RequestBody requestBody = okhttp3.RequestBody.create(mediaType, invokeInterFace.toJSONString());
             res = httpClient.newCall(new Request.Builder().url(url).post(requestBody).build()).execute();
             ans = res.body().string();

@@ -43,7 +43,7 @@ public class TaoCartOrderItemController
 //	}
 	
 	/**
-	 * 查询购物车单类商品列表
+	 * 查询购物车单类商品列表****
 	 */
 	@ApiOperation("查询购物车单类商品列表")
 	@GetMapping("/list/{cartId}")
@@ -65,7 +65,7 @@ public class TaoCartOrderItemController
 //	}
 	
 	/**
-	 * 新增保存购物车单类商品
+	 * 新增保存购物车单类商品****
 	 */
 	@ApiOperation("新增保存购物车单类商品")
 	@PostMapping("/add/{cartId}")
@@ -80,38 +80,38 @@ public class TaoCartOrderItemController
 	 * 修改购物车单类商品
 	 */
 
-	@ApiOperation("修改购物车单类商品,返回该商品的基本信息")
-	@GetMapping("/getInfoBeforeEdit/{orderItemId}")
-	public ResponseEntity getInfoBeforeEdit(@PathVariable("orderItemId") @ApiParam(value = "订单单个商品号",required = true) Integer orderItemId)
-	{
-		TaoCartOrderItem taoCartOrderItem = taoCartOrderItemService.selectTaoCartOrderItemById(orderItemId);
-		if(taoCartOrderItem==null)return ResponseEntity.ok(ResponseResult.fail(ResultCode.FILED_VALUE_INVALID));
-
-
-		return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItem));
-//	    return prefix + "/edit";
-	}
+//	@ApiOperation("修改购物车单类商品,返回该商品的基本信息")
+//	@GetMapping("/getInfoBeforeEdit/{orderItemId}")
+//	public ResponseEntity getInfoBeforeEdit(@PathVariable("orderItemId") @ApiParam(value = "订单单个商品号",required = true) Integer orderItemId)
+//	{
+//		TaoCartOrderItem taoCartOrderItem = taoCartOrderItemService.selectTaoCartOrderItemById(orderItemId);
+//		if(taoCartOrderItem==null)return ResponseEntity.ok(ResponseResult.fail(ResultCode.FILED_VALUE_INVALID));
+//
+//
+//		return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItem));
+////	    return prefix + "/edit";
+//	}
 	
-	/**
-	 * 修改保存购物车单类商品
-	 */
-	@ApiOperation("修改购物车单类商品")
-	@PostMapping("/edit")
-	public ResponseEntity editCart(@RequestBody TaoCartOrderItem taoCartOrderItem)
-	{		
-		return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItemService.updateTaoCartOrderItem(taoCartOrderItem)));
-	}
+//	/**
+//	 * 修改保存购物车单类商品
+//	 */
+//	@ApiOperation("修改购物车单类商品")
+//	@PostMapping("/edit")
+//	public ResponseEntity editCart(@RequestBody TaoCartOrderItem taoCartOrderItem)
+//	{
+//		return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItemService.updateTaoCartOrderItem(taoCartOrderItem)));
+//	}
 	
-	/**
-	 * 删除购物车单类商品
-	 */
-	@ApiOperation("删除购物车单类商品")
-	@PostMapping( "/remove")
-	public ResponseEntity removeItems(@RequestBody @ApiParam("被删除商品的id字符串，用逗号分隔")RemoveIdsDTO removeIdsDTO)
-	{
-		if(removeIdsDTO.getIds()==null||removeIdsDTO.getIds().equals(""))return ResponseEntity.ok(ResponseResult.fail(ResultCode.FILED_VALUE_INVALID));
-
-		return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItemService.deleteTaoCartOrderItemByIds(removeIdsDTO.getIds())));
-	}
+//	/**
+//	 * 删除购物车单类商品
+//	 */
+//	@ApiOperation("删除购物车单类商品")
+//	@PostMapping( "/remove")
+//	public ResponseEntity removeItems(@RequestBody @ApiParam("被删除商品的id字符串，用逗号分隔")RemoveIdsDTO removeIdsDTO)
+//	{
+//		if(removeIdsDTO.getIds()==null||removeIdsDTO.getIds().equals(""))return ResponseEntity.ok(ResponseResult.fail(ResultCode.FILED_VALUE_INVALID));
+//
+//		return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItemService.deleteTaoCartOrderItemByIds(removeIdsDTO.getIds())));
+//	}
 	
 }

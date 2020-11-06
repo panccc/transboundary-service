@@ -17,8 +17,8 @@ import com.transample.demo.common.ResponseResult;
  * @date 2020-10-13
  */
 //@CrossOrigin
-@Controller
-@RequestMapping("/taoShoppingCart")
+//@Controller
+//@RequestMapping("/taoShoppingCart")
 public class TaoShoppingCartController
 {
     private String prefix = "taoShoppingCart";
