@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.springframework.http.HttpStatus;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,16 +33,16 @@ public class ResponseResult  {
     @JsonInclude(value = Include.NON_NULL)
     private  Object data;
 
-    public List<String> getIndexes() {
+    public HashMap<String,String> getIndexes() {
         return indexes;
     }
 
-    public void setIndexes(List<String> indexes) {
+    public void setIndexes(HashMap<String,String> indexes) {
         this.indexes = indexes;
     }
 
     @JsonInclude(value = Include.NON_NULL)
-    private List<String> indexes;
+    private HashMap<String,String> indexes;
     /**
      * 响应时间
      */
@@ -70,7 +71,7 @@ public class ResponseResult  {
         this.status = resultCode.getCode();
         this.message = message;
     }
-    public ResponseResult(Integer status , String message, Object data, List<String> indexes){
+    public ResponseResult(Integer status , String message, Object data, HashMap<String,String> indexes){
         this.status = status;
         this.message = message;
         this.data = data;
@@ -90,7 +91,7 @@ public class ResponseResult  {
      * 成功返回结果与指标的实例
      * @param data
      */
-    private ResponseResult(Object data,List<String> indexes){
+    private ResponseResult(Object data,HashMap<String,String> indexes){
         this.status = ResultCode.OK.getCode();
         this.message = ResultCode.OK.getName();
         this.data = data;
@@ -122,7 +123,7 @@ public class ResponseResult  {
     public static ResponseResult ok(Object data){
         return new ResponseResult(data);
     }
-    public static ResponseResult ok(Object data,List<String> indexes){
+    public static ResponseResult ok(Object data,HashMap<String,String> indexes){
         return new ResponseResult(data,indexes);
     }
     public static ResponseResult fail(ResultCode code){

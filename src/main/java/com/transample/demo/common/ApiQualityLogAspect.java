@@ -55,10 +55,10 @@ public class ApiQualityLogAspect {
             return result;
         }
         UUID uuid=UUID.randomUUID();
-        //拼接调用方法前的日志
-        if(apiQualityLog.needPrintArgs()){
-            buildBeforeLog(apiQualityLog,joinPoint,uuid);
-        }
+//        //拼接调用方法前的日志
+//        if(apiQualityLog.needPrintArgs()){
+//            buildBeforeLog(apiQualityLog,joinPoint,uuid);
+//        }
 //        开始执行时间
         long startTime = System.currentTimeMillis();
         //开始执行方法

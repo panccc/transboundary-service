@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.transample.demo.annotation.ApiQualityLog;
 import com.transample.demo.common.ResultCode;
 import com.transample.demo.constants.OrderConstant;
 import com.transample.demo.domain.TaoCartOrderItem;
@@ -18,6 +19,7 @@ import com.transample.demo.utils.OrderUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -167,6 +169,7 @@ public class TaoOrderController
 	/**
 	 * 新增保存订单
 	 */
+	@ApiQualityLog(methodDesc = "添加订单", indexParams = "execTime,firstLogisticPrice,secondLogisticPrice")
 	@ApiOperation("下单 参数 订单的一些基本信息和各个商品的信息list")
 	@PostMapping("/addOrder")
 	public ResponseEntity addOrder(@RequestBody OrderDTO orderDTO)
@@ -174,10 +177,10 @@ public class TaoOrderController
 		HashMap<Integer,List<TaoOrderItem>> hashMap = orderDTO.getOrderItemHashMap();
 		List<Integer> orderIds= new ArrayList<>();
 		ModelMap modelMap = new ModelMap();
-
+		TaoOrder order = orderDTO.getOrder();
 		for(Integer sellerId : hashMap.keySet())
 		{
-			TaoOrder order = orderDTO.getOrder();
+
 			order.setOrderId(null);
 			order.setSellerId(sellerId);
 			/**
@@ -194,8 +197,15 @@ public class TaoOrderController
 			taoOrderService.updateTaoOrder(order);
 		}
 		modelMap.put("orderIds",orderIds);
-
-		return ResponseEntity.ok(ResponseResult.ok(modelMap));
+		/*
+		 *感知逻辑（业务无关）
+		 */
+		HashMap<String,String> indexes=new HashMap<>();
+		indexes.put("totalPrice",orderDTO.getOrder().getTotalPrice().toString());
+		indexes.put("firstLogisticPrice",orderDTO.getOrder().getLogisticsOnePrice().toString());
+		indexes.put("secondLogisticPrice",orderDTO.getOrder().getLogisticsTwoPrice().toString());
+		indexes.put("orderId",order.getOrderId().toString());
+		return ResponseEntity.ok(ResponseResult.ok(modelMap,indexes));
 	}
 
 
@@ -216,6 +226,7 @@ public class TaoOrderController
 	    HashMap<Integer,List<TaoOrderItem>> hashMap = new HashMap<>();
 	    hashMap.put(order.getSellerId(),list);
 	    orderDTO.setOrderItemHashMap(hashMap);
+
 
 		return ResponseEntity.ok(ResponseResult.ok(orderDTO));
 	}
@@ -238,6 +249,8 @@ public class TaoOrderController
 	 */
 	private static final String editAPIValue = "支付成功pay,商家确认confirm,商家缺货stockOut,用户取消订单cancel" +
 			",发货send,商品送达arrive,商品签收receive,订单完成takeOver";
+
+	@ApiQualityLog(methodDesc = "修改订单的状态",indexParams = "sendReceiveRatio,execTime")
 	@ApiOperation("修改订单的状态")
 	@PostMapping("/edit/{op}/{orderId}")
 	public ResponseEntity edit(@PathVariable @ApiParam(value = editAPIValue ,required = true) String op,@PathVariable @ApiParam(value = "订单id",required = true) Integer orderId)
@@ -259,7 +272,7 @@ public class TaoOrderController
 		}else if(op.equals("cancel"))
 		{
 			order.setStatus(OrderConstant.CANCEL);
-		}else if(op.equals("send"))
+			}else if(op.equals("send"))
 		{
 			order.setStatus(OrderConstant.TRANSPORT);
 			/**
@@ -298,7 +311,24 @@ public class TaoOrderController
 		{
 			return ResponseEntity.ok(ResponseResult.fail(ResultCode.DATA_UPDATE_ERROR));
 		}
-		return ResponseEntity.ok(ResponseResult.ok("操作成功"));
+
+		/*
+		* 感知逻辑（业务无关）
+		*/
+		HashMap<String,String> indexes=new HashMap<>();
+		if(order.getStatus().equals(OrderConstant.FINISH)){
+			Date sendTime=order.getSendTime();
+			Date arriveTime=order.getArriveTime();
+			Date receiveTime=order.getShouTime();
+
+			long sendToArriveTime=arriveTime.getTime()-sendTime.getTime();
+			long arriveToReceiveTime=receiveTime.getTime()-arriveTime.getTime();
+			double sendReceiveRatio=(double)sendToArriveTime/arriveToReceiveTime;
+			indexes.put("deliveryTime",Long.toString(sendToArriveTime));
+			indexes.put("sendReceiveRatio",Double.toString(sendReceiveRatio));
+			indexes.put("orderId",order.getOrderId().toString());
+		}
+		return ResponseEntity.ok(ResponseResult.ok("操作成功",indexes));
 	}
 
 	@ApiOperation("村小二和商家根据订单状态获取订单数量")
@@ -333,9 +363,10 @@ public class TaoOrderController
 		return ans;
 	}
 
+	@ApiQualityLog(methodDesc = "订单/物流总价格",indexParams = "orderPrice,secondLogisticPrice")
 	@ApiOperation("商家获取订单总成交额；村小二获取总二级物流价格")
 	@GetMapping("/getTotalPrice/{role}/{id}")
-	public HashMap<String, Double> getTotalPrice(@ApiParam("商家:seller;村站:station ")@PathVariable String role, @ApiParam("id") @PathVariable Integer id)
+	public ResponseEntity getTotalPrice(@ApiParam("商家:seller;村站:station ")@PathVariable String role, @ApiParam("id") @PathVariable Integer id)
 	{
 		HashMap<String,Double> ans = new HashMap<>();
 		TaoOrder order = new TaoOrder();
@@ -350,7 +381,24 @@ public class TaoOrderController
 			double price = taoOrderService.getTotalPrice(order);
 			ans.put("price",price);
 		}
-		return ans;
+
+		/*
+		 * 感知逻辑（业务无关）
+		 */
+		HashMap<String,String> indexes=new HashMap<>();
+		if(role.equals("seller")){
+			order.setSellerId(id);
+			double price = taoOrderService.getTotalPrice(order);
+			indexes.put("orderPrice",Double.toString(price));
+		}else if(role.equals("station"))
+		{
+			order.setStationId(id);
+			double price = taoOrderService.getTotalPrice(order);
+			indexes.put("secondLogisticPrice",Double.toString(price));
+		}
+		indexes.put("orderId",order.getOrderId().toString());
+
+		return ResponseEntity.ok(ResponseResult.ok(ans,indexes));
 	}
 
 

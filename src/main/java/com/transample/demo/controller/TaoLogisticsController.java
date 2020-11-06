@@ -1,8 +1,10 @@
 package com.transample.demo.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import com.transample.demo.annotation.ApiQualityLog;
 import com.transample.demo.common.ResultCode;
 import com.transample.demo.constants.OrderConstant;
 import com.transample.demo.domain.TaoLogisticsState;
@@ -74,6 +76,7 @@ public class TaoLogisticsController
 	/**
 	 * 新增保存物流
 	 */
+	@ApiQualityLog(methodDesc = "物流发货",indexParams = "firstLogisticPrice,secondLogisticPrice")
 	@ApiOperation("商家发货时，向物流表新增一条记录")
 	@PostMapping("/addLogistics")
 	public ResponseEntity addLogistics(@RequestBody TaoLogistics taoLogistics)
@@ -101,10 +104,15 @@ public class TaoLogisticsController
 
 		int res3 = taoOrderService.updateTaoOrder(order);
 		if(res3==0)return ResponseEntity.ok(ResponseResult.fail(ResultCode.DATA_UPDATE_ERROR));
+		/*
+		*感知逻辑（业务无关）
+		**/
+		HashMap<String,String> indexes=new HashMap<>();
+		TaoOrder order_perception=taoOrderService.selectTaoOrderById(order.getOrderId());
+		indexes.put("orderId",order.getOrderId().toString());
+		indexes.put("sellerResponseTime",String.valueOf((order_perception.getSendTime().getTime()-order_perception.getCreateTime().getTime())/3600000.0));
 
-		return ResponseEntity.ok(ResponseResult.ok(ResultCode.OK));
-
-
+		return ResponseEntity.ok(ResponseResult.ok(ResultCode.OK,indexes));
 	}
 
 	/**
