@@ -113,8 +113,8 @@ public class TaoLogisticsController
 	 * 修改物流
 	 */
 	@ApiOperation("修改物流时返显给前端的信息，待确认")
-	@GetMapping("/getInfoBeforeEdit/{ticketId}")
-	public ResponseEntity getInfoBeforeEdit(@PathVariable("ticketId") String ticketId, ModelMap mmap)
+	@GetMapping("/getInfoBeforeEdit")
+	public ResponseEntity getInfoBeforeEdit(@RequestParam("ticketId") String ticketId, ModelMap mmap)
 	{
 		TaoLogistics taoLogistics = taoLogisticsService.selectTaoLogisticsById(ticketId);
 		if(taoLogistics==null)
@@ -139,8 +139,8 @@ public class TaoLogisticsController
 	 * 根据订单id来查询物流信息
 	 */
 	@ApiOperation("根据订单id来查询物流信息")
-	@GetMapping("getLogistics/{orderId}")
-	public ResponseEntity getLogisticsById(@PathVariable Integer orderId)
+	@GetMapping("getLogistics")
+	public ResponseEntity getLogisticsById(@RequestParam("orderId") Integer orderId)
 	{
 		List<TaoLogistics> taoLogisticsList= taoLogisticsService.selectLogisticsByOrderId(orderId);
 		if(taoLogisticsList==null)

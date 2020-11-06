@@ -51,9 +51,9 @@ public class TaoSellerController
 		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.insertTaoSeller(taoSeller)));
 	}
 
-	@GetMapping("/getInfoBeforeEdit/{sellerId}")
+	@GetMapping("/getInfoBeforeEdit")
     @ApiOperation("获取修改商家信息")
-	public ResponseEntity<ResponseResult> getInfoBeforeEdit(@PathVariable("sellerId") Integer sellerId)
+	public ResponseEntity<ResponseResult> getInfoBeforeEdit(@RequestParam("sellerId") Integer sellerId)
 	{
 		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.getTaoSellerById(sellerId)));
 	}
@@ -72,9 +72,9 @@ public class TaoSellerController
 		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.deleteTaoSellerByIds(ids.getIds())));
 	}
 
-	@PostMapping( "/search/{id}")
+	@GetMapping( "/search/{id}")
 	@ApiOperation("查找商家")
-	public ResponseEntity<ResponseResult> search(@PathVariable Integer id)
+	public ResponseEntity<ResponseResult> search(@RequestParam Integer id)
 	{
 		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.getTaoSellerById(id)));
 	}

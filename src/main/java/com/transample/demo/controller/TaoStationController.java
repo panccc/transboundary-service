@@ -48,9 +48,9 @@ public class TaoStationController
 		return ResponseEntity.ok(ResponseResult.ok(taoStationService.insertTaoStation(taoStation)));
 	}
 
-	@GetMapping("/getInfoBeforeEdit/{stationId}")
+	@GetMapping("/getInfoBeforeEdit")
     @ApiOperation("获取修改村站信息")
-	public ResponseEntity<ResponseResult> getInfoBeforeEdit(@PathVariable("stationId") Integer stationId) {
+	public ResponseEntity<ResponseResult> getInfoBeforeEdit(@RequestParam("stationId") Integer stationId) {
 		return ResponseEntity.ok(ResponseResult.ok(taoStationService.getTaoStationById(stationId)));
 	}
 	

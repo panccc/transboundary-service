@@ -44,9 +44,9 @@ public class TaoProductController
 		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getTaoProductList(product)));
 	}
 
-	@GetMapping("/getInfoBeforeAdd/{sellerId}")
+	@GetMapping("/getInfoBeforeAdd")
     @ApiOperation("获取系统自动生成的新建商品信息")
-	public ResponseEntity<ResponseResult> getInfoBeforeAdd(@PathVariable Integer sellerId)
+	public ResponseEntity<ResponseResult> getInfoBeforeAdd(@RequestParam Integer sellerId)
 	{
 		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getInfoBeforeAdd(sellerId)));
 	}
@@ -58,9 +58,9 @@ public class TaoProductController
 		return ResponseEntity.ok(ResponseResult.ok(taoProductService.addTaoProduct(taoProduct)));
 	}
 
-	@GetMapping("/getInfoBeforeEdit/{productId}")
+	@GetMapping("/getInfoBeforeEdit")
     @ApiOperation("通过id获取商品信息")
-	public TaoProduct getInfoBeforeEdit(@PathVariable("productId") Integer productId)
+	public TaoProduct getInfoBeforeEdit(@RequestParam("productId") Integer productId)
 	{
 		return taoProductService.getInfoBeforeEdit(productId);
 	}

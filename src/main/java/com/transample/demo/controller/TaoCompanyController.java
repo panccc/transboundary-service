@@ -41,8 +41,8 @@ public class TaoCompanyController
 	 * 查询物流公司列表
 	 */
 	@ApiOperation(value = "查询物流公司列表 按照物流公司类型查找")
-	@GetMapping("/list/{companyType}")
-	public ResponseEntity list(@PathVariable @ApiParam(value = "物流公司类型 1常规， 2县村",required = true) Integer companyType)
+	@GetMapping("/list")
+	public ResponseEntity list(@RequestParam @ApiParam(value = "物流公司类型 1常规， 2县村",required = true) Integer companyType)
 	{
 		TaoCompany taoCompany = new TaoCompany();
 		if(companyType==1)
@@ -80,8 +80,8 @@ public class TaoCompanyController
 	 * 修改物流公司
 	 */
 	@ApiOperation(value = "修改物流公司，返回物流公司的基本信息")
-	@GetMapping("/getInfoBeforeEdit/{companyId}")
-	public ResponseEntity getInfoBeforeEdit(@PathVariable("companyId") Integer companyId)
+	@GetMapping("/getInfoBeforeEdit")
+	public ResponseEntity getInfoBeforeEdit(@RequestParam("companyId") Integer companyId)
 	{
 		TaoCompany taoCompany = taoCompanyService.selectTaoCompanyById(companyId);
 		if(taoCompany==null)
