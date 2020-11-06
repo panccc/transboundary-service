@@ -19,7 +19,6 @@ import com.transample.demo.utils.OrderUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +62,7 @@ public class TaoOrderController
 			",待成交receive,已成交takeOver";
 	@ApiOperation("商家按条件获取订单列表")
 	@GetMapping("/list/seller/{status}/{sellerId}")
-	public List<TaoOrder> getListOfSeller(@PathVariable @ApiParam(value = queryStatusAPIValue,required = true) String status,@PathVariable @ApiParam("商家id") Integer sellerId)
+	public ResponseEntity getListOfSeller(@PathVariable @ApiParam(value = queryStatusAPIValue,required = true) String status,@PathVariable @ApiParam("商家id") Integer sellerId)
 	{
 		TaoOrder order = new TaoOrder();
 		order.setSellerId(sellerId);
@@ -87,14 +86,14 @@ public class TaoOrderController
 		}
       		List<TaoOrder> list = taoOrderService.selectTaoOrderList(order);
 
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 	private static final String queryStatusUserAPIValue = "未付款unpaid,已购买pay,待发货underSend,运输中send" +
 			",已购买takeOver";
 	@ApiOperation("用户按条件获取订单列表")
 	@GetMapping("/list/user/{status}/{userId}")
-	public ResponseResult getListOfUser(@PathVariable @ApiParam(value = queryStatusUserAPIValue,required = true) String status,@PathVariable @ApiParam("用户id") Integer userId)
+	public ResponseEntity getListOfUser(@PathVariable @ApiParam(value = queryStatusUserAPIValue,required = true) String status,@PathVariable @ApiParam("用户id") Integer userId)
 	{
 		ModelMap modelMap = new ModelMap();
 		List<OrderDTO> ans = new ArrayList<>();
@@ -134,7 +133,7 @@ public class TaoOrderController
 		}
 		modelMap.put("totalNum",ans.size());
 		modelMap.put("orderList",ans);
-		return ResponseResult.ok(modelMap);
+		return ResponseEntity.ok(ResponseResult.ok(modelMap));
 	}
 
 	private static final String queryStatusStationAPIValue = "村站等待收取underSend,已代收receive";
@@ -227,7 +226,6 @@ public class TaoOrderController
 	    hashMap.put(order.getSellerId(),list);
 	    orderDTO.setOrderItemHashMap(hashMap);
 
-
 		return ResponseEntity.ok(ResponseResult.ok(orderDTO));
 	}
 	
@@ -272,7 +270,7 @@ public class TaoOrderController
 		}else if(op.equals("cancel"))
 		{
 			order.setStatus(OrderConstant.CANCEL);
-			}else if(op.equals("send"))
+		}else if(op.equals("send"))
 		{
 			order.setStatus(OrderConstant.TRANSPORT);
 			/**

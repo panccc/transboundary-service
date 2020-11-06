@@ -3,6 +3,7 @@ package com.transample.demo.service;
 import com.transample.demo.domain.TaoVillager;
 import org.springframework.ui.ModelMap;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**

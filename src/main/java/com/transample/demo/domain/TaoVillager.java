@@ -24,6 +24,9 @@ public class TaoVillager
 	private String city;
 	/** 所属县/区 */
 	private String county;
+	/** 所属县/区 */
+	private String town;
+
 	/** 所属村 */
 	private String village;
 	/** 村站ID */
@@ -133,4 +136,11 @@ public class TaoVillager
 		return password;
 	}
 
+	public String getTown() {
+		return town;
+	}
+
+	public void setTown(String town) {
+		this.town = town;
+	}
 }

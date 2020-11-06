@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="provence"    column="provence"    />
         <result property="city"    column="city"    />
         <result property="county"    column="county"    />
+        <result property="town"    column="town"    />
         <result property="village"    column="village"    />
         <result property="stationId"    column="station_id"    />
         <result property="stationName"    column="station_name"    />
@@ -19,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectTaoVillagerVo">
-        select villager_id, user_name, mobile, address, provence, city, county, village, station_id, station_name, password from tao_villager
+        select villager_id, user_name, mobile, address, provence, city, county, town, village, station_id, station_name, password from tao_villager
     </sql>
 	
     <select id="selectTaoVillagerList" parameterType="TaoVillager" resultMap="TaoVillagerResult">
@@ -32,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="provence != null  and provence != '' "> and provence LIKE CONCAT('%',#{provence},'%')</if>
              <if test="city != null  and city != '' "> and city LIKE CONCAT('%',#{city},'%')</if>
              <if test="county != null  and county != '' "> and county LIKE CONCAT('%',#{county},'%')</if>
+             <if test="town != null  and town != '' "> and town LIKE CONCAT('%',#{town},'%')</if>
              <if test="village != null  and village != '' "> and village LIKE CONCAT('%',#{village},'%')</if>
              <if test="stationId != null "> and station_id LIKE CONCAT('%',#{stationId},'%')</if>
              <if test="stationName != null  and stationName != '' "> and station_name LIKE CONCAT('%',#{stationName},'%')</if>
@@ -54,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="provence != null  and provence != ''  ">provence,</if>
 			<if test="city != null  and city != ''  ">city,</if>
 			<if test="county != null  and county != ''  ">county,</if>
+			<if test="town != null  and town != ''  ">town,</if>
 			<if test="village != null  and village != ''  ">village,</if>
 			<if test="stationId != null  ">station_id,</if>
 			<if test="stationName != null  and stationName != ''  ">station_name,</if>
@@ -67,6 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="provence != null  and provence != ''  ">#{provence},</if>
 			<if test="city != null  and city != ''  ">#{city},</if>
 			<if test="county != null  and county != ''  ">#{county},</if>
+			<if test="town != null  and town != ''  ">#{town},</if>
 			<if test="village != null  and village != ''  ">#{village},</if>
 			<if test="stationId != null  ">#{stationId},</if>
 			<if test="stationName != null  and stationName != ''  ">#{stationName},</if>
@@ -83,6 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="provence != null  and provence != ''  ">provence = #{provence},</if>
             <if test="city != null  and city != ''  ">city = #{city},</if>
             <if test="county != null  and county != ''  ">county = #{county},</if>
+            <if test="town != null  and town != ''  ">town = #{town},</if>
             <if test="village != null  and village != ''  ">village = #{village},</if>
             <if test="stationId != null  ">station_id = #{stationId},</if>
             <if test="stationName != null  and stationName != ''  ">station_name = #{stationName},</if>

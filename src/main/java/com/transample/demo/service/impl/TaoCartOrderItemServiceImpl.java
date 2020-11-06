@@ -73,8 +73,8 @@ public class TaoCartOrderItemServiceImpl implements ITaoCartOrderItemService
 		int productId = taoCartOrderItem.getGoodsId();
 		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
 		if(product==null)return 0;
-
-		taoCartOrderItem.setPrice(product.getProductPrice()*taoCartOrderItem.getAmount());
+//		double price = Double.parseDouble()
+//		taoCartOrderItem.setPrice(*taoCartOrderItem.getAmount());
 		//System.out.println(taoCartOrderItem.getOrderItemId());
 		return taoCartOrderItemMapper.insertTaoCartOrderItem(taoCartOrderItem);
 	}
@@ -88,10 +88,10 @@ public class TaoCartOrderItemServiceImpl implements ITaoCartOrderItemService
 	@Override
 	public int updateTaoCartOrderItem(TaoCartOrderItem taoCartOrderItem)
 	{
-		int productId = taoCartOrderItem.getGoodsId();
-		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
-		if(product==null)return 0;
-		taoCartOrderItem.setPrice(product.getProductPrice()*taoCartOrderItem.getAmount());
+//		int productId = taoCartOrderItem.getGoodsId();
+//		TaoProduct product = taoProductMapper.selectTaoProductById(productId);
+//		if(product==null)return 0;
+//		taoCartOrderItem.setPrice(product.getProductPrice()*taoCartOrderItem.getAmount());
 		return taoCartOrderItemMapper.updateTaoCartOrderItem(taoCartOrderItem);
 	}
 
