@@ -72,11 +72,19 @@ public class TaoProductServiceImpl implements ITaoProductService
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if(res == null)return null;
+//		if(res == null)return null;
 		JSONObject jsonObject1 = JSON.parseObject(res.body().string());
-		TaoProduct taoProduct = jsonObject1.getJSONObject("data").getJSONObject("data").toJavaObject(TaoProduct.class);
+		if(jsonObject1==null)return null;
+		try
+		{
 
-		return taoProduct;
+			TaoProduct taoProduct = jsonObject1.getJSONObject("data").getJSONObject("data").toJavaObject(TaoProduct.class);
+			return taoProduct;
+		}catch (Exception e)
+		{
+			return null;
+		}
+
 	}
 	
 	@Override
