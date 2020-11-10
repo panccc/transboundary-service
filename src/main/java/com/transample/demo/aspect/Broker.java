@@ -93,7 +93,6 @@ public class Broker {
         try {
 //            result = joinPoint.proceed();
             OkHttpClient httpClient =new OkHttpClient();
-            String url = ServiceNetworkConstants.ADDRESS+ServiceNetworkConstants.INVOKEINTERFACE;
             MediaType mediaType= MediaType.parse("application/json; charset=utf-8");
 //            ITaoInterfaceService taoInterfaceService = new TaoInterfaceServiceImpl();
             String interfaceId = taoInterfaceService.getInterfaceId(controller,methodName);
@@ -103,16 +102,19 @@ public class Broker {
             if(request.getMethod().equals("POST"))
             {
 //                if(invokeInterFace==null)invokeInterFace= new JSONObject();
+                invokeInterFace.put("params","");
                 invokeInterFace.put("requestBody",jsonObject.toJSONString());
             }else if(request.getMethod().equals("GET"))
             {
 //                if(invokeInterFace==null)invokeInterFace= new JSONObject();
 
                 invokeInterFace.put("params",jsonObject.toJSONString());
+                invokeInterFace.put("requestBody","");
             }
             System.out.println(invokeInterFace.toJSONString());
 
             okhttp3.RequestBody requestBody = okhttp3.RequestBody.create(mediaType, invokeInterFace.toJSONString());
+            String url = ServiceNetworkConstants.ADDRESS+"/api/inner/service/interface/invokeInterfaceByInterfaceId";
             res = httpClient.newCall(new Request.Builder().url(url).post(requestBody).build()).execute();
             ans = res.body().string();
 
