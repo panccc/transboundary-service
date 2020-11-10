@@ -35,20 +35,10 @@ public class UserController {
 
     @PostMapping("/login/villager")
     @ApiOperation("村民登陆")
-    public ResponseEntity<ResponseResult> villagerLogin(@RequestBody TaoVillager villager, HttpSession session) {
+    public ResponseEntity<ResponseResult> villagerLogin(@RequestBody TaoVillager villager) {
 
-        ModelMap modelMap = taoVillagerService.login(villager);
-        if(modelMap==null)
-        {
-            return ResponseEntity.ok(ResponseResult.fail(ResultCode.ACCESS_DENIED));
-        }else
-        {
-            TaoVillager villager1 = (TaoVillager) modelMap.get("villager");
-            TaoShoppingCart cart = (TaoShoppingCart) modelMap.get("cart");
-            session.setAttribute("villager",villager1);
-            session.setAttribute("cart",cart);
-            return ResponseEntity.ok(ResponseResult.ok(modelMap));
-        }
+        return ResponseEntity.ok(ResponseResult.ok(taoVillagerService.login(villager)));
+
     }
 
 //    @GetMapping("/login/villagerBySession")
