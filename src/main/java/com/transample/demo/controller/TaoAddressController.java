@@ -40,44 +40,44 @@ public class TaoAddressController
 	 * 查询全国省的列表
 	 */
 	@ApiOperation("获取全国省的列表")
-	@GetMapping("/list")
-	public List<TaoAddress> getProvinceList()
+	@GetMapping("/getProvinceList")
+	public ResponseEntity getProvinceList()
 	{
         List<TaoAddress> list = taoAddressService.getAllProvince();
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 
 	@ApiOperation("获取城市的列表根据省名")
-	@GetMapping("/list/{province}")
-	public List<TaoAddress> getCityListBy(@PathVariable String province)
+	@GetMapping("/getCityList")
+	public ResponseEntity getCityList(@RequestParam String province)
 	{
 		List<TaoAddress> list = taoAddressService.getCityListByProvince(province);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 	@ApiOperation("获取该县区的列表根据省市名")
-	@GetMapping("/list/{province}/{city}")
-	public List<TaoAddress> getCountyList(@PathVariable String province,@PathVariable String city)
+	@GetMapping("/getCountyList")
+	public ResponseEntity getCountyList(@RequestParam String province,@RequestParam String city)
 	{
 		List<TaoAddress> list = taoAddressService.getCountyListByProvinceAndCity(province, city);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 	@ApiOperation("获取该镇的列表根据省市县名")
-	@GetMapping("/list/{province}/{city}/{county}")
-	public List<TaoAddress> getTownList(@PathVariable String province,@PathVariable String city,@PathVariable String county)
+	@GetMapping("/getTownList")
+	public ResponseEntity getTownList(@RequestParam String province,@RequestParam String city,@RequestParam String county)
 	{
 		List<TaoAddress> list = taoAddressService.getTownListByProvinceAndCityAndCounty(province, city, county);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 	@ApiOperation("获取村的列表根据省市县镇名")
-	@GetMapping("/list/{province}/{city}/{county}/{town}")
-	public List<TaoAddress> getVillageList(@PathVariable String province,@PathVariable String city,@PathVariable String county,@PathVariable String town)
+	@GetMapping("/getVillageList")
+	public ResponseEntity getVillageList(@RequestParam String province,@RequestParam String city,@RequestParam String county,@RequestParam String town)
 	{
 		List<TaoAddress> list = taoAddressService.getVillageListByProvinceAndCityAndCountyAndTown(province, city, county, town);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 

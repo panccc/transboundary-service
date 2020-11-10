@@ -35,37 +35,27 @@ public class UserController {
 
     @PostMapping("/login/villager")
     @ApiOperation("村民登陆")
-    public ResponseEntity<ResponseResult> villagerLogin(@RequestBody TaoVillager villager, HttpSession session) {
+    public ResponseEntity<ResponseResult> villagerLogin(@RequestBody TaoVillager villager) {
 
-        ModelMap modelMap = taoVillagerService.login(villager);
-        if(modelMap==null)
-        {
-            return ResponseEntity.ok(ResponseResult.fail(ResultCode.ACCESS_DENIED));
-        }else
-        {
-            TaoVillager villager1 = (TaoVillager) modelMap.get("villager");
-            TaoShoppingCart cart = (TaoShoppingCart) modelMap.get("cart");
-            session.setAttribute("villager",villager1);
-            session.setAttribute("cart",cart);
-            return ResponseEntity.ok(ResponseResult.ok(modelMap));
-        }
+        return ResponseEntity.ok(ResponseResult.ok(taoVillagerService.login(villager)));
+
     }
 
-    @GetMapping("/login/villagerBySession")
-    @ApiOperation("村民从session获取登陆信息")
-    public ResponseEntity villagerLoginBySession(HttpSession session)
-    {
-        if(session.getAttribute("villager")==null||session.getAttribute("cart")==null)
-        {
-            return ResponseEntity.ok(ResponseResult.fail(ResultCode.ACCESS_DENIED));
-        }else
-        {
-            ModelMap modelMap = new ModelMap();
-            modelMap.put("villager",session.getAttribute("villager"));
-            modelMap.put("cart",session.getAttribute("cart"));
-            return ResponseEntity.ok(ResponseResult.ok(modelMap));
-        }
-    }
+//    @GetMapping("/login/villagerBySession")
+//    @ApiOperation("村民从session获取登陆信息")
+//    public ResponseEntity villagerLoginBySession(HttpSession session)
+//    {
+//        if(session.getAttribute("villager")==null||session.getAttribute("cart")==null)
+//        {
+//            return ResponseEntity.ok(ResponseResult.fail(ResultCode.ACCESS_DENIED));
+//        }else
+//        {
+//            ModelMap modelMap = new ModelMap();
+//            modelMap.put("villager",session.getAttribute("villager"));
+//            modelMap.put("cart",session.getAttribute("cart"));
+//            return ResponseEntity.ok(ResponseResult.ok(modelMap));
+//        }
+//    }
 
 
     @PostMapping("/login/murakami")

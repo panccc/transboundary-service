@@ -50,9 +50,9 @@ public class TaoMurakamiController
 		return ResponseEntity.ok(ResponseResult.ok(taoMurakamiService.insertTaoMurakami(taoMurakami)));
 	}
 
-	@GetMapping("/getInfoBeforeEdit/{murakamiId}")
+	@GetMapping("/getInfoBeforeEdit")
     @ApiOperation("获取修改村小二信息")
-	public ResponseEntity<ResponseResult> getInfoBeforeEdit(@PathVariable("murakamiId") Integer murakamiId)
+	public ResponseEntity<ResponseResult> getInfoBeforeEdit(@RequestParam("murakamiId") Integer murakamiId)
 	{
 		return ResponseEntity.ok(ResponseResult.ok(taoMurakamiService.getTaoMurakamiById(murakamiId)));
 	}

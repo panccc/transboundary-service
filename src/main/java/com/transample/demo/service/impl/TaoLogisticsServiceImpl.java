@@ -127,7 +127,7 @@ public class TaoLogisticsServiceImpl implements ITaoLogisticsService
 	}
 
 	@Override
-	public TaoLogistics selectLogisticsByOrderId(Integer orderId) {
+	public List<TaoLogistics> selectLogisticsByOrderId(Integer orderId) {
 		return taoLogisticsMapper.selectLogisticsByOrderId(orderId);
 	}
 }

@@ -101,5 +101,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{ticketId}
         </foreach>
     </delete>
+
+    <select id="selectLogisticsByOrderId" parameterType="Integer" resultMap="TaoLogisticsResult">
+        <include refid="selectTaoLogisticsVo"/>
+        where order_id = #{orderId}
+    </select>
+
     
 </mapper>

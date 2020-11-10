@@ -30,9 +30,9 @@ public class TaoProductController
 	@Autowired
 	private ITaoProductService taoProductService;
 
-	@GetMapping("/getProduct/{productId}")
+	@GetMapping("/getProduct")
 	@ApiOperation("通过id获取商品")
-	public ResponseEntity<ResponseResult> getProduct(@PathVariable Integer productId)
+	public ResponseEntity<ResponseResult> getProduct(@ApiParam(value = "商品id", required = true) @RequestParam("productId") Integer productId)
 	{
 		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getProductById(productId)));
 	}
@@ -44,9 +44,9 @@ public class TaoProductController
 		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getTaoProductList(product)));
 	}
 
-	@GetMapping("/getInfoBeforeAdd/{sellerId}")
+	@GetMapping("/getInfoBeforeAdd")
     @ApiOperation("获取系统自动生成的新建商品信息")
-	public ResponseEntity<ResponseResult> getInfoBeforeAdd(@PathVariable Integer sellerId)
+	public ResponseEntity<ResponseResult> getInfoBeforeAdd(@RequestParam Integer sellerId)
 	{
 		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getInfoBeforeAdd(sellerId)));
 	}
@@ -58,11 +58,11 @@ public class TaoProductController
 		return ResponseEntity.ok(ResponseResult.ok(taoProductService.addTaoProduct(taoProduct)));
 	}
 
-	@GetMapping("/getInfoBeforeEdit/{productId}")
+	@GetMapping("/getInfoBeforeEdit")
     @ApiOperation("通过id获取商品信息")
-	public TaoProduct getInfoBeforeEdit(@PathVariable("productId") Integer productId)
+	public ResponseEntity getInfoBeforeEdit(@RequestParam("productId") Integer productId)
 	{
-		return taoProductService.getInfoBeforeEdit(productId);
+		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getInfoBeforeEdit(productId)));
 	}
 	
 	@PostMapping("/edit")

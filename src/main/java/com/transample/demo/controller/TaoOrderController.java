@@ -61,8 +61,8 @@ public class TaoOrderController
 	private static final String queryStatusAPIValue = "待确认underConfirm待发货underSend,运输中send" +
 			",待成交receive,已成交takeOver";
 	@ApiOperation("商家按条件获取订单列表")
-	@GetMapping("/list/seller/{status}/{sellerId}")
-	public ResponseEntity getListOfSeller(@PathVariable @ApiParam(value = queryStatusAPIValue,required = true) String status,@PathVariable @ApiParam("商家id") Integer sellerId)
+	@GetMapping("/list/seller")
+	public ResponseEntity getListOfSeller(@RequestParam @ApiParam(value = queryStatusAPIValue,required = true) String status,@RequestParam @ApiParam("商家id") Integer sellerId)
 	{
 		TaoOrder order = new TaoOrder();
 		order.setSellerId(sellerId);
@@ -92,8 +92,8 @@ public class TaoOrderController
 	private static final String queryStatusUserAPIValue = "未付款unpaid,已购买pay,待发货underSend,运输中send" +
 			",已购买takeOver";
 	@ApiOperation("用户按条件获取订单列表")
-	@GetMapping("/list/user/{status}/{userId}")
-	public ResponseEntity getListOfUser(@PathVariable @ApiParam(value = queryStatusUserAPIValue,required = true) String status,@PathVariable @ApiParam("用户id") Integer userId)
+	@GetMapping("/list/user")
+	public ResponseEntity getListOfUser(@RequestParam @ApiParam(value = queryStatusUserAPIValue,required = true) String status,@RequestParam @ApiParam("用户id") Integer userId)
 	{
 		ModelMap modelMap = new ModelMap();
 		List<OrderDTO> ans = new ArrayList<>();
@@ -138,8 +138,8 @@ public class TaoOrderController
 
 	private static final String queryStatusStationAPIValue = "村站等待收取underSend,已代收receive";
 	@ApiOperation("村站按条件获取订单列表")
-	@GetMapping("/list/station/{status}/{stationId}")
-	public List<TaoOrder> getListOfStation(@PathVariable @ApiParam(value = queryStatusStationAPIValue,required = true) String status,@PathVariable @ApiParam("村站id") Integer stationId)
+	@GetMapping("/list/station")
+	public ResponseEntity getListOfStation(@RequestParam @ApiParam(value = queryStatusStationAPIValue,required = true) String status,@RequestParam @ApiParam("村站id") Integer stationId)
 	{
 		TaoOrder order = new TaoOrder();
 		order.setStationId(stationId);
@@ -154,16 +154,16 @@ public class TaoOrderController
 		}
 		List<TaoOrder> list = taoOrderService.selectTaoOrderList(order);
 
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 
-	@ApiOperation("获取下单前返显给前端的信息，参数和返回结果待确认")
-	@GetMapping("/getInfoBeforeAdd")
-	public String getInfoBeforeAdd()
-	{
-		return prefix+"/getInfoBeforeAdd";
-	}
+//	@ApiOperation("获取下单前返显给前端的信息，参数和返回结果待确认")
+//	@GetMapping("/getInfoBeforeAdd")
+//	public String getInfoBeforeAdd()
+//	{
+//		return prefix+"/getInfoBeforeAdd";
+//	}
 
 	/**
 	 * 新增保存订单
@@ -211,8 +211,8 @@ public class TaoOrderController
 
 
 	@ApiOperation("获取订单详情返显给前端的信息")
-	@GetMapping("/getOrderInfo/{orderId}")
-	public ResponseEntity getOrderInfo(@PathVariable @ApiParam(value = "订单id",required = true) Integer orderId)
+	@GetMapping("/getOrderInfo")
+	public ResponseEntity getOrderInfo(@RequestParam @ApiParam(value = "订单id",required = true) Integer orderId)
 	{
 
 		OrderDTO orderDTO = new OrderDTO();
@@ -235,11 +235,11 @@ public class TaoOrderController
 	 * 修改订单
 	 */
 	@ApiOperation("编辑时返显给前端的信息")
-	@GetMapping("/getInfoBeforeEdit/{orderId}")
-	public TaoOrder getInfoBeforeEdit(@PathVariable("orderId") @ApiParam(value = "订单id",required = true) Integer orderId)
+	@GetMapping("/getInfoBeforeEdit")
+	public ResponseEntity getInfoBeforeEdit(@RequestParam("orderId") @ApiParam(value = "订单id",required = true) Integer orderId)
 	{
 		TaoOrder taoOrder = taoOrderService.selectTaoOrderById(orderId);
-	    return taoOrder;
+	    return ResponseEntity.ok(ResponseResult.ok(taoOrder));
 	}
 	
 	/**
@@ -250,8 +250,8 @@ public class TaoOrderController
 
 	@ApiQualityLog(methodDesc = "修改订单的状态",indexParams = "sendReceiveRatio,execTime")
 	@ApiOperation("修改订单的状态")
-	@PostMapping("/edit/{op}/{orderId}")
-	public ResponseEntity edit(@PathVariable @ApiParam(value = editAPIValue ,required = true) String op,@PathVariable @ApiParam(value = "订单id",required = true) Integer orderId)
+	@PostMapping("/edit")
+	public ResponseEntity edit(@RequestBody @ApiParam(value = editAPIValue ,required = true) String op,@RequestBody @ApiParam(value = "订单id",required = true) Integer orderId)
 	{		
 		TaoOrder order = taoOrderService.selectTaoOrderById(orderId);
 		/**
@@ -330,8 +330,8 @@ public class TaoOrderController
 	}
 
 	@ApiOperation("村小二和商家根据订单状态获取订单数量")
-	@GetMapping("/getOrderNum/{role}/{op}/{id}")
-	public HashMap<String,Integer> getOrderNum(@ApiParam("卖家seller;村站station") @PathVariable String role, @ApiParam("总订单total;未发货underSend;未确认underConfirm") @PathVariable String op,@ApiParam("村小二或商家id") @PathVariable Integer id)
+	@GetMapping("/getOrderNum")
+	public ResponseEntity getOrderNum(@ApiParam("卖家seller;村站station") @RequestParam String role, @ApiParam("总订单total;未发货underSend;未确认underConfirm") @RequestParam String op,@ApiParam("村小二或商家id") @RequestParam Integer id)
 	{
 		HashMap<String, Integer> ans = new HashMap<>();
 		int num = 0;
@@ -346,7 +346,7 @@ public class TaoOrderController
 		else
 		{
 			ans.put("num",0);
-			return ans;
+			return ResponseEntity.ok(ResponseResult.ok(ans));
 		}
 
 		if(op.equals("underSend"))
@@ -358,13 +358,13 @@ public class TaoOrderController
 		}
 		num = taoOrderService.getOrderNum(order);
 		ans.put("num",num);
-		return ans;
+		return ResponseEntity.ok(ResponseResult.ok(ans));
 	}
 
 	@ApiQualityLog(methodDesc = "订单/物流总价格",indexParams = "orderPrice,secondLogisticPrice")
 	@ApiOperation("商家获取订单总成交额；村小二获取总二级物流价格")
-	@GetMapping("/getTotalPrice/{role}/{id}")
-	public ResponseEntity getTotalPrice(@ApiParam("商家:seller;村站:station ")@PathVariable String role, @ApiParam("id") @PathVariable Integer id)
+	@GetMapping("/getTotalPrice")
+	public ResponseEntity getTotalPrice(@ApiParam("商家:seller;村站:station ")@RequestParam String role, @ApiParam("id") @RequestParam Integer id)
 	{
 		HashMap<String,Double> ans = new HashMap<>();
 		TaoOrder order = new TaoOrder();

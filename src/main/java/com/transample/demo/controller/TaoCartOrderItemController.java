@@ -46,12 +46,12 @@ public class TaoCartOrderItemController
 	 * 查询购物车单类商品列表
 	 */
 	@ApiOperation("查询购物车单类商品列表")
-	@GetMapping("/list/{cartId}")
-	public HashMap<Integer,List<TaoCartOrderItem>> getCartList(@PathVariable Integer cartId)
+	@GetMapping("/list")
+	public ResponseEntity getCartList(@RequestParam Integer cartId)
 	{
 
 
-        return taoCartOrderItemService.getCartItemListGroupBySeller(cartId);
+        return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItemService.getCartItemListGroupBySeller(cartId)));
 	}
 	
 	
@@ -68,10 +68,10 @@ public class TaoCartOrderItemController
 	 * 新增保存购物车单类商品
 	 */
 	@ApiOperation("新增保存购物车单类商品")
-	@PostMapping("/add/{cartId}")
-	public ResponseEntity addItem(@ApiParam(value = "购物车id",required = true)@PathVariable("cartId") Integer cartId,@RequestBody TaoCartOrderItem taoCartOrderItem)
+	@PostMapping("/add")
+	public ResponseEntity addItem(@RequestBody TaoCartOrderItem taoCartOrderItem)
 	{		
-		taoCartOrderItem.setCartId(cartId);
+//		taoCartOrderItem.setCartId(cartId);
 
 		return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItemService.insertTaoCartOrderItem(taoCartOrderItem)));
 	}
@@ -81,8 +81,8 @@ public class TaoCartOrderItemController
 	 */
 
 	@ApiOperation("修改购物车单类商品,返回该商品的基本信息")
-	@GetMapping("/getInfoBeforeEdit/{orderItemId}")
-	public ResponseEntity getInfoBeforeEdit(@PathVariable("orderItemId") @ApiParam(value = "订单单个商品号",required = true) Integer orderItemId)
+	@GetMapping("/getInfoBeforeEdit")
+	public ResponseEntity getInfoBeforeEdit(@RequestParam("orderItemId") @ApiParam(value = "订单单个商品号",required = true) Integer orderItemId)
 	{
 		TaoCartOrderItem taoCartOrderItem = taoCartOrderItemService.selectTaoCartOrderItemById(orderItemId);
 		if(taoCartOrderItem==null)return ResponseEntity.ok(ResponseResult.fail(ResultCode.FILED_VALUE_INVALID));

@@ -41,30 +41,30 @@ public class TaoCompanyController
 	 * 查询物流公司列表
 	 */
 	@ApiOperation(value = "查询物流公司列表 按照物流公司类型查找")
-	@GetMapping("")
-	public ResponseEntity list(@PathVariable @ApiParam(value = "物流公司类型 1常规， 2县村",required = true) Integer companyType)
+	@GetMapping("/list")
+	public ResponseEntity list(@RequestParam @ApiParam(value = "物流公司类型 1常规， 2县村",required = true) Integer companyType)
 	{
 		TaoCompany taoCompany = new TaoCompany();
 		if(companyType==1)
 		{
-			taoCompany.setCompanyType("常规");
+			taoCompany.setCompanyType("城市物流");
 		}else if(companyType==2)
 		{
-			taoCompany.setCompanyType("县村");
+			taoCompany.setCompanyType("县乡村物流");
 		}
 		return ResponseEntity.ok(ResponseResult.ok(taoCompanyService.selectTaoCompanyList(taoCompany)));
 	}
 	
 	
-	/**
-	 * 新增时需要反显给前端的信息
-	 */
-	@ApiOperation("新增时需要反显给前端的信息,待确认")
-	@GetMapping("/getInfoBeforeAdd")
-	public String getInfoBeforeAdd()
-	{
-	    return prefix + "/add";
-	}
+//	/**
+//	 * 新增时需要反显给前端的信息
+//	 */
+//	@ApiOperation("新增时需要反显给前端的信息,待确认")
+//	@GetMapping("/getInfoBeforeAdd")
+//	public String getInfoBeforeAdd()
+//	{
+//	    return prefix + "/add";
+//	}
 	
 	/**
 	 * 新增保存物流公司
@@ -80,8 +80,8 @@ public class TaoCompanyController
 	 * 修改物流公司
 	 */
 	@ApiOperation(value = "修改物流公司，返回物流公司的基本信息")
-	@GetMapping("/getInfoBeforeEdit/{companyId}")
-	public ResponseEntity getInfoBeforeEdit(@PathVariable("companyId") Integer companyId)
+	@GetMapping("/getInfoBeforeEdit")
+	public ResponseEntity getInfoBeforeEdit(@RequestParam("companyId") Integer companyId)
 	{
 		TaoCompany taoCompany = taoCompanyService.selectTaoCompanyById(companyId);
 		if(taoCompany==null)

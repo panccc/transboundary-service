@@ -12,7 +12,6 @@ import com.transample.demo.service.ITaoOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -57,14 +56,14 @@ public class TaoLogisticsStateController
 	 * 查询物流状态列表
 	 */
 	@ApiOperation("按照物流单号查询物流状态列表")
-	@PostMapping("/list/{ticketId}")
+	@PostMapping("/list")
 	@ResponseBody
-	public List<TaoLogisticsState> list(@PathVariable @ApiParam(value = "物流单号",required = true) String ticketId)
+	public ResponseEntity list(@RequestBody @ApiParam(value = "物流单号",required = true) String ticketId)
 	{
         TaoLogisticsState taoLogisticsState = new TaoLogisticsState();
         taoLogisticsState.setTicketId(ticketId);
 		List<TaoLogisticsState> list = taoLogisticsStateService.selectTaoLogisticsStateList(taoLogisticsState);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 	
 	
@@ -82,10 +81,12 @@ public class TaoLogisticsStateController
 	 */
 	@ApiQualityLog(methodDesc = "新增物流状态",indexParams = "firstLogisticTime,secondLogisticTime,damaged")
 	@ApiOperation("新增物流状态")
-	@PostMapping("/add/{ticketId}")
-	public ResponseEntity addLogisticsState(@PathVariable @ApiParam(value = "物流单号",required = true) String ticketId, @RequestBody TaoLogisticsState taoLogisticsState)
+	@PostMapping("/add")
+
+	public ResponseEntity addLogisticsState(@RequestBody TaoLogisticsState taoLogisticsState)
 	{
-		taoLogisticsState.setTicketId(ticketId);
+//		taoLogisticsState.setTicketId(ticketId);
+		String ticketId = taoLogisticsState.getTicketId();
 		int res = taoLogisticsStateService.insertTaoLogisticsState(taoLogisticsState);
 		if(res==0)
 		{
@@ -163,8 +164,8 @@ public class TaoLogisticsStateController
 	 * 修改物流状态
 	 */
 	@ApiOperation("更新前返回给前端的必要信息")
-	@GetMapping("/getInfoBeforeEdit/{ticketId}")
-	public ResponseEntity getInfoBeforeEdit(@PathVariable("ticketId") Integer id)
+	@GetMapping("/getInfoBeforeEdit")
+	public ResponseEntity getInfoBeforeEdit(@RequestParam("ticketId") Integer id)
 	{
 		TaoLogisticsState taoLogisticsState = taoLogisticsStateService.selectTaoLogisticsStateById(id);
 		if(taoLogisticsState==null)
@@ -180,7 +181,7 @@ public class TaoLogisticsStateController
 	 */
 	@ApiOperation("修改物流状态")
 	@PostMapping("/edit")
-	public ResponseEntity editLogisticsState(TaoLogisticsState taoLogisticsState)
+	public ResponseEntity editLogisticsState(@RequestBody TaoLogisticsState taoLogisticsState)
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoLogisticsStateService.updateTaoLogisticsState(taoLogisticsState)));
 	}

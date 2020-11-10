@@ -55,9 +55,9 @@ public class TaoVillagerController
 		return ResponseEntity.ok(ResponseResult.ok(taoVillagerService.insertTaoVillager(taoVillager)));
 	}
 
-	@GetMapping("/edit/{villagerId}")
+	@GetMapping("/edit")
     @ApiOperation("获取村民信息")
-	public ResponseEntity<ResponseResult> getInfoBeforeEdit(@PathVariable("villagerId") Integer villagerId)
+	public ResponseEntity<ResponseResult> getInfoBeforeEdit(@RequestParam("villagerId") Integer villagerId)
 	{
 		return ResponseEntity.ok(ResponseResult.ok(taoVillagerService.getTaoVillagerById(villagerId)));
 	}
