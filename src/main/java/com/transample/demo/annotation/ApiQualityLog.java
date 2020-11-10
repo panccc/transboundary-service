@@ -37,7 +37,6 @@ public @interface ApiQualityLog {
      * @return
      */
     String[] paramsDesc() default {};
-
     /**
      * 返回值的描述
      * @return
