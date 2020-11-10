@@ -15,16 +15,21 @@ public class TaoInterfaceServiceImpl implements ITaoInterfaceService {
     private TaoInterfaceMapper taoInterfaceDao;
 
     @Override
-    public String getInterfaceId(String controller, String method) {
-        TaoInterfaceExample example = new TaoInterfaceExample();
-        TaoInterfaceExample.Criteria criteria = example.createCriteria();
-        criteria.andControllerEqualTo(controller);
-        criteria.andMethodNameEqualTo(method);
+    public String getInterfaceId(String uri) {
 
-        List<TaoInterface> list = taoInterfaceDao.selectByExample(example);
+        String tmp = uri;
+        TaoInterface taoInterface = null;
+        while(tmp.length()>0)
+        {
+            taoInterface = taoInterfaceDao.selectByUri(tmp);
+            if(taoInterface!=null)
+            {
+                return taoInterface.getInterfaceId();
+            }
+            tmp = tmp.substring(0,tmp.length()-1);
+        }
 
-        if(list.size()==0)return null;
-        return list.get(0).getInterfaceId();
+        return null;
 
     }
 }

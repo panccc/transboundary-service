@@ -27,4 +27,6 @@ public interface TaoInterfaceMapper {
     int updateByPrimaryKeySelective(TaoInterface record);
 
     int updateByPrimaryKey(TaoInterface record);
+
+    TaoInterface selectByUri(@Param("uri") String uri);
 }

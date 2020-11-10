@@ -13,19 +13,19 @@ public class TaoInterface implements Serializable {
     private Integer id;
 
     /**
-     * controller
+     * uri
      */
-    private String controller;
-
-    /**
-     * 方法名字
-     */
-    private String methodName;
+    private String uri;
 
     /**
      * 服务网络接口id
      */
     private String interfaceId;
+
+    /**
+     * 描述信息
+     */
+    private String description;
 
     private static final long serialVersionUID = 1L;
 
@@ -37,20 +37,12 @@ public class TaoInterface implements Serializable {
         this.id = id;
     }
 
-    public String getController() {
-        return controller;
+    public String getUri() {
+        return uri;
     }
 
-    public void setController(String controller) {
-        this.controller = controller;
-    }
-
-    public String getMethodName() {
-        return methodName;
-    }
-
-    public void setMethodName(String methodName) {
-        this.methodName = methodName;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public String getInterfaceId() {
@@ -59,6 +51,14 @@ public class TaoInterface implements Serializable {
 
     public void setInterfaceId(String interfaceId) {
         this.interfaceId = interfaceId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -74,9 +74,9 @@ public class TaoInterface implements Serializable {
         }
         TaoInterface other = (TaoInterface) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getController() == null ? other.getController() == null : this.getController().equals(other.getController()))
-            && (this.getMethodName() == null ? other.getMethodName() == null : this.getMethodName().equals(other.getMethodName()))
-            && (this.getInterfaceId() == null ? other.getInterfaceId() == null : this.getInterfaceId().equals(other.getInterfaceId()));
+            && (this.getUri() == null ? other.getUri() == null : this.getUri().equals(other.getUri()))
+            && (this.getInterfaceId() == null ? other.getInterfaceId() == null : this.getInterfaceId().equals(other.getInterfaceId()))
+            && (this.getDescription() == null ? other.getDescription() == null : this.getDescription().equals(other.getDescription()));
     }
 
     @Override
@@ -84,9 +84,9 @@ public class TaoInterface implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getController() == null) ? 0 : getController().hashCode());
-        result = prime * result + ((getMethodName() == null) ? 0 : getMethodName().hashCode());
+        result = prime * result + ((getUri() == null) ? 0 : getUri().hashCode());
         result = prime * result + ((getInterfaceId() == null) ? 0 : getInterfaceId().hashCode());
+        result = prime * result + ((getDescription() == null) ? 0 : getDescription().hashCode());
         return result;
     }
 
@@ -97,9 +97,9 @@ public class TaoInterface implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", controller=").append(controller);
-        sb.append(", methodName=").append(methodName);
+        sb.append(", uri=").append(uri);
         sb.append(", interfaceId=").append(interfaceId);
+        sb.append(", description=").append(description);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

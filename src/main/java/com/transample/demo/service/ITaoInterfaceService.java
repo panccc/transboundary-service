@@ -5,9 +5,8 @@ public interface ITaoInterfaceService {
 
     /**
      * 根据controller和method名字获得接口id
-     * @param controller
-     * @param method
+     * @param uri
      * @return
      */
-    public String getInterfaceId(String controller, String method);
+    public String getInterfaceId(String uri);
 }

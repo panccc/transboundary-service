@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.transample.demo.mapper.TaoInterfaceMapper">
-  <resultMap id="BaseResultMap" type="TaoInterface">
+  <resultMap id="BaseResultMap" type="com.transample.demo.domain.TaoInterface">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="controller" jdbcType="VARCHAR" property="controller" />
-    <result column="method_name" jdbcType="VARCHAR" property="methodName" />
+    <result column="uri" jdbcType="VARCHAR" property="uri" />
     <result column="interface_id" jdbcType="VARCHAR" property="interfaceId" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,9 +66,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, controller, method_name, interface_id
+    id, uri, interface_id, description
   </sql>
-  <select id="selectByExample" parameterType="TaoInterfaceExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.transample.demo.domain.TaoInterfaceExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -106,40 +106,34 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.transample.demo.domain.TaoInterface">
-    insert into tao_interface (id, controller, method_name, 
-      interface_id)
-    values (#{id,jdbcType=INTEGER}, #{controller,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, 
-      #{interfaceId,jdbcType=VARCHAR})
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.transample.demo.domain.TaoInterface" useGeneratedKeys="true">
+    insert into tao_interface (uri, interface_id, description
+      )
+    values (#{uri,jdbcType=VARCHAR}, #{interfaceId,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.transample.demo.domain.TaoInterface">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.transample.demo.domain.TaoInterface" useGeneratedKeys="true">
     insert into tao_interface
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="controller != null">
-        controller,
-      </if>
-      <if test="methodName != null">
-        method_name,
+      <if test="uri != null">
+        uri,
       </if>
       <if test="interfaceId != null">
         interface_id,
       </if>
+      <if test="description != null">
+        description,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="controller != null">
-        #{controller,jdbcType=VARCHAR},
-      </if>
-      <if test="methodName != null">
-        #{methodName,jdbcType=VARCHAR},
+      <if test="uri != null">
+        #{uri,jdbcType=VARCHAR},
       </if>
       <if test="interfaceId != null">
         #{interfaceId,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -155,14 +149,14 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.controller != null">
-        controller = #{record.controller,jdbcType=VARCHAR},
-      </if>
-      <if test="record.methodName != null">
-        method_name = #{record.methodName,jdbcType=VARCHAR},
+      <if test="record.uri != null">
+        uri = #{record.uri,jdbcType=VARCHAR},
       </if>
       <if test="record.interfaceId != null">
         interface_id = #{record.interfaceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -172,9 +166,9 @@
   <update id="updateByExample" parameterType="map">
     update tao_interface
     set id = #{record.id,jdbcType=INTEGER},
-      controller = #{record.controller,jdbcType=VARCHAR},
-      method_name = #{record.methodName,jdbcType=VARCHAR},
-      interface_id = #{record.interfaceId,jdbcType=VARCHAR}
+      uri = #{record.uri,jdbcType=VARCHAR},
+      interface_id = #{record.interfaceId,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -182,23 +176,30 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.transample.demo.domain.TaoInterface">
     update tao_interface
     <set>
-      <if test="controller != null">
-        controller = #{controller,jdbcType=VARCHAR},
-      </if>
-      <if test="methodName != null">
-        method_name = #{methodName,jdbcType=VARCHAR},
+      <if test="uri != null">
+        uri = #{uri,jdbcType=VARCHAR},
       </if>
       <if test="interfaceId != null">
         interface_id = #{interfaceId,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.transample.demo.domain.TaoInterface">
     update tao_interface
-    set controller = #{controller,jdbcType=VARCHAR},
-      method_name = #{methodName,jdbcType=VARCHAR},
-      interface_id = #{interfaceId,jdbcType=VARCHAR}
+    set uri = #{uri,jdbcType=VARCHAR},
+      interface_id = #{interfaceId,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByUri" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tao_interface
+    where uri = #{uri}
+  </select>
 </mapper>

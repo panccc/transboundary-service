@@ -184,143 +184,73 @@ public class TaoInterfaceExample {
             return (Criteria) this;
         }
 
-        public Criteria andControllerIsNull() {
-            addCriterion("controller is null");
+        public Criteria andUriIsNull() {
+            addCriterion("uri is null");
             return (Criteria) this;
         }
 
-        public Criteria andControllerIsNotNull() {
-            addCriterion("controller is not null");
+        public Criteria andUriIsNotNull() {
+            addCriterion("uri is not null");
             return (Criteria) this;
         }
 
-        public Criteria andControllerEqualTo(String value) {
-            addCriterion("controller =", value, "controller");
+        public Criteria andUriEqualTo(String value) {
+            addCriterion("uri =", value, "uri");
             return (Criteria) this;
         }
 
-        public Criteria andControllerNotEqualTo(String value) {
-            addCriterion("controller <>", value, "controller");
+        public Criteria andUriNotEqualTo(String value) {
+            addCriterion("uri <>", value, "uri");
             return (Criteria) this;
         }
 
-        public Criteria andControllerGreaterThan(String value) {
-            addCriterion("controller >", value, "controller");
+        public Criteria andUriGreaterThan(String value) {
+            addCriterion("uri >", value, "uri");
             return (Criteria) this;
         }
 
-        public Criteria andControllerGreaterThanOrEqualTo(String value) {
-            addCriterion("controller >=", value, "controller");
+        public Criteria andUriGreaterThanOrEqualTo(String value) {
+            addCriterion("uri >=", value, "uri");
             return (Criteria) this;
         }
 
-        public Criteria andControllerLessThan(String value) {
-            addCriterion("controller <", value, "controller");
+        public Criteria andUriLessThan(String value) {
+            addCriterion("uri <", value, "uri");
             return (Criteria) this;
         }
 
-        public Criteria andControllerLessThanOrEqualTo(String value) {
-            addCriterion("controller <=", value, "controller");
+        public Criteria andUriLessThanOrEqualTo(String value) {
+            addCriterion("uri <=", value, "uri");
             return (Criteria) this;
         }
 
-        public Criteria andControllerLike(String value) {
-            addCriterion("controller like", value, "controller");
+        public Criteria andUriLike(String value) {
+            addCriterion("uri like", value, "uri");
             return (Criteria) this;
         }
 
-        public Criteria andControllerNotLike(String value) {
-            addCriterion("controller not like", value, "controller");
+        public Criteria andUriNotLike(String value) {
+            addCriterion("uri not like", value, "uri");
             return (Criteria) this;
         }
 
-        public Criteria andControllerIn(List<String> values) {
-            addCriterion("controller in", values, "controller");
+        public Criteria andUriIn(List<String> values) {
+            addCriterion("uri in", values, "uri");
             return (Criteria) this;
         }
 
-        public Criteria andControllerNotIn(List<String> values) {
-            addCriterion("controller not in", values, "controller");
+        public Criteria andUriNotIn(List<String> values) {
+            addCriterion("uri not in", values, "uri");
             return (Criteria) this;
         }
 
-        public Criteria andControllerBetween(String value1, String value2) {
-            addCriterion("controller between", value1, value2, "controller");
+        public Criteria andUriBetween(String value1, String value2) {
+            addCriterion("uri between", value1, value2, "uri");
             return (Criteria) this;
         }
 
-        public Criteria andControllerNotBetween(String value1, String value2) {
-            addCriterion("controller not between", value1, value2, "controller");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameIsNull() {
-            addCriterion("method_name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameIsNotNull() {
-            addCriterion("method_name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameEqualTo(String value) {
-            addCriterion("method_name =", value, "methodName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameNotEqualTo(String value) {
-            addCriterion("method_name <>", value, "methodName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameGreaterThan(String value) {
-            addCriterion("method_name >", value, "methodName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameGreaterThanOrEqualTo(String value) {
-            addCriterion("method_name >=", value, "methodName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameLessThan(String value) {
-            addCriterion("method_name <", value, "methodName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameLessThanOrEqualTo(String value) {
-            addCriterion("method_name <=", value, "methodName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameLike(String value) {
-            addCriterion("method_name like", value, "methodName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameNotLike(String value) {
-            addCriterion("method_name not like", value, "methodName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameIn(List<String> values) {
-            addCriterion("method_name in", values, "methodName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameNotIn(List<String> values) {
-            addCriterion("method_name not in", values, "methodName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameBetween(String value1, String value2) {
-            addCriterion("method_name between", value1, value2, "methodName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMethodNameNotBetween(String value1, String value2) {
-            addCriterion("method_name not between", value1, value2, "methodName");
+        public Criteria andUriNotBetween(String value1, String value2) {
+            addCriterion("uri not between", value1, value2, "uri");
             return (Criteria) this;
         }
 
@@ -391,6 +321,76 @@ public class TaoInterfaceExample {
 
         public Criteria andInterfaceIdNotBetween(String value1, String value2) {
             addCriterion("interface_id not between", value1, value2, "interfaceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIsNull() {
+            addCriterion("description is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIsNotNull() {
+            addCriterion("description is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionEqualTo(String value) {
+            addCriterion("description =", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotEqualTo(String value) {
+            addCriterion("description <>", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionGreaterThan(String value) {
+            addCriterion("description >", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionGreaterThanOrEqualTo(String value) {
+            addCriterion("description >=", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLessThan(String value) {
+            addCriterion("description <", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLessThanOrEqualTo(String value) {
+            addCriterion("description <=", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLike(String value) {
+            addCriterion("description like", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotLike(String value) {
+            addCriterion("description not like", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIn(List<String> values) {
+            addCriterion("description in", values, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotIn(List<String> values) {
+            addCriterion("description not in", values, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionBetween(String value1, String value2) {
+            addCriterion("description between", value1, value2, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotBetween(String value1, String value2) {
+            addCriterion("description not between", value1, value2, "description");
             return (Criteria) this;
         }
     }

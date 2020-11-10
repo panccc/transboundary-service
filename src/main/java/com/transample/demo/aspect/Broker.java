@@ -90,12 +90,13 @@ public class Broker {
 
         Response res =null;
         String ans = null;
+        Object ansObject = null;
         try {
 //            result = joinPoint.proceed();
             OkHttpClient httpClient =new OkHttpClient();
             MediaType mediaType= MediaType.parse("application/json; charset=utf-8");
 //            ITaoInterfaceService taoInterfaceService = new TaoInterfaceServiceImpl();
-            String interfaceId = taoInterfaceService.getInterfaceId(controller,methodName);
+            String interfaceId = taoInterfaceService.getInterfaceId(uri);
             System.out.println(interfaceId);
             JSONObject invokeInterFace = new JSONObject();
             invokeInterFace.put("interfaceId",interfaceId);
@@ -117,11 +118,22 @@ public class Broker {
             String url = ServiceNetworkConstants.ADDRESS+"/api/inner/service/interface/invokeInterfaceByInterfaceId";
             res = httpClient.newCall(new Request.Builder().url(url).post(requestBody).build()).execute();
             ans = res.body().string();
+            JSONObject tempObject = JSON.parseObject(ans);
+            String str = tempObject.getString("data");
+            JSONObject tempObject2 = JSON.parseObject(str);
+            String str2 = tempObject2.getString("data");
+            ansObject = JSON.parse(str2);
+//            ansObject = JSON.parseObject(JSON.parseObject());
 
+            System.out.println();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        return ResponseEntity.ok(ResponseResult.ok(ans));
+        if(ansObject==null)
+        {
+            return ResponseEntity.ok(ResponseResult.fail("请求失败"));
+        }
+        return ResponseEntity.ok(ResponseResult.ok(ansObject));
     }
 
 }
