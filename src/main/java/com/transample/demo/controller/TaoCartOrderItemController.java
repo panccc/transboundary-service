@@ -47,11 +47,11 @@ public class TaoCartOrderItemController
 	 */
 	@ApiOperation("查询购物车单类商品列表")
 	@GetMapping("/list/{cartId}")
-	public HashMap<Integer,List<TaoCartOrderItem>> getCartList(@PathVariable Integer cartId)
+	public ResponseEntity getCartList(@PathVariable Integer cartId)
 	{
 
 
-        return taoCartOrderItemService.getCartItemListGroupBySeller(cartId);
+        return ResponseEntity.ok(ResponseResult.ok(taoCartOrderItemService.getCartItemListGroupBySeller(cartId)));
 	}
 	
 	

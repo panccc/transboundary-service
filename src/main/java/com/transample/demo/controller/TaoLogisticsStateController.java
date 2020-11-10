@@ -58,12 +58,12 @@ public class TaoLogisticsStateController
 	@ApiOperation("按照物流单号查询物流状态列表")
 	@PostMapping("/list/{ticketId}")
 	@ResponseBody
-	public List<TaoLogisticsState> list(@PathVariable @ApiParam(value = "物流单号",required = true) String ticketId)
+	public ResponseEntity list(@PathVariable @ApiParam(value = "物流单号",required = true) String ticketId)
 	{
         TaoLogisticsState taoLogisticsState = new TaoLogisticsState();
         taoLogisticsState.setTicketId(ticketId);
 		List<TaoLogisticsState> list = taoLogisticsStateService.selectTaoLogisticsStateList(taoLogisticsState);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 	
 	

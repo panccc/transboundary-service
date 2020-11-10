@@ -64,15 +64,15 @@ public class TaoCompanyController
 	}
 	
 	
-	/**
-	 * 新增时需要反显给前端的信息
-	 */
-	@ApiOperation("新增时需要反显给前端的信息,待确认")
-	@GetMapping("/getInfoBeforeAdd")
-	public String getInfoBeforeAdd()
-	{
-	    return prefix + "/add";
-	}
+//	/**
+//	 * 新增时需要反显给前端的信息
+//	 */
+//	@ApiOperation("新增时需要反显给前端的信息,待确认")
+//	@GetMapping("/getInfoBeforeAdd")
+//	public String getInfoBeforeAdd()
+//	{
+//	    return prefix + "/add";
+//	}
 	
 	/**
 	 * 新增保存物流公司
