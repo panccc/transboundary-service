@@ -72,7 +72,7 @@ public class TaoSellerController
 		return ResponseEntity.ok(ResponseResult.ok(taoSellerService.deleteTaoSellerByIds(ids.getIds())));
 	}
 
-	@GetMapping( "/search/{id}")
+	@GetMapping( "/search")
 	@ApiOperation("查找商家")
 	public ResponseEntity<ResponseResult> search(@RequestParam Integer id)
 	{
