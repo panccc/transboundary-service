@@ -41,10 +41,10 @@ public class TaoOrderItemController
 	@ApiOperation("查询订单单类商品列表")
 	@PostMapping("/list")
 	@ResponseBody
-	public List<TaoOrderItem> getItemList(@RequestBody TaoOrderItem taoOrderItem)
+	public ResponseEntity getItemList(@RequestBody TaoOrderItem taoOrderItem)
 	{
         List<TaoOrderItem> list = taoOrderItemService.selectTaoOrderItemList(taoOrderItem);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 	
 	

@@ -60,9 +60,9 @@ public class TaoProductController
 
 	@GetMapping("/getInfoBeforeEdit")
     @ApiOperation("通过id获取商品信息")
-	public TaoProduct getInfoBeforeEdit(@RequestParam("productId") Integer productId)
+	public ResponseEntity getInfoBeforeEdit(@RequestParam("productId") Integer productId)
 	{
-		return taoProductService.getInfoBeforeEdit(productId);
+		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getInfoBeforeEdit(productId)));
 	}
 	
 	@PostMapping("/edit")

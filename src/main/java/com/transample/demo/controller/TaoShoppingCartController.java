@@ -37,21 +37,21 @@ public class TaoShoppingCartController
 	 */
 	@PostMapping("/list")
 	@ResponseBody
-	public List<TaoShoppingCart> list(TaoShoppingCart taoShoppingCart)
+	public ResponseEntity list(TaoShoppingCart taoShoppingCart)
 	{
         List<TaoShoppingCart> list = taoShoppingCartService.selectTaoShoppingCartList(taoShoppingCart);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 	
 	
 	/**
 	 * 新增购物车
 	 */
-	@GetMapping("/add")
-	public String add()
-	{
-	    return prefix + "/add";
-	}
+//	@GetMapping("/add")
+//	public String add()
+//	{
+//	    return prefix + "/add";
+//	}
 	
 	/**
 	 * 新增保存购物车
@@ -62,17 +62,17 @@ public class TaoShoppingCartController
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoShoppingCartService.insertTaoShoppingCart(taoShoppingCart)));
 	}
-
-	/**
-	 * 修改购物车
-	 */
-	@GetMapping("/edit/{cartId}")
-	public String edit(@PathVariable("cartId") Integer cartId, ModelMap mmap)
-	{
-		TaoShoppingCart taoShoppingCart = taoShoppingCartService.selectTaoShoppingCartById(cartId);
-		mmap.put("taoShoppingCart", taoShoppingCart);
-	    return prefix + "/edit";
-	}
+//
+//	/**
+//	 * 修改购物车
+//	 */
+//	@GetMapping("/edit/{cartId}")
+//	public String edit(@PathVariable("cartId") Integer cartId, ModelMap mmap)
+//	{
+//		TaoShoppingCart taoShoppingCart = taoShoppingCartService.selectTaoShoppingCartById(cartId);
+//		mmap.put("taoShoppingCart", taoShoppingCart);
+//	    return prefix + "/edit";
+//	}
 	
 	/**
 	 * 修改保存购物车

@@ -41,43 +41,43 @@ public class TaoAddressController
 	 */
 	@ApiOperation("获取全国省的列表")
 	@GetMapping("/getProvinceList")
-	public List<TaoAddress> getProvinceList()
+	public ResponseEntity getProvinceList()
 	{
         List<TaoAddress> list = taoAddressService.getAllProvince();
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 
 	@ApiOperation("获取城市的列表根据省名")
 	@GetMapping("/getCityList")
-	public List<TaoAddress> getCityList(@RequestParam String province)
+	public ResponseEntity getCityList(@RequestParam String province)
 	{
 		List<TaoAddress> list = taoAddressService.getCityListByProvince(province);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 	@ApiOperation("获取该县区的列表根据省市名")
 	@GetMapping("/getCountyList")
-	public List<TaoAddress> getCountyList(@RequestParam String province,@RequestParam String city)
+	public ResponseEntity getCountyList(@RequestParam String province,@RequestParam String city)
 	{
 		List<TaoAddress> list = taoAddressService.getCountyListByProvinceAndCity(province, city);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 	@ApiOperation("获取该镇的列表根据省市县名")
 	@GetMapping("/getTownList")
-	public List<TaoAddress> getTownList(@RequestParam String province,@RequestParam String city,@RequestParam String county)
+	public ResponseEntity getTownList(@RequestParam String province,@RequestParam String city,@RequestParam String county)
 	{
 		List<TaoAddress> list = taoAddressService.getTownListByProvinceAndCityAndCounty(province, city, county);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 	@ApiOperation("获取村的列表根据省市县镇名")
 	@GetMapping("/getVillageList")
-	public List<TaoAddress> getVillageList(@RequestParam String province,@RequestParam String city,@RequestParam String county,@RequestParam String town)
+	public ResponseEntity getVillageList(@RequestParam String province,@RequestParam String city,@RequestParam String county,@RequestParam String town)
 	{
 		List<TaoAddress> list = taoAddressService.getVillageListByProvinceAndCityAndCountyAndTown(province, city, county, town);
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 

@@ -138,7 +138,7 @@ public class TaoOrderController
 	private static final String queryStatusStationAPIValue = "村站等待收取underSend,已代收receive";
 	@ApiOperation("村站按条件获取订单列表")
 	@GetMapping("/list/station")
-	public List<TaoOrder> getListOfStation(@RequestParam @ApiParam(value = queryStatusStationAPIValue,required = true) String status,@RequestParam @ApiParam("村站id") Integer stationId)
+	public ResponseEntity getListOfStation(@RequestParam @ApiParam(value = queryStatusStationAPIValue,required = true) String status,@RequestParam @ApiParam("村站id") Integer stationId)
 	{
 		TaoOrder order = new TaoOrder();
 		order.setStationId(stationId);
@@ -153,7 +153,7 @@ public class TaoOrderController
 		}
 		List<TaoOrder> list = taoOrderService.selectTaoOrderList(order);
 
-		return list;
+		return ResponseEntity.ok(ResponseResult.ok(list));
 	}
 
 
@@ -227,10 +227,10 @@ public class TaoOrderController
 	 */
 	@ApiOperation("编辑时返显给前端的信息")
 	@GetMapping("/getInfoBeforeEdit")
-	public TaoOrder getInfoBeforeEdit(@RequestParam("orderId") @ApiParam(value = "订单id",required = true) Integer orderId)
+	public ResponseEntity getInfoBeforeEdit(@RequestParam("orderId") @ApiParam(value = "订单id",required = true) Integer orderId)
 	{
 		TaoOrder taoOrder = taoOrderService.selectTaoOrderById(orderId);
-	    return taoOrder;
+	    return ResponseEntity.ok(ResponseResult.ok(taoOrder));
 	}
 	
 	/**
@@ -303,7 +303,7 @@ public class TaoOrderController
 
 	@ApiOperation("村小二和商家根据订单状态获取订单数量")
 	@GetMapping("/getOrderNum")
-	public HashMap<String,Integer> getOrderNum(@ApiParam("卖家seller;村站station") @RequestParam String role, @ApiParam("总订单total;未发货underSend;未确认underConfirm") @RequestParam String op,@ApiParam("村小二或商家id") @RequestParam Integer id)
+	public ResponseEntity getOrderNum(@ApiParam("卖家seller;村站station") @RequestParam String role, @ApiParam("总订单total;未发货underSend;未确认underConfirm") @RequestParam String op,@ApiParam("村小二或商家id") @RequestParam Integer id)
 	{
 		HashMap<String, Integer> ans = new HashMap<>();
 		int num = 0;
@@ -318,7 +318,7 @@ public class TaoOrderController
 		else
 		{
 			ans.put("num",0);
-			return ans;
+			return ResponseEntity.ok(ResponseResult.ok(ans));
 		}
 
 		if(op.equals("underSend"))
@@ -330,7 +330,7 @@ public class TaoOrderController
 		}
 		num = taoOrderService.getOrderNum(order);
 		ans.put("num",num);
-		return ans;
+		return ResponseEntity.ok(ResponseResult.ok(ans));
 	}
 
 	@ApiOperation("商家获取订单总成交额；村小二获取总二级物流价格")
