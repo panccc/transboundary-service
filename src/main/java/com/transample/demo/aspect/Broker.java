@@ -97,6 +97,8 @@ public class Broker {
             MediaType mediaType= MediaType.parse("application/json; charset=utf-8");
 //            ITaoInterfaceService taoInterfaceService = new TaoInterfaceServiceImpl();
             String interfaceId = taoInterfaceService.getInterfaceId(uri);
+            if(interfaceId==null)
+                return ResponseEntity.ok(ResponseResult.fail("服务网络不存在该接口id"));
             System.out.println(interfaceId);
             JSONObject invokeInterFace = new JSONObject();
             invokeInterFace.put("interfaceId",interfaceId);
