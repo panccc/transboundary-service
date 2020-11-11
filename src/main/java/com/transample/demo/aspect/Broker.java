@@ -1,8 +1,10 @@
 package com.transample.demo.aspect;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.transample.demo.common.ResponseResult;
+import com.transample.demo.common.ResultCode;
 import com.transample.demo.constants.ServiceNetworkConstants;
 import com.transample.demo.service.ITaoInterfaceService;
 import com.transample.demo.service.impl.TaoInterfaceServiceImpl;
@@ -128,8 +130,14 @@ public class Broker {
 //            ansObject = JSON.parseObject(JSON.parseObject());
 
             System.out.println();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
+        } catch (JSONException e)
+        {
+//            e.printStackTrace();
+            return ResponseEntity.ok(ResponseResult.ok(ResultCode.OK));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(ResponseResult.fail(ResultCode.OBJECT_NOT_EXIST));
         }
         if(ansObject==null)
         {
