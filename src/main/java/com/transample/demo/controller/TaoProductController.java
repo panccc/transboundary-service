@@ -1,7 +1,9 @@
 package com.transample.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
+import com.transample.demo.annotation.ApiQualityLog;
 import com.transample.demo.dto.RemoveIdsDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,11 +32,17 @@ public class TaoProductController
 	@Autowired
 	private ITaoProductService taoProductService;
 
+	@ApiQualityLog(methodDesc = "查看商品详情",indexParams = "productPageViews",calculateType = "statistics")
 	@GetMapping("/getProduct")
 	@ApiOperation("通过id获取商品")
 	public ResponseEntity<ResponseResult> getProduct(@ApiParam(value = "商品id", required = true) @RequestParam("productId") Integer productId)
 	{
-		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getProductById(productId)));
+		/*
+		 * 感知逻辑（业务无关）
+		 */
+		HashMap<String,String> indexes=new HashMap<>();
+		indexes.put("productId",productId.toString());
+		return ResponseEntity.ok(ResponseResult.ok(taoProductService.getProductById(productId),indexes));
 	}
 
 	@PostMapping("/list")

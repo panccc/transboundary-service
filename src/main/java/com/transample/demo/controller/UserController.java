@@ -1,5 +1,6 @@
 package com.transample.demo.controller;
 
+import com.transample.demo.annotation.ApiQualityLog;
 import com.transample.demo.common.ResponseResult;
 import com.transample.demo.common.ResultCode;
 import com.transample.demo.domain.TaoMurakami;
@@ -17,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
 //@CrossOrigin
 @RestController
@@ -33,12 +35,17 @@ public class UserController {
     @Autowired
     private ITaoSellerService taoSellerService;
 
+    @ApiQualityLog(methodDesc = "村民登录",indexParams = "activeVillageCountsPerDay,villageLoginCountsPerDay",calculateType = "statistics")
     @PostMapping("/login/villager")
     @ApiOperation("村民登陆")
     public ResponseEntity<ResponseResult> villagerLogin(@RequestBody TaoVillager villager) {
 
-        return ResponseEntity.ok(ResponseResult.ok(taoVillagerService.login(villager)));
-
+        /*
+         * 感知逻辑（业务无关）,有效
+         */
+        HashMap<String,String> indexes=new HashMap<>();
+        indexes.put("userName",villager.getUserName());
+        return ResponseEntity.ok(ResponseResult.ok(taoVillagerService.login(villager),indexes));
     }
 
 //    @GetMapping("/login/villagerBySession")
@@ -64,10 +71,16 @@ public class UserController {
         return ResponseEntity.ok(ResponseResult.ok(taoMurakamiService.login(murakami)));
     }
 
+    @ApiQualityLog(methodDesc = "商家登录",indexParams = "sellerLoginCountsPerDay",calculateType = "statistics")
     @PostMapping("/login/seller")
     @ApiOperation("商家登陆")
     public ResponseEntity<ResponseResult> sellerLogin(@RequestBody TaoSeller seller) {
-        return ResponseEntity.ok(ResponseResult.ok(taoSellerService.login(seller)));
+        /*
+         * 感知逻辑（业务无关）
+         */
+        HashMap<String,String> indexes=new HashMap<>();
+        indexes.put("userName",seller.getSellerName());
+        return ResponseEntity.ok(ResponseResult.ok(taoSellerService.login(seller),indexes));
     }
 
 }

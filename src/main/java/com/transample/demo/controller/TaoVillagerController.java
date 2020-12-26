@@ -1,7 +1,9 @@
 package com.transample.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
+import com.transample.demo.annotation.ApiQualityLog;
 import com.transample.demo.dto.RemoveIdsDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,12 +49,18 @@ public class TaoVillagerController
 	{
 		return ResponseEntity.ok(ResponseResult.ok(new TaoVillager()));
 	}
-	
+
+	@ApiQualityLog(methodDesc = "村民注册",indexParams = "villagerRegisterPerDay",calculateType = "statistics")
 	@PostMapping("/add")
 	@ApiOperation("新增村民")
 	public ResponseEntity<ResponseResult> add(@RequestBody TaoVillager taoVillager)
-	{		
-		return ResponseEntity.ok(ResponseResult.ok(taoVillagerService.insertTaoVillager(taoVillager)));
+	{
+		/*
+		 * 感知逻辑（业务无关）
+		 */
+		HashMap<String,String> indexes=new HashMap<>();
+		indexes.put("userName",taoVillager.getUserName());
+		return ResponseEntity.ok(ResponseResult.ok(taoVillagerService.insertTaoVillager(taoVillager),indexes));
 	}
 
 	@GetMapping("/edit")

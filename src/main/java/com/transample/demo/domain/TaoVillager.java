@@ -26,7 +26,6 @@ public class TaoVillager
 	private String county;
 	/** 所属县/区 */
 	private String town;
-
 	/** 所属村 */
 	private String village;
 	/** 村站ID */

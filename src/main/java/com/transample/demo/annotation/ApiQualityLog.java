@@ -42,4 +42,9 @@ public @interface ApiQualityLog {
      * @return
      */
     String returnDesc() default "返回值";
+    /**
+     * 标记为统计型（“statistics”）或者单一型("")
+     * @return
+     */
+    String calculateType() default "";
 }

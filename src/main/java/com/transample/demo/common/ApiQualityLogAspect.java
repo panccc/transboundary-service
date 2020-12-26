@@ -109,14 +109,16 @@ public class ApiQualityLogAspect {
             ResponseResult responseEntity = (ResponseResult)((ResponseEntity)result).getBody();
             String str= JSON.toJSONString(responseEntity.getIndexes());
             System.out.println(str);
-            log.info( "{\"requestId\":\"{}\",\"methodDesc\":\"{}\",\"requestIp\":\"{}\",\"requestUri\":\"{}\",\"result\":{},\"indexes\":{},\"execTime\":\"{}\"}",
+            log.info( "{\"requestId\":\"{}\",\"methodDesc\":\"{}\",\"requestIp\":\"{}\",\"requestUri\":\"{}\",\"result\":{},\"indexes\":{},\"execTime\":\"{}\",\"calulateType\":\"{}\",\"indexParams\":\"{}\"}",
                     uuid,
                     alog.methodDesc(),
                     request.getRemoteAddr(),
                     request.getRequestURI(),
                     JSON.toJSONString(responseEntity),
                     str,
-                    time);
+                    time,
+                    alog.calculateType(),
+                    alog.indexParams());
         }
         return sb.toString();
     }

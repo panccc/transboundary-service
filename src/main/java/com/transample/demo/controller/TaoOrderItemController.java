@@ -1,7 +1,9 @@
 package com.transample.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
+import com.transample.demo.annotation.ApiQualityLog;
 import com.transample.demo.common.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -60,13 +62,20 @@ public class TaoOrderItemController
 	/**
 	 * 新增保存订单单类商品
 	 */
+	@ApiQualityLog(methodDesc = "商品加入购物车",indexParams = "addCartCount",calculateType = "statistics")
 	@ApiOperation("新增保存订单单类商品")
 	@PostMapping("/add")
 	@ResponseBody
 	public ResponseEntity addItem(@RequestBody @ApiParam(value = "商品的基本信息",required = true)TaoOrderItem taoOrderItem)
 	{		
 //		taoOrderItem.setOrderId(orderId);
-		return ResponseEntity.ok(ResponseResult.ok(taoOrderItemService.insertTaoOrderItem(taoOrderItem)));
+		/*
+		 * 感知逻辑（业务无关）
+		 */
+		HashMap<String,String> indexes=new HashMap<>();
+		indexes.put("productId",taoOrderItem.getGoodsId().toString());
+		System.out.println("加入购物车：");
+		return ResponseEntity.ok(ResponseResult.ok(taoOrderItemService.insertTaoOrderItem(taoOrderItem),indexes));
 	}
 
 	/**
@@ -112,5 +121,4 @@ public class TaoOrderItemController
 	{		
 		return ResponseEntity.ok(ResponseResult.ok(taoOrderItemService.deleteTaoOrderItemByIds(ids)));
 	}
-	
 }
