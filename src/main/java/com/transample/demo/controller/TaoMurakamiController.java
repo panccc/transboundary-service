@@ -21,9 +21,13 @@ import com.transample.demo.common.ResponseResult;
  * @date 2020-10-13
  */
 //@CrossOrigin
-@RestController
-@RequestMapping("/taoMurakami")
-@Api(tags = "村小二相关API")
+//@RestController
+//@RequestMapping("/taoMurakami")
+//@Api(tags = "村小二相关API")
+
+/**
+ * 20210107废弃
+ */
 public class TaoMurakamiController
 {
 

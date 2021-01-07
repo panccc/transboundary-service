@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.transample.demo.constants.OrderConstant;
 import com.transample.demo.domain.*;
+import com.transample.demo.mapper.TaoOrderDao;
 import com.transample.demo.mapper.TaoOrderItemMapper;
 import com.transample.demo.mapper.TaoSellerMapper;
 import com.transample.demo.service.*;
@@ -39,6 +40,9 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 
 	@Resource
 	private ITaoStationService taoStationService;
+
+	@Resource
+	private TaoOrderDao taoOrderDao;
 
 	/**
      * 查询订单信息
@@ -267,5 +271,19 @@ public class TaoOrderServiceImpl implements ITaoOrderService
 		}
 
 		return ans;
+	}
+
+	@Override
+	public List<TaoOrder> getTaoOrderByTimeAndStatus(Date startTime, Date endTime, Integer status) {
+		if(status==null)status = OrderConstant.PAY;
+		TaoOrderExample example = new TaoOrderExample();
+		TaoOrderExample.Criteria criteria = example.createCriteria();
+		criteria.andStatusEqualTo(status);
+		if(startTime!=null)
+			criteria.andFinishTimeGreaterThanOrEqualTo(startTime);
+		if(endTime!=null)
+			criteria.andFinishTimeLessThanOrEqualTo(endTime);
+
+		return taoOrderDao.selectByExample(example);
 	}
 }

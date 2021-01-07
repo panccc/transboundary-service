@@ -10,9 +10,9 @@
         <relativePath/> 
     </parent>
     <groupId>com.transample</groupId>
-    <artifactId>demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
+    <artifactId>kidmall</artifactId>
+    <version>0.0.1</version>
+    <name>kidmall</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

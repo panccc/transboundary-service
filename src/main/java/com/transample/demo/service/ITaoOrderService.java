@@ -4,6 +4,7 @@ import com.transample.demo.domain.TaoCartOrderItem;
 import com.transample.demo.domain.TaoOrder;
 import com.transample.demo.domain.TaoOrderItem;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,5 +77,14 @@ public interface ITaoOrderService
 	 * @return
 	 */
 	public double getTotalPrice(TaoOrder order);
+
+	/**
+	 * 筛选起止时间内的订单
+	 * @param startTime 开始时间
+	 * @param endTime 终止时间
+	 * @param status 订单状态
+	 * @return
+	 */
+	public List<TaoOrder> getTaoOrderByTimeAndStatus(Date startTime, Date endTime, Integer status);
 
 }
